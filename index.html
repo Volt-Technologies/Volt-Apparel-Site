@@ -77,6 +77,34 @@ button{border:none;background:none;cursor:pointer;font-family:inherit}
   transform:translateY(10px);
 }
 
+/* DOC BANNER */
+.doc-banner{
+  position:fixed;top:0;left:0;right:0;z-index:950;
+  background:linear-gradient(135deg,var(--gold),var(--bronze));
+  padding:10px 24px;
+  text-align:center;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform 0.4s ease;
+}
+.doc-banner a{
+  color:var(--bg);
+  font-size:0.88rem;
+  font-weight:600;
+  letter-spacing:0.03em;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.doc-banner a:hover{text-decoration:underline}
+.doc-banner svg{flex-shrink:0}
+.doc-banner-close{
+  position:absolute;right:16px;top:50%;transform:translateY(-50%);
+  color:var(--bg);opacity:0.7;
+  cursor:pointer;padding:4px;
+  transition:opacity 0.3s ease;
+}
+.doc-banner-close:hover{opacity:1}
+body.has-doc-banner nav{top:40px}
+body.has-doc-banner .scroll-progress{top:40px}
+
 /* SCROLL PROGRESS */
 .scroll-progress{
   position:fixed;top:0;left:0;
@@ -943,6 +971,18 @@ footer{
   <div class="loader-sub" id="loaderSub">Fashion ERP, Reimagined</div>
 </div>
 
+<!-- DOC BANNER -->
+<div class="doc-banner" id="docBanner">
+  <a href="https://volt-technologies.gitbook.io/volt-apparel/documentation" target="_blank" rel="noopener">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    Read the Documentation — Get started with Volt Apparel
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+  <button class="doc-banner-close" id="docBannerClose" aria-label="Close banner">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+</div>
+
 <!-- SCROLL PROGRESS -->
 <div class="scroll-progress" id="scrollProgress"></div>
 
@@ -958,7 +998,7 @@ footer{
     <a href="#impact">Impact</a>
     <a href="#process">Process</a>
     <a href="#integration">Integration</a>
-    <a href="#cta" class="nav-cta">Get Started</a>
+    <a href="https://volt-technologies.gitbook.io/volt-apparel/documentation" target="_blank" rel="noopener" class="nav-cta">Documentation</a>
   </div>
   <div class="nav-toggle" id="navToggle">
     <span></span><span></span><span></span>
@@ -978,8 +1018,8 @@ footer{
     <h1>Fashion ERP,<br><em>reimagined.</em></h1>
     <p class="hero-sub">The thoughtful platform for apparel businesses on Microsoft Dynamics 365 Business Central. Manage variants, seasons, and allocations with transparency and precision.</p>
     <div class="hero-actions">
-      <a href="#cta" class="btn-primary">
-        Explore the Platform
+      <a href="https://volt-technologies.gitbook.io/volt-apparel/documentation" target="_blank" rel="noopener" class="btn-primary">
+        Read the Documentation
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
       <a href="#features" class="btn-secondary">
@@ -1340,8 +1380,8 @@ footer{
     <div class="section-label">Take the Next Step</div>
     <h2>Ready to transform your<br>apparel operations?</h2>
     <p>Join fashion brands that chose transparency, precision, and thoughtful technology. Let us show you what Volt Apparel can do for your business.</p>
-    <a href="#" class="btn-primary">
-      Schedule a Conversation
+    <a href="https://volt-technologies.gitbook.io/volt-apparel/documentation" target="_blank" rel="noopener" class="btn-primary">
+      Read the Documentation
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </a>
   </div>
@@ -1370,7 +1410,7 @@ footer{
     </div>
     <div class="footer-col">
       <h4>Resources</h4>
-      <a href="#">Documentation</a>
+      <a href="https://volt-technologies.gitbook.io/volt-apparel/documentation" target="_blank" rel="noopener">Documentation</a>
       <a href="#">Case Studies</a>
       <a href="#">Support</a>
       <a href="#">Contact</a>
@@ -1394,6 +1434,13 @@ footer{
 <script>
 (function(){
   "use strict";
+
+  // ---- DOC BANNER ----
+  document.body.classList.add('has-doc-banner');
+  document.getElementById('docBannerClose').addEventListener('click', function(){
+    document.getElementById('docBanner').style.transform = 'translateY(-100%)';
+    document.body.classList.remove('has-doc-banner');
+  });
 
   // ---- LOADING ANIMATION ----
   const loader = document.getElementById('loader');
