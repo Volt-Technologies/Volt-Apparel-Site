@@ -384,71 +384,76 @@ section{padding:120px 48px;position:relative}
 .features{background:var(--bg)}
 .features-header{
   text-align:center;
-  margin-bottom:80px;
+  margin-bottom:64px;
 }
 .features-header .section-subtitle{margin:0 auto}
-.feature-row{
+.features-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:40px;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
   max-width:1200px;
-  margin:0 auto 60px;
-  align-items:center;
+  margin:0 auto;
 }
-.feature-row.reverse .feature-image{order:-1}
-.feature-card{
+.feature-tile{
   background:var(--bg-card);
   border:1px solid rgba(200,149,108,0.08);
-  border-radius:var(--radius-lg);
-  padding:48px;
-  transition:transform 0.6s ease,border-color 0.5s ease,box-shadow 0.5s ease;
+  border-radius:var(--radius);
+  padding:32px 28px;
+  transition:transform 0.5s ease,border-color 0.5s ease,box-shadow 0.5s ease;
+  position:relative;
+  overflow:hidden;
 }
-.feature-card:hover{
+.feature-tile:hover{
   transform:translateY(-6px);
-  border-color:rgba(200,149,108,0.18);
-  box-shadow:0 20px 60px rgba(42,32,20,0.3);
+  border-color:rgba(200,149,108,0.2);
+  box-shadow:0 16px 50px rgba(42,32,20,0.3);
 }
-.feature-icon{
-  width:52px;height:52px;
-  background:linear-gradient(135deg,rgba(212,160,23,0.12),rgba(200,149,108,0.12));
+.feature-tile::before{
+  content:'';position:absolute;
+  top:-30px;right:-30px;
+  width:100px;height:100px;
+  background:radial-gradient(circle,rgba(212,160,23,0.06),transparent);
+  border-radius:50%;
+}
+.feature-tile-icon{
+  width:44px;height:44px;
+  background:linear-gradient(135deg,rgba(212,160,23,0.12),rgba(200,149,108,0.1));
   border-radius:var(--radius-sm);
   display:flex;align-items:center;justify-content:center;
-  margin-bottom:24px;
+  margin-bottom:20px;
 }
-.feature-icon svg{width:24px;height:24px;color:var(--gold)}
-.feature-card h3{
+.feature-tile-icon svg{width:22px;height:22px;color:var(--gold)}
+.feature-tile h3{
   font-family:var(--serif);
-  font-size:1.6rem;
+  font-size:1.15rem;
   color:var(--text);
-  margin-bottom:8px;
+  margin-bottom:6px;
 }
-.feature-card .feature-tagline{
-  font-size:0.9rem;
+.feature-tile .feature-tagline{
+  font-size:0.78rem;
   color:var(--bronze);
-  margin-bottom:16px;
+  margin-bottom:14px;
   font-style:italic;
 }
-.feature-card p{
-  font-size:0.95rem;
+.feature-tile p{
+  font-size:0.85rem;
   color:var(--text-muted);
-  line-height:1.7;
+  line-height:1.65;
 }
-.feature-image{
-  border-radius:var(--radius-lg);
-  overflow:hidden;
-  position:relative;
-  aspect-ratio:4/3;
+.feature-tile-stat{
+  margin-top:16px;
+  padding-top:14px;
+  border-top:1px solid rgba(200,149,108,0.08);
+  display:flex;align-items:baseline;gap:6px;
 }
-.feature-image img{
-  width:100%;height:100%;
-  object-fit:cover;
-  transition:transform 0.8s ease;
+.feature-tile-stat strong{
+  font-family:var(--serif);
+  font-size:1.3rem;
+  color:var(--gold);
 }
-.feature-image:hover img{transform:scale(1.05)}
-.feature-image::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(12,12,12,0.2),transparent);
-  border-radius:var(--radius-lg);
+.feature-tile-stat span{
+  font-size:0.75rem;
+  color:var(--text-dim);
 }
 
 /* DETAILS SECTION */
@@ -913,8 +918,7 @@ footer{
 /* RESPONSIVE */
 @media(max-width:1024px){
   section{padding:80px 32px}
-  .feature-row{grid-template-columns:1fr;gap:32px}
-  .feature-row.reverse .feature-image{order:0}
+  .features-grid{grid-template-columns:repeat(2,1fr)}
   .impact-grid{grid-template-columns:repeat(2,1fr)}
   .process-grid{grid-template-columns:repeat(2,1fr);gap:40px}
   .process-line{display:none}
@@ -951,11 +955,11 @@ footer{
   .integration-arrow{transform:rotate(90deg)}
   .integration-features{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr}
-  .feature-card{padding:32px}
   .matrix-grid{grid-template-columns:80px repeat(4,1fr);overflow-x:auto}
   .cta-section{padding:80px 24px;min-height:50vh}
 }
 @media(max-width:480px){
+  .features-grid{grid-template-columns:1fr}
   .impact-grid{grid-template-columns:1fr}
   .process-grid{grid-template-columns:1fr}
   .hero h1{font-size:2.2rem}
@@ -1029,7 +1033,7 @@ footer{
     </div>
     <div class="hero-stats">
       <div class="hero-stat">
-        <div class="hero-stat-num">6</div>
+        <div class="hero-stat-num">8</div>
         <div class="hero-stat-label">Core Modules</div>
       </div>
       <div class="hero-stat">
@@ -1069,99 +1073,117 @@ footer{
 <!-- FEATURES: THOUGHTFULLY BUILT -->
 <section class="features" id="features">
   <div class="features-header reveal">
-    <div class="section-label">Core Capabilities</div>
+    <div class="section-label">Core Modules</div>
     <h2 class="section-title">Thoughtfully Built</h2>
-    <p class="section-subtitle">Six modules designed with the same care and intentionality you bring to your collections. Every detail considered, every workflow refined.</p>
+    <p class="section-subtitle">Eight modules designed with the same care and intentionality you bring to your collections. Every detail considered, every workflow refined.</p>
   </div>
 
-  <!-- Feature 1: Product Variants -->
-  <div class="feature-row reveal">
-    <div class="feature-card">
-      <div class="feature-icon">
+  <div class="features-grid">
+
+    <!-- Product Variants -->
+    <div class="feature-tile reveal">
+      <div class="feature-tile-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
       </div>
       <h3>Product Variants</h3>
       <div class="feature-tagline">Every combination, beautifully organized</div>
-      <p>Manage size-color matrices with intuitive variant generation. Define hierarchies across dimensions, create bulk variants in seconds, and maintain clarity across thousands of SKUs. The complexity stays behind the scenes.</p>
+      <p>Size-color matrix generation, dimension hierarchies, and bulk variant creation. Manage thousands of SKUs with clarity across sales, purchasing, warehouse, and production.</p>
+      <div class="feature-tile-stat">
+        <strong>40+</strong><span>BC pages extended</span>
+      </div>
     </div>
-    <div class="feature-image">
-      <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=800&q=80" alt="Fabric detail" loading="lazy">
-    </div>
-  </div>
 
-  <!-- Feature 2: Seasonality -->
-  <div class="feature-row reverse reveal">
-    <div class="feature-card">
-      <div class="feature-icon">
+    <!-- Soft Allocations -->
+    <div class="feature-tile reveal">
+      <div class="feature-tile-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M21 3l-7 7"/><path d="M3 3l7 7"/><path d="M16 21h5v-5"/><path d="M8 21H3v-5"/><path d="M21 21l-7-7"/><path d="M3 21l7-7"/></svg>
+      </div>
+      <h3>Soft Allocation</h3>
+      <div class="feature-tagline">Supply meets demand, intelligently</div>
+      <p>Multi-dimensional pegging engine with demand and supply priority schemes, period-based time buckets, preliminary pass scenarios, and real-time allocation inquiries.</p>
+      <div class="feature-tile-stat">
+        <strong>2</strong><span>engine types: Greedy &amp; Azure</span>
+      </div>
+    </div>
+
+    <!-- Accruals & Landed Costs -->
+    <div class="feature-tile reveal">
+      <div class="feature-tile-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <h3>Accruals &amp; Landed Costs</h3>
+      <div class="feature-tagline">Transparent costs, source to shelf</div>
+      <p>Automated purchase accruals with HTS code management, receipt-to-charge linking, reconciliation workflows, and full processing logs. Every cost component tracked with precision.</p>
+      <div class="feature-tile-stat">
+        <strong>5</strong><span>cost types: freight, duty, insurance &amp; more</span>
+      </div>
+    </div>
+
+    <!-- Seasonality -->
+    <div class="feature-tile reveal">
+      <div class="feature-tile-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       </div>
       <h3>Seasonality</h3>
-      <div class="feature-tagline">Seasonal rhythm, naturally managed</div>
-      <p>Align your operations with fashion's natural cadence. Define seasons, manage delivery windows, track collection performance, and plan transitions. Your calendar, your rhythm, your way.</p>
-    </div>
-    <div class="feature-image">
-      <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=800&q=80" alt="Clothing rack" loading="lazy">
-    </div>
-  </div>
-
-  <!-- Feature 3: Soft Allocations -->
-  <div class="feature-row reveal">
-    <div class="feature-card">
-      <div class="feature-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M21 3l-7 7"/><path d="M3 3l7 7"/><path d="M16 21h5v-5"/><path d="M8 21H3v-5"/><path d="M21 21l-7-7"/><path d="M3 21l7-7"/></svg>
+      <div class="feature-tagline">Fashion's natural cadence, managed</div>
+      <p>Define seasons with delivery groups, customer-specific delivery windows, recurring season templates, and auto-populated request and cancel dates on sales documents.</p>
+      <div class="feature-tile-stat">
+        <strong>&infin;</strong><span>seasons, delivery groups &amp; customer links</span>
       </div>
-      <h3>Soft Allocations</h3>
-      <div class="feature-tagline">Thoughtful distribution, zero waste</div>
-      <p>Reserve inventory intelligently before orders are confirmed. Distribute across channels with real-time visibility, prevent overselling, and honor commitments. Allocation should feel effortless.</p>
     </div>
-    <div class="feature-image">
-      <img src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=800&q=80" alt="Store display" loading="lazy">
-    </div>
-  </div>
 
-  <!-- Feature 4: Landed Costs -->
-  <div class="feature-row reverse reveal">
-    <div class="feature-card">
-      <div class="feature-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-      </div>
-      <h3>Landed Costs</h3>
-      <div class="feature-tagline">Transparent costs, from source to shelf</div>
-      <p>Capture every cost component from factory floor to retail shelf. Duties, freight, insurance, handling - all allocated with precision. True cost transparency for better margins and honest pricing.</p>
-    </div>
-    <div class="feature-image">
-      <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=800&q=80" alt="Sustainable textiles" loading="lazy">
-    </div>
-  </div>
-
-  <!-- Feature 5: Product Attributes -->
-  <div class="feature-row reveal">
-    <div class="feature-card">
-      <div class="feature-icon">
+    <!-- Product Attributes -->
+    <div class="feature-tile reveal">
+      <div class="feature-tile-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
       </div>
-      <h3>Product Attributes</h3>
-      <div class="feature-tagline">30 attributes that tell the full story</div>
-      <p>Capture the richness of every product. Fabric composition, care instructions, sustainability certifications, origin - over 30 attributes that tell the complete story of your garments.</p>
+      <h3>Apparel Attributes</h3>
+      <div class="feature-tagline">30 slots that tell the full story</div>
+      <p>Flexible attribute system with four data types, fixed-list values, bulk update wizards, and variant-level inheritance modes. Define what matters for your products.</p>
+      <div class="feature-tile-stat">
+        <strong>30</strong><span>attribute slots per item &amp; variant</span>
+      </div>
     </div>
-    <div class="feature-image">
-      <img src="https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?auto=format&fit=crop&w=800&q=80" alt="Quality garment" loading="lazy">
-    </div>
-  </div>
 
-  <!-- Feature 6: Item Statuses -->
-  <div class="feature-row reverse reveal">
-    <div class="feature-card">
-      <div class="feature-icon">
+    <!-- Line Cancelation -->
+    <div class="feature-tile reveal">
+      <div class="feature-tile-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      </div>
+      <h3>Line Cancelation</h3>
+      <div class="feature-tagline">Controlled cancellations, full audit trail</div>
+      <p>Line-level quantity cancellations on sales and purchase documents with mandatory reason codes, complete audit logs tracking user, date, and quantity changes.</p>
+      <div class="feature-tile-stat">
+        <strong>100%</strong><span>audit trail coverage</span>
+      </div>
+    </div>
+
+    <!-- Item Statuses -->
+    <div class="feature-tile reveal">
+      <div class="feature-tile-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
       </div>
       <h3>Item Statuses</h3>
-      <div class="feature-tagline">Mindful lifecycle management</div>
-      <p>From concept through production, selling, markdown, and archive. Track every product's journey with clear status transitions that keep your entire team aligned and your operations flowing.</p>
+      <div class="feature-tagline">Lifecycle stages, clearly defined</div>
+      <p>Custom status codes for items and variants with managed transitions. From concept through production, active selling, markdown, and archive&mdash;your team stays aligned.</p>
+      <div class="feature-tile-stat">
+        <strong>&check;</strong><span>item &amp; variant level tracking</span>
+      </div>
     </div>
-    <div class="feature-image">
-      <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=800&q=80" alt="Minimal fashion" loading="lazy">
+
+    <!-- Guided Setup -->
+    <div class="feature-tile reveal">
+      <div class="feature-tile-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      </div>
+      <h3>Guided Setup</h3>
+      <div class="feature-tagline">Up and running in minutes</div>
+      <p>Assisted setup wizards for every module, feature status management, default data initialization, and a centralized setup hub. Configure everything from one place.</p>
+      <div class="feature-tile-stat">
+        <strong>8</strong><span>setup wizards included</span>
+      </div>
     </div>
+
   </div>
 </section>
 
@@ -1257,20 +1279,20 @@ footer{
   </div>
   <div class="impact-grid">
     <div class="impact-card reveal">
-      <div class="impact-num"><span class="counter" data-target="90">0</span>%</div>
-      <div class="impact-label">Reduction in variant setup time through intelligent matrix generation</div>
+      <div class="impact-num"><span class="counter" data-target="8">0</span></div>
+      <div class="impact-label">Core modules working together as a unified apparel platform</div>
     </div>
     <div class="impact-card reveal">
-      <div class="impact-num"><span class="counter" data-target="42">0</span></div>
-      <div class="impact-label">Cost components tracked across the entire supply chain transparently</div>
+      <div class="impact-num"><span class="counter" data-target="340">0</span>+</div>
+      <div class="impact-label">AL objects — tables, pages, codeunits, and extensions — built for fashion</div>
     </div>
     <div class="impact-card reveal">
-      <div class="impact-num"><span class="counter" data-target="30">0</span>+</div>
-      <div class="impact-label">Product attributes capturing the complete story of each garment</div>
+      <div class="impact-num"><span class="counter" data-target="30">0</span></div>
+      <div class="impact-label">Custom attribute slots per item and variant for complete product data</div>
     </div>
     <div class="impact-card reveal">
       <div class="impact-num"><span class="counter" data-target="0" data-prefix="">0</span></div>
-      <div class="impact-label">Custom code required. Fully native to Business Central, zero compromises</div>
+      <div class="impact-label">External dependencies. 100% native AL, built directly inside Business Central</div>
     </div>
   </div>
 </section>
