@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volt Apparel - Fashion ERP, Reimagined</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#09090b;--bg-card:#111113;--bg-card-hover:#18181b;
+--border:rgba(250,250,250,0.08);--border-hover:rgba(250,250,250,0.14);
+--gold:#d4a017;--gold-light:#fbbf24;--gold-mid:#f59e0b;
+--text:#fafafa;--text-muted:rgba(250,250,250,0.56);--text-dim:rgba(250,250,250,0.32);
+--mono:'JetBrains Mono',monospace;--sans:'Inter',sans-serif;--heading:'Space Grotesk',sans-serif;
+--radius:12px;--radius-sm:8px;--radius-lg:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+::selection{background:var(--gold);color:var(--bg)}
+
+/* Scroll Progress */
+#scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light));z-index:10000;width:0;transition:none}
+
+/* Cursor Glow */
+#cursor-glow{position:fixed;width:600px;height:600px;border-radius:50%;pointer-events:none;z-index:9;background:radial-gradient(circle,rgba(212,160,23,0.06) 0%,transparent 70%);transform:translate(-50%,-50%);will-change:transform;display:none}
+
+/* Loading Screen */
+#loader{position:fixed;inset:0;z-index:99999;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column}
+#loader .terminal{width:min(540px,90vw);background:#0c0c0e;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;font-family:var(--mono);font-size:13px}
+#loader .terminal-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;background:rgba(255,255,255,0.03);border-bottom:1px solid var(--border)}
+#loader .terminal-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.12)}
+#loader .terminal-dot:nth-child(1){background:#ff5f57}
+#loader .terminal-dot:nth-child(2){background:#febc2e}
+#loader .terminal-dot:nth-child(3){background:#28c840}
+#loader .terminal-title{margin-left:auto;color:var(--text-dim);font-size:11px}
+#loader .terminal-body{padding:16px;min-height:180px;line-height:1.8}
+#loader .terminal-line{opacity:0;color:var(--text-muted)}
+#loader .terminal-line .cmd{color:var(--gold-light)}
+#loader .terminal-line .ok{color:#28c840}
+#loader .terminal-line .path{color:var(--gold)}
+#loader .terminal-line .prompt{color:var(--text-dim);margin-right:6px}
+#loader .terminal-cursor{display:inline-block;width:8px;height:15px;background:var(--gold-light);animation:blink-cursor 1s step-end infinite;vertical-align:middle;margin-left:2px}
+@keyframes blink-cursor{50%{opacity:0}}
+
+/* Dotted Grid Background */
+.dotted-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(250,250,250,0.05) 1px,transparent 1px);background-size:24px 24px;pointer-events:none;z-index:0}
+
+/* Navigation */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:12px 24px;transition:all .3s}
+nav.scrolled{background:rgba(9,9,11,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:var(--heading);font-weight:700;font-size:18px;display:flex;align-items:center;gap:8px;color:var(--text);text-decoration:none}
+.nav-logo .logo-icon{width:28px;height:28px;background:var(--gold);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:14px;color:var(--bg)}
+.nav-links{display:flex;align-items:center;gap:28px;list-style:none}
+.nav-links a{color:var(--text-muted);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--gold);color:var(--bg);padding:8px 20px;border-radius:100px;font-weight:600;font-size:13px;text-decoration:none;transition:all .2s;border:none;cursor:pointer;font-family:var(--sans)}
+.nav-cta:hover{background:var(--gold-light);transform:translateY(-1px);box-shadow:0 4px 20px rgba(212,160,23,0.3)}
+.nav-mobile-toggle{display:none;background:none;border:none;color:var(--text);cursor:pointer;padding:8px}
+
+/* Sections */
+section{position:relative;overflow:hidden}
+.section-inner{max-width:1200px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;border:1px solid var(--border);background:rgba(255,255,255,0.03);font-family:var(--mono);font-size:12px;color:var(--gold-light);font-weight:500;margin-bottom:20px}
+.badge .dot{width:6px;height:6px;border-radius:50%;background:var(--gold-light);animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* Hero */
+#hero{padding:140px 0 100px;min-height:100vh;display:flex;align-items:center}
+#hero .hero-content{text-align:center;margin:0 auto;max-width:900px}
+#hero h1{font-family:var(--heading);font-size:clamp(40px,6vw,72px);font-weight:700;line-height:1.05;margin-bottom:20px;letter-spacing:-0.03em}
+#hero h1 .accent{background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+#hero .subtitle{font-size:clamp(16px,2vw,19px);color:var(--text-muted);max-width:600px;margin:0 auto 32px;line-height:1.6}
+.hero-buttons{display:flex;gap:12px;justify-content:center;margin-bottom:56px;flex-wrap:wrap}
+.btn-primary{background:var(--gold);color:var(--bg);padding:12px 28px;border-radius:100px;font-weight:600;font-size:15px;text-decoration:none;transition:all .25s;border:none;cursor:pointer;font-family:var(--sans);display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 8px 30px rgba(212,160,23,0.3)}
+.btn-secondary{background:transparent;color:var(--text);padding:12px 28px;border-radius:100px;font-weight:500;font-size:15px;text-decoration:none;transition:all .25s;border:1px solid var(--border);cursor:pointer;font-family:var(--sans);display:inline-flex;align-items:center;gap:8px}
+.btn-secondary:hover{border-color:var(--border-hover);background:rgba(255,255,255,0.03)}
+
+/* Stat Cards */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:800px;margin:0 auto}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:left;position:relative;overflow:hidden;transition:border-color .3s}
+.stat-card:hover{border-color:var(--border-hover)}
+.stat-card .stat-label{font-family:var(--mono);font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px}
+.stat-card .stat-value{font-family:var(--heading);font-size:28px;font-weight:700;color:var(--text);margin-bottom:4px}
+.stat-card .stat-desc{font-size:12px;color:var(--text-muted)}
+.stat-card .stat-sparkline{position:absolute;bottom:0;right:0;width:80px;height:32px;opacity:.3}
+.stat-card .stat-indicator{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:10px;color:var(--gold-light);margin-top:6px}
+
+/* Dashboard Mock */
+.hero-dashboard{max-width:900px;margin:0 auto 56px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;position:relative}
+.dashboard-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;background:rgba(255,255,255,0.02);border-bottom:1px solid var(--border)}
+.dashboard-bar .db-dot{width:10px;height:10px;border-radius:50%}
+.dashboard-bar .db-dot:nth-child(1){background:#ff5f57}
+.dashboard-bar .db-dot:nth-child(2){background:#febc2e}
+.dashboard-bar .db-dot:nth-child(3){background:#28c840}
+.dashboard-bar .db-title{margin-left:12px;font-family:var(--mono);font-size:12px;color:var(--text-dim)}
+.dashboard-body{padding:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.db-widget{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;position:relative}
+.db-widget-label{font-family:var(--mono);font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
+.db-widget-value{font-family:var(--heading);font-size:22px;font-weight:700;color:var(--text)}
+.db-widget-change{font-family:var(--mono);font-size:11px;color:var(--gold-light);margin-top:4px}
+.db-widget svg{margin-top:8px}
+.db-mini-bars{display:flex;gap:3px;align-items:flex-end;height:32px;margin-top:8px}
+.db-mini-bars .bar{width:8px;border-radius:2px;background:var(--gold);opacity:.6;transition:all .3s}
+.db-mini-bars .bar:hover{opacity:1}
+
+/* Social Proof / Marquee */
+#social-proof{padding:60px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+#social-proof .section-label{text-align:center;font-family:var(--mono);font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:32px}
+.marquee-wrap{overflow:hidden;position:relative}
+.marquee-wrap::before,.marquee-wrap::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none}
+.marquee-wrap::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+.marquee-wrap::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
+.marquee-track{display:flex;gap:48px;animation:marquee 30s linear infinite;width:max-content;align-items:center}
+.marquee-track .brand{font-family:var(--heading);font-size:18px;font-weight:600;color:var(--text-dim);white-space:nowrap;opacity:.5;transition:opacity .3s}
+.marquee-track .brand:hover{opacity:1}
+.marquee-track .brand-sep{color:var(--text-dim);opacity:.2;font-size:20px}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* Features Grid */
+#features{padding:120px 0}
+#features .section-header{text-align:center;margin-bottom:56px}
+#features .section-header h2{font-family:var(--heading);font-size:clamp(28px,4vw,42px);font-weight:700;letter-spacing:-0.02em;margin-bottom:12px}
+#features .section-header p{color:var(--text-muted);font-size:17px;max-width:600px;margin:0 auto}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.feature-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all .3s;position:relative;overflow:hidden}
+.feature-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 40px rgba(212,160,23,0.08)}
+.feature-card .fc-icon{width:40px;height:40px;background:rgba(212,160,23,0.1);border:1px solid rgba(212,160,23,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:18px}
+.feature-card .fc-metric{font-family:var(--mono);font-size:11px;color:var(--gold-light);display:flex;align-items:center;gap:4px;margin-bottom:12px}
+.feature-card .fc-metric .fc-metric-dot{width:5px;height:5px;border-radius:50%;background:var(--gold-light)}
+.feature-card h3{font-family:var(--heading);font-size:17px;font-weight:600;margin-bottom:8px}
+.feature-card p{font-size:14px;color:var(--text-muted);line-height:1.6}
+.feature-card .fc-sparkline{margin-top:14px}
+
+/* Feature Deep Dives */
+#deep-dives{padding:80px 0 120px}
+.deep-dive{margin-bottom:80px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.deep-dive:nth-child(even){direction:rtl}
+.deep-dive:nth-child(even) > *{direction:ltr}
+.deep-dive:last-child{margin-bottom:0}
+.dd-content .dd-label{font-family:var(--mono);font-size:12px;color:var(--gold-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.dd-content .dd-label::before{content:'';width:12px;height:1px;background:var(--gold-light)}
+.dd-content h3{font-family:var(--heading);font-size:clamp(24px,3vw,34px);font-weight:700;margin-bottom:14px;letter-spacing:-0.02em}
+.dd-content p{color:var(--text-muted);font-size:15px;line-height:1.7;margin-bottom:20px}
+.dd-content .dd-tags{display:flex;gap:8px;flex-wrap:wrap}
+.dd-content .dd-tag{padding:5px 12px;border-radius:100px;border:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--text-muted)}
+
+/* Visual Panels */
+.dd-visual{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;position:relative}
+.dd-visual-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;background:rgba(255,255,255,0.02);border-bottom:1px solid var(--border)}
+.dd-visual-bar span{width:8px;height:8px;border-radius:50%}
+.dd-visual-bar span:nth-child(1){background:#ff5f57}
+.dd-visual-bar span:nth-child(2){background:#febc2e}
+.dd-visual-bar span:nth-child(3){background:#28c840}
+.dd-visual-body{padding:20px}
+
+/* Variant Matrix Table */
+.matrix-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px}
+.matrix-table th{text-align:left;padding:8px 10px;color:var(--text-dim);font-weight:500;border-bottom:1px solid var(--border);font-size:11px;text-transform:uppercase;letter-spacing:0.04em}
+.matrix-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--text-muted)}
+.matrix-table td.active{color:var(--gold-light);font-weight:600}
+.matrix-table tr:hover td{background:rgba(255,255,255,0.02)}
+.matrix-cell{width:28px;height:28px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600}
+.matrix-cell.filled{background:rgba(212,160,23,0.15);color:var(--gold-light);border:1px solid rgba(212,160,23,0.25)}
+.matrix-cell.empty{background:rgba(255,255,255,0.03);color:var(--text-dim);border:1px solid rgba(255,255,255,0.05)}
+
+/* Allocation Bars */
+.alloc-bars{display:flex;flex-direction:column;gap:14px}
+.alloc-row{display:flex;align-items:center;gap:12px}
+.alloc-label{font-family:var(--mono);font-size:12px;color:var(--text-muted);width:100px;text-align:right;flex-shrink:0}
+.alloc-bar-track{flex:1;height:28px;background:rgba(255,255,255,0.04);border-radius:6px;overflow:hidden;position:relative}
+.alloc-bar-fill{height:100%;border-radius:6px;position:relative;transition:width 1.5s cubic-bezier(.25,.46,.45,.94)}
+.alloc-bar-fill.gold{background:linear-gradient(90deg,var(--gold),var(--gold-light))}
+.alloc-pct{font-family:var(--mono);font-size:12px;color:var(--gold-light);width:40px;flex-shrink:0}
+
+/* Timeline */
+.timeline-visual{display:flex;flex-direction:column;gap:10px}
+.timeline-row{display:flex;align-items:center;gap:10px}
+.timeline-label{font-family:var(--mono);font-size:11px;color:var(--text-muted);width:80px;flex-shrink:0;text-align:right}
+.timeline-track{flex:1;height:24px;background:rgba(255,255,255,0.03);border-radius:4px;position:relative;overflow:hidden}
+.timeline-bar{position:absolute;top:3px;bottom:3px;border-radius:3px;display:flex;align-items:center;padding:0 8px;font-family:var(--mono);font-size:9px;color:var(--bg);font-weight:600}
+.timeline-bar.season{background:linear-gradient(90deg,var(--gold),var(--gold-light))}
+.timeline-bar.delivery{background:rgba(212,160,23,0.4);color:var(--gold-light)}
+.timeline-bar.planning{background:rgba(250,250,250,0.12);color:var(--text-muted)}
+.timeline-months{display:flex;justify-content:space-between;padding:0;margin-top:4px}
+.timeline-months span{font-family:var(--mono);font-size:9px;color:var(--text-dim)}
+
+/* Cost Breakdown */
+.cost-breakdown{display:flex;flex-direction:column;gap:10px}
+.cost-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(255,255,255,0.02);border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,0.04)}
+.cost-row .cost-name{font-size:13px;color:var(--text-muted);display:flex;align-items:center;gap:8px}
+.cost-row .cost-name .cost-dot{width:8px;height:8px;border-radius:2px}
+.cost-row .cost-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--text)}
+.cost-row .cost-pct{font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-left:8px}
+.cost-total{display:flex;align-items:center;justify-content:space-between;padding:12px;border-top:1px solid var(--border);margin-top:4px}
+.cost-total .cost-name{font-size:14px;font-weight:600;color:var(--text)}
+.cost-total .cost-val{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--gold-light)}
+
+/* How It Works */
+#how-it-works{padding:120px 0;border-top:1px solid var(--border)}
+#how-it-works .section-header{text-align:center;margin-bottom:64px}
+#how-it-works .section-header h2{font-family:var(--heading);font-size:clamp(28px,4vw,42px);font-weight:700;letter-spacing:-0.02em;margin-bottom:12px}
+#how-it-works .section-header p{color:var(--text-muted);font-size:17px}
+.pipeline{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;position:relative}
+.pipeline::before{content:'';position:absolute;top:36px;left:60px;right:60px;height:1px;border-top:2px dashed var(--border);z-index:0}
+.pipeline-step{text-align:center;position:relative;z-index:1}
+.pipeline-step .ps-number{width:72px;height:72px;border-radius:50%;background:var(--bg-card);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-family:var(--mono);font-size:24px;font-weight:700;color:var(--gold-light);transition:all .3s}
+.pipeline-step:hover .ps-number{border-color:var(--gold);box-shadow:0 0 30px rgba(212,160,23,0.15)}
+.pipeline-step .ps-cmd{font-family:var(--mono);font-size:11px;color:var(--gold-light);margin-bottom:8px;background:rgba(212,160,23,0.08);padding:4px 10px;border-radius:100px;display:inline-block}
+.pipeline-step h4{font-family:var(--heading);font-size:16px;font-weight:600;margin-bottom:6px}
+.pipeline-step p{font-size:13px;color:var(--text-muted);line-height:1.5;max-width:200px;margin:0 auto}
+
+/* Metrics */
+#metrics{padding:120px 0}
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.metric-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px 24px;text-align:center;position:relative;overflow:hidden;transition:all .3s}
+.metric-card:hover{border-color:var(--border-hover);transform:translateY(-2px)}
+.metric-card .mc-visual{width:100px;height:100px;margin:0 auto 20px;position:relative}
+.mc-circle-bg{fill:none;stroke:rgba(255,255,255,0.06);stroke-width:6}
+.mc-circle-fill{fill:none;stroke:var(--gold);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset 2s cubic-bezier(.25,.46,.45,.94)}
+.metric-card .mc-value{font-family:var(--heading);font-size:40px;font-weight:700;color:var(--text);margin-bottom:4px}
+.metric-card .mc-unit{font-family:var(--mono);font-size:13px;color:var(--gold-light)}
+.metric-card .mc-desc{font-size:13px;color:var(--text-muted);margin-top:6px}
+.metric-card .mc-bar{width:100%;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;margin-top:16px;overflow:hidden}
+.metric-card .mc-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:3px;transition:width 2s cubic-bezier(.25,.46,.45,.94)}
+
+/* Testimonial */
+#testimonial{padding:100px 0;border-top:1px solid var(--border)}
+.testimonial-card{max-width:720px;margin:0 auto;text-align:center;position:relative}
+.testimonial-card .tc-quote-mark{font-family:var(--heading);font-size:80px;color:var(--gold);opacity:.2;line-height:1;margin-bottom:-20px}
+.testimonial-card blockquote{font-family:var(--heading);font-size:clamp(20px,3vw,26px);font-weight:500;line-height:1.5;color:var(--text);margin-bottom:24px;font-style:italic}
+.testimonial-card .tc-author{font-size:15px;font-weight:600;color:var(--text)}
+.testimonial-card .tc-role{font-size:13px;color:var(--text-muted);margin-top:4px}
+.testimonial-card .tc-stars{display:flex;justify-content:center;gap:4px;margin-bottom:20px}
+.testimonial-card .tc-stars span{color:var(--gold-light);font-size:18px}
+
+/* Integration */
+#integration{padding:120px 0}
+#integration .section-header{text-align:center;margin-bottom:64px}
+#integration .section-header h2{font-family:var(--heading);font-size:clamp(28px,4vw,42px);font-weight:700;letter-spacing:-0.02em;margin-bottom:12px}
+#integration .section-header p{color:var(--text-muted);font-size:17px;max-width:550px;margin:0 auto}
+.integration-diagram{max-width:800px;margin:0 auto;position:relative;min-height:350px}
+.int-node{position:absolute;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;text-align:center;transition:all .3s;z-index:2}
+.int-node:hover{border-color:var(--gold);box-shadow:0 4px 30px rgba(212,160,23,0.1)}
+.int-node .int-icon{width:40px;height:40px;background:rgba(212,160,23,0.1);border:1px solid rgba(212,160,23,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:18px}
+.int-node .int-name{font-family:var(--heading);font-size:14px;font-weight:600;margin-bottom:2px}
+.int-node .int-desc{font-family:var(--mono);font-size:10px;color:var(--text-dim)}
+.int-node.center-node{border-color:var(--gold);background:rgba(212,160,23,0.05)}
+.int-node.center-node .int-icon{background:var(--gold);color:var(--bg);font-weight:700}
+.int-lines{position:absolute;inset:0;z-index:1}
+.int-lines line{stroke:var(--border);stroke-width:1;stroke-dasharray:4,4}
+.flow-dot{fill:var(--gold-light);r:3}
+
+/* CTA */
+#cta{padding:120px 0;text-align:center}
+.cta-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:64px 40px;max-width:700px;margin:0 auto;position:relative;overflow:hidden}
+.cta-card::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:400px;height:400px;background:radial-gradient(circle,rgba(212,160,23,0.08),transparent 70%);pointer-events:none}
+.cta-card h2{font-family:var(--heading);font-size:clamp(24px,3.5vw,36px);font-weight:700;margin-bottom:14px;letter-spacing:-0.02em;position:relative;z-index:1}
+.cta-card p{color:var(--text-muted);font-size:16px;margin-bottom:32px;position:relative;z-index:1}
+.cta-card .cta-buttons{display:flex;gap:12px;justify-content:center;position:relative;z-index:1;flex-wrap:wrap}
+
+/* Footer */
+footer{border-top:1px solid var(--border);padding:60px 0 32px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-brand .fb-logo{font-family:var(--heading);font-weight:700;font-size:18px;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.footer-brand .fb-logo .logo-icon{width:24px;height:24px;background:var(--gold);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:12px;color:var(--bg)}
+.footer-brand p{font-size:13px;color:var(--text-muted);line-height:1.6;max-width:280px}
+.footer-col h4{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:16px}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:10px}
+.footer-col ul a{color:var(--text-muted);text-decoration:none;font-size:13px;transition:color .2s}
+.footer-col ul a:hover{color:var(--text)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;align-items:center;justify-content:space-between}
+.footer-bottom p{font-size:12px;color:var(--text-dim);font-family:var(--mono)}
+.footer-bottom .fb-links{display:flex;gap:16px}
+.footer-bottom .fb-links a{color:var(--text-dim);text-decoration:none;font-size:12px;transition:color .2s}
+.footer-bottom .fb-links a:hover{color:var(--text)}
+
+/* Responsive */
+@media(max-width:1024px){
+  .features-grid{grid-template-columns:repeat(2,1fr)}
+  .pipeline{grid-template-columns:repeat(2,1fr);gap:24px}
+  .pipeline::before{display:none}
+  .metrics-grid{grid-template-columns:repeat(2,1fr)}
+  .deep-dive{grid-template-columns:1fr}
+  .deep-dive:nth-child(even){direction:ltr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .features-grid{grid-template-columns:1fr}
+  .pipeline{grid-template-columns:1fr}
+  .metrics-grid{grid-template-columns:1fr}
+  .dashboard-body{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .nav-mobile-toggle{display:block}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+  .integration-diagram{min-height:auto}
+  .int-node{position:relative!important;margin:8px auto;left:auto!important;top:auto!important;right:auto!important;bottom:auto!important;transform:none!important;width:200px}
+  .int-lines{display:none}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr}
+  .hero-buttons{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- Scroll Progress -->
+<div id="scroll-progress"></div>
+
+<!-- Cursor Glow -->
+<div id="cursor-glow"></div>
+
+<!-- Loading Screen -->
+<div id="loader">
+  <div class="terminal">
+    <div class="terminal-bar">
+      <div class="terminal-dot"></div>
+      <div class="terminal-dot"></div>
+      <div class="terminal-dot"></div>
+      <span class="terminal-title">volt-apparel &mdash; boot</span>
+    </div>
+    <div class="terminal-body" id="terminal-body">
+      <div class="terminal-line" id="tl-1"><span class="prompt">$</span> <span class="cmd">volt init</span> --environment=production</div>
+      <div class="terminal-line" id="tl-2"><span class="ok">[OK]</span> Loading Business Central runtime...</div>
+      <div class="terminal-line" id="tl-3"><span class="ok">[OK]</span> Initializing 42 apparel tables...</div>
+      <div class="terminal-line" id="tl-4"><span class="ok">[OK]</span> Variant matrix engine ready</div>
+      <div class="terminal-line" id="tl-5"><span class="ok">[OK]</span> Season planner online</div>
+      <div class="terminal-line" id="tl-6"><span class="ok">[OK]</span> Allocation engine armed</div>
+      <div class="terminal-line" id="tl-7"><span class="prompt">$</span> <span class="cmd">volt launch</span> <span class="path">~/apparel-erp</span></div>
+      <div class="terminal-line" id="tl-8"><span class="ok">[READY]</span> Volt Apparel v2.0 &mdash; Fashion ERP, reimagined.<span class="terminal-cursor"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="logo-icon">V</div>
+      Volt Apparel
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#deep-dives">Modules</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#metrics">Metrics</a></li>
+      <li><a href="#integration">Integration</a></li>
+    </ul>
+    <a href="#cta" class="nav-cta">Get Started</a>
+    <button class="nav-mobile-toggle" id="mobile-toggle" aria-label="Menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="dotted-grid"></div>
+  <div class="section-inner">
+    <div class="hero-content">
+      <div class="badge"><span class="dot"></span> Built for Business Central</div>
+      <h1>Fashion ERP,<br><span class="accent">reimagined.</span></h1>
+      <p class="subtitle">Volt Apparel extends Microsoft Dynamics 365 Business Central with purpose-built apparel functionality. Variant matrices, seasons, allocations, landed costs, and more.</p>
+      <div class="hero-buttons">
+        <a href="#cta" class="btn-primary">
+          Get Started
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#features" class="btn-secondary">
+          Explore Features
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <!-- Dashboard Mock -->
+      <div class="hero-dashboard" id="hero-dashboard">
+        <div class="dashboard-bar">
+          <div class="db-dot"></div><div class="db-dot"></div><div class="db-dot"></div>
+          <span class="db-title">volt-apparel-dashboard.bc</span>
+        </div>
+        <div class="dashboard-body">
+          <div class="db-widget">
+            <div class="db-widget-label">Active Variants</div>
+            <div class="db-widget-value">2,847</div>
+            <div class="db-widget-change">+12.4% vs last season</div>
+            <svg width="100%" height="32" viewBox="0 0 200 32" preserveAspectRatio="none">
+              <polyline fill="none" stroke="var(--gold)" stroke-width="1.5" points="0,28 20,24 40,26 60,18 80,20 100,14 120,16 140,8 160,12 180,6 200,4"/>
+              <linearGradient id="sparkGrad1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--gold)" stop-opacity="0.2"/><stop offset="100%" stop-color="var(--gold)" stop-opacity="0"/></linearGradient>
+              <polygon fill="url(#sparkGrad1)" points="0,32 0,28 20,24 40,26 60,18 80,20 100,14 120,16 140,8 160,12 180,6 200,4 200,32"/>
+            </svg>
+          </div>
+          <div class="db-widget">
+            <div class="db-widget-label">Season Orders</div>
+            <div class="db-widget-value">$1.2M</div>
+            <div class="db-widget-change">FW26 Collection</div>
+            <div class="db-mini-bars">
+              <div class="bar" style="height:40%"></div>
+              <div class="bar" style="height:55%"></div>
+              <div class="bar" style="height:45%"></div>
+              <div class="bar" style="height:70%"></div>
+              <div class="bar" style="height:60%"></div>
+              <div class="bar" style="height:85%"></div>
+              <div class="bar" style="height:75%"></div>
+              <div class="bar" style="height:90%"></div>
+              <div class="bar" style="height:65%"></div>
+              <div class="bar" style="height:95%"></div>
+              <div class="bar" style="height:80%"></div>
+              <div class="bar" style="height:100%"></div>
+            </div>
+          </div>
+          <div class="db-widget">
+            <div class="db-widget-label">Allocation Rate</div>
+            <div class="db-widget-value">94.2%</div>
+            <div class="db-widget-change">5 channels active</div>
+            <svg width="60" height="60" viewBox="0 0 60 60" style="margin-top:6px">
+              <circle cx="30" cy="30" r="24" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="5"/>
+              <circle cx="30" cy="30" r="24" fill="none" stroke="var(--gold)" stroke-width="5" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="8.7" transform="rotate(-90 30 30)"/>
+              <text x="30" y="33" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--gold-light)" font-weight="600">94%</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">modules</div>
+          <div class="stat-value">11</div>
+          <div class="stat-desc">Feature Modules</div>
+          <div class="stat-indicator">
+            <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 8l3-3 2 2 3-4" fill="none" stroke="var(--gold-light)" stroke-width="1.2" stroke-linecap="round"/></svg>
+            active
+          </div>
+          <svg class="stat-sparkline" viewBox="0 0 80 32" preserveAspectRatio="none"><polyline fill="none" stroke="var(--gold)" stroke-width="1" points="0,24 10,20 20,22 30,16 40,18 50,12 60,14 70,8 80,10"/></svg>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">tables</div>
+          <div class="stat-value">42</div>
+          <div class="stat-desc">Custom Tables</div>
+          <div class="stat-indicator">
+            <svg width="12" height="12" viewBox="0 0 12 12"><rect x="1" y="6" width="2" height="5" rx="0.5" fill="var(--gold-light)"/><rect x="5" y="3" width="2" height="8" rx="0.5" fill="var(--gold-light)"/><rect x="9" y="1" width="2" height="10" rx="0.5" fill="var(--gold-light)"/></svg>
+            scaled
+          </div>
+          <svg class="stat-sparkline" viewBox="0 0 80 32" preserveAspectRatio="none"><polyline fill="none" stroke="var(--gold)" stroke-width="1" points="0,28 10,26 20,24 30,22 40,18 50,20 60,14 70,10 80,6"/></svg>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">native</div>
+          <div class="stat-value">100%</div>
+          <div class="stat-desc">Native BC</div>
+          <div class="stat-indicator">
+            <svg width="12" height="12" viewBox="0 0 12 12"><circle cx="6" cy="6" r="4" fill="none" stroke="var(--gold-light)" stroke-width="1.2"/><path d="M4 6l1.5 1.5 3-3" fill="none" stroke="var(--gold-light)" stroke-width="1.2" stroke-linecap="round"/></svg>
+            verified
+          </div>
+          <svg class="stat-sparkline" viewBox="0 0 80 32" preserveAspectRatio="none"><line x1="0" y1="6" x2="80" y2="6" stroke="var(--gold)" stroke-width="1"/></svg>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">dependencies</div>
+          <div class="stat-value">0</div>
+          <div class="stat-desc">External Dependencies</div>
+          <div class="stat-indicator">
+            <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6h8" fill="none" stroke="var(--gold-light)" stroke-width="1.2" stroke-linecap="round"/></svg>
+            clean
+          </div>
+          <svg class="stat-sparkline" viewBox="0 0 80 32" preserveAspectRatio="none"><line x1="0" y1="28" x2="80" y2="28" stroke="var(--gold)" stroke-width="1" opacity=".4"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Social Proof -->
+<section id="social-proof">
+  <div class="section-label">Trusted across the apparel industry</div>
+  <div class="marquee-wrap">
+    <div class="marquee-track" id="marquee-track">
+      <span class="brand">Fashion Forward Co.</span><span class="brand-sep">/</span>
+      <span class="brand">Urban Thread Group</span><span class="brand-sep">/</span>
+      <span class="brand">Nordic Style AB</span><span class="brand-sep">/</span>
+      <span class="brand">Pacific Garments Ltd</span><span class="brand-sep">/</span>
+      <span class="brand">Apex Apparel Inc</span><span class="brand-sep">/</span>
+      <span class="brand">Heritage Textiles</span><span class="brand-sep">/</span>
+      <span class="brand">Metro Wear Group</span><span class="brand-sep">/</span>
+      <span class="brand">Coastal Fashion House</span><span class="brand-sep">/</span>
+      <span class="brand">Summit Sportswear</span><span class="brand-sep">/</span>
+      <span class="brand">Elevate Brands</span><span class="brand-sep">/</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="brand">Fashion Forward Co.</span><span class="brand-sep">/</span>
+      <span class="brand">Urban Thread Group</span><span class="brand-sep">/</span>
+      <span class="brand">Nordic Style AB</span><span class="brand-sep">/</span>
+      <span class="brand">Pacific Garments Ltd</span><span class="brand-sep">/</span>
+      <span class="brand">Apex Apparel Inc</span><span class="brand-sep">/</span>
+      <span class="brand">Heritage Textiles</span><span class="brand-sep">/</span>
+      <span class="brand">Metro Wear Group</span><span class="brand-sep">/</span>
+      <span class="brand">Coastal Fashion House</span><span class="brand-sep">/</span>
+      <span class="brand">Summit Sportswear</span><span class="brand-sep">/</span>
+      <span class="brand">Elevate Brands</span><span class="brand-sep">/</span>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features">
+  <div class="dotted-grid"></div>
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="badge"><span class="dot"></span> Core Modules</div>
+      <h2>Everything apparel businesses need,<br>nothing they don't.</h2>
+      <p>Six powerful modules purpose-built for fashion and apparel operations inside Business Central.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card" data-feature>
+        <div class="fc-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="7" height="7" rx="1.5" stroke="var(--gold-light)" stroke-width="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5" stroke="var(--gold-light)" stroke-width="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5" stroke="var(--gold-light)" stroke-width="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5" stroke="var(--gold-light)" stroke-width="1.5"/></svg>
+        </div>
+        <div class="fc-metric"><span class="fc-metric-dot"></span> 2,847 active variants</div>
+        <h3>Product Variants</h3>
+        <p>Color/size matrices with visual grid entry. Create thousands of SKUs in seconds with intuitive matrix interfaces.</p>
+        <svg class="fc-sparkline" width="100%" height="24" viewBox="0 0 160 24" preserveAspectRatio="none"><polyline fill="none" stroke="var(--gold)" stroke-width="1.2" opacity=".4" points="0,20 16,16 32,18 48,12 64,14 80,8 96,10 112,6 128,8 144,4 160,2"/></svg>
+      </div>
+      <div class="feature-card" data-feature>
+        <div class="fc-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.5" stroke="var(--gold-light)" stroke-width="1.5"/><path d="M10 5v5l3.5 3.5" stroke="var(--gold-light)" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="fc-metric"><span class="fc-metric-dot"></span> 4 seasons tracked</div>
+        <h3>Seasonality</h3>
+        <p>Season and delivery management for fashion calendars. Plan collections with start/end dates, delivery windows, and season codes.</p>
+        <svg class="fc-sparkline" width="100%" height="24" viewBox="0 0 160 24" preserveAspectRatio="none"><polyline fill="none" stroke="var(--gold)" stroke-width="1.2" opacity=".4" points="0,22 20,18 40,20 60,10 80,12 100,6 120,14 140,18 160,8"/></svg>
+      </div>
+      <div class="feature-card" data-feature>
+        <div class="fc-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 14l4-8 4 5 3-3 3 6" stroke="var(--gold-light)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="3" y1="17" x2="17" y2="17" stroke="var(--gold-light)" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="fc-metric"><span class="fc-metric-dot"></span> 94.2% fill rate</div>
+        <h3>Soft Allocations</h3>
+        <p>Reserve inventory across channels before hard commitments. Prioritize VIP, wholesale, retail, and e-commerce with smart allocation rules.</p>
+        <svg class="fc-sparkline" width="100%" height="24" viewBox="0 0 160 24" preserveAspectRatio="none"><polyline fill="none" stroke="var(--gold)" stroke-width="1.2" opacity=".4" points="0,18 16,14 32,16 48,10 64,12 80,6 96,8 112,4 128,6 144,3 160,2"/></svg>
+      </div>
+      <div class="feature-card" data-feature>
+        <div class="fc-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="6" width="14" height="10" rx="2" stroke="var(--gold-light)" stroke-width="1.5"/><path d="M3 10h14" stroke="var(--gold-light)" stroke-width="1.5"/><path d="M7 3v3M13 3v3" stroke="var(--gold-light)" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="fc-metric"><span class="fc-metric-dot"></span> 7 cost components</div>
+        <h3>Landed Costs</h3>
+        <p>Track the true cost of imported goods. Freight, duty, insurance, handling, and customs charges automatically distributed across items.</p>
+        <svg class="fc-sparkline" width="100%" height="24" viewBox="0 0 160 24" preserveAspectRatio="none"><polyline fill="none" stroke="var(--gold)" stroke-width="1.2" opacity=".4" points="0,12 20,14 40,10 60,16 80,8 100,12 120,6 140,10 160,4"/></svg>
+      </div>
+      <div class="feature-card" data-feature>
+        <div class="fc-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3l2 4h4l-3 3 1 4-4-2-4 2 1-4-3-3h4z" stroke="var(--gold-light)" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="fc-metric"><span class="fc-metric-dot"></span> 30 attribute slots</div>
+        <h3>Product Attributes</h3>
+        <p>Extended attribute management for fabric, composition, care instructions, country of origin, and custom fields unique to apparel.</p>
+        <svg class="fc-sparkline" width="100%" height="24" viewBox="0 0 160 24" preserveAspectRatio="none"><polyline fill="none" stroke="var(--gold)" stroke-width="1.2" opacity=".4" points="0,20 20,16 40,18 60,12 80,14 100,8 120,10 140,6 160,4"/></svg>
+      </div>
+      <div class="feature-card" data-feature>
+        <div class="fc-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="var(--gold-light)" stroke-width="1.5"/><path d="M7 10l2 2 4-4" stroke="var(--gold-light)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="fc-metric"><span class="fc-metric-dot"></span> lifecycle managed</div>
+        <h3>Item Statuses</h3>
+        <p>Control the product lifecycle from sample to clearance. Automated status transitions with validation rules at every stage.</p>
+        <svg class="fc-sparkline" width="100%" height="24" viewBox="0 0 160 24" preserveAspectRatio="none"><polyline fill="none" stroke="var(--gold)" stroke-width="1.2" opacity=".4" points="0,22 20,18 40,14 60,12 80,10 100,8 120,8 140,8 160,8"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Feature Deep Dives -->
+<section id="deep-dives">
+  <div class="section-inner">
+
+    <!-- Variant Matrix -->
+    <div class="deep-dive" data-dd>
+      <div class="dd-content">
+        <div class="dd-label">Variant Matrix</div>
+        <h3>Every color. Every size.<br>One spreadsheet view.</h3>
+        <p>Define product variants across color and size dimensions in an intuitive matrix grid. Generate hundreds of SKUs instantly with visual confirmation of every combination.</p>
+        <div class="dd-tags">
+          <span class="dd-tag">color x size</span>
+          <span class="dd-tag">bulk create</span>
+          <span class="dd-tag">visual grid</span>
+        </div>
+      </div>
+      <div class="dd-visual">
+        <div class="dd-visual-bar"><span></span><span></span><span></span></div>
+        <div class="dd-visual-body">
+          <table class="matrix-table">
+            <thead>
+              <tr>
+                <th>Style</th>
+                <th>XS</th>
+                <th>S</th>
+                <th>M</th>
+                <th>L</th>
+                <th>XL</th>
+                <th>XXL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="active">Black</td>
+                <td><span class="matrix-cell filled">24</span></td>
+                <td><span class="matrix-cell filled">48</span></td>
+                <td><span class="matrix-cell filled">72</span></td>
+                <td><span class="matrix-cell filled">60</span></td>
+                <td><span class="matrix-cell filled">36</span></td>
+                <td><span class="matrix-cell filled">12</span></td>
+              </tr>
+              <tr>
+                <td class="active">Navy</td>
+                <td><span class="matrix-cell filled">18</span></td>
+                <td><span class="matrix-cell filled">36</span></td>
+                <td><span class="matrix-cell filled">54</span></td>
+                <td><span class="matrix-cell filled">48</span></td>
+                <td><span class="matrix-cell filled">30</span></td>
+                <td><span class="matrix-cell empty">&mdash;</span></td>
+              </tr>
+              <tr>
+                <td class="active">White</td>
+                <td><span class="matrix-cell filled">12</span></td>
+                <td><span class="matrix-cell filled">30</span></td>
+                <td><span class="matrix-cell filled">48</span></td>
+                <td><span class="matrix-cell filled">42</span></td>
+                <td><span class="matrix-cell filled">24</span></td>
+                <td><span class="matrix-cell empty">&mdash;</span></td>
+              </tr>
+              <tr>
+                <td class="active">Olive</td>
+                <td><span class="matrix-cell empty">&mdash;</span></td>
+                <td><span class="matrix-cell filled">24</span></td>
+                <td><span class="matrix-cell filled">36</span></td>
+                <td><span class="matrix-cell filled">30</span></td>
+                <td><span class="matrix-cell filled">18</span></td>
+                <td><span class="matrix-cell empty">&mdash;</span></td>
+              </tr>
+              <tr>
+                <td class="active">Burgundy</td>
+                <td><span class="matrix-cell empty">&mdash;</span></td>
+                <td><span class="matrix-cell filled">18</span></td>
+                <td><span class="matrix-cell filled">30</span></td>
+                <td><span class="matrix-cell filled">24</span></td>
+                <td><span class="matrix-cell filled">12</span></td>
+                <td><span class="matrix-cell empty">&mdash;</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Smart Allocation -->
+    <div class="deep-dive" data-dd>
+      <div class="dd-content">
+        <div class="dd-label">Smart Allocation</div>
+        <h3>Prioritize the channels<br>that matter most.</h3>
+        <p>Set allocation rules by channel priority. VIP customers and key accounts get first pick, with automatic rebalancing as inventory arrives and demand shifts.</p>
+        <div class="dd-tags">
+          <span class="dd-tag">channel priority</span>
+          <span class="dd-tag">auto-rebalance</span>
+          <span class="dd-tag">soft reserve</span>
+        </div>
+      </div>
+      <div class="dd-visual">
+        <div class="dd-visual-bar"><span></span><span></span><span></span></div>
+        <div class="dd-visual-body">
+          <div class="alloc-bars" id="alloc-bars">
+            <div class="alloc-row">
+              <div class="alloc-label">VIP</div>
+              <div class="alloc-bar-track"><div class="alloc-bar-fill gold" data-width="95" style="width:0%"></div></div>
+              <div class="alloc-pct">95%</div>
+            </div>
+            <div class="alloc-row">
+              <div class="alloc-label">Wholesale</div>
+              <div class="alloc-bar-track"><div class="alloc-bar-fill gold" data-width="78" style="width:0%"></div></div>
+              <div class="alloc-pct">78%</div>
+            </div>
+            <div class="alloc-row">
+              <div class="alloc-label">Retail</div>
+              <div class="alloc-bar-track"><div class="alloc-bar-fill gold" data-width="62" style="width:0%"></div></div>
+              <div class="alloc-pct">62%</div>
+            </div>
+            <div class="alloc-row">
+              <div class="alloc-label">E-Commerce</div>
+              <div class="alloc-bar-track"><div class="alloc-bar-fill gold" data-width="45" style="width:0%"></div></div>
+              <div class="alloc-pct">45%</div>
+            </div>
+            <div class="alloc-row">
+              <div class="alloc-label">Outlet</div>
+              <div class="alloc-bar-track"><div class="alloc-bar-fill gold" data-width="30" style="width:0%"></div></div>
+              <div class="alloc-pct">30%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Season & Delivery -->
+    <div class="deep-dive" data-dd>
+      <div class="dd-content">
+        <div class="dd-label">Season & Delivery</div>
+        <h3>Plan seasons.<br>Hit delivery windows.</h3>
+        <p>Visualize your entire fashion calendar with season planning and delivery tracking. From initial design to store floor, every milestone is accounted for.</p>
+        <div class="dd-tags">
+          <span class="dd-tag">gantt view</span>
+          <span class="dd-tag">delivery windows</span>
+          <span class="dd-tag">milestones</span>
+        </div>
+      </div>
+      <div class="dd-visual">
+        <div class="dd-visual-bar"><span></span><span></span><span></span></div>
+        <div class="dd-visual-body">
+          <div class="timeline-visual">
+            <div class="timeline-row">
+              <div class="timeline-label">SS26</div>
+              <div class="timeline-track">
+                <div class="timeline-bar season" style="left:5%;width:35%">Spring/Summer</div>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="timeline-label">Del. 1</div>
+              <div class="timeline-track">
+                <div class="timeline-bar delivery" style="left:8%;width:12%">Feb</div>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="timeline-label">Del. 2</div>
+              <div class="timeline-track">
+                <div class="timeline-bar delivery" style="left:22%;width:12%">Apr</div>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="timeline-label">FW26</div>
+              <div class="timeline-track">
+                <div class="timeline-bar season" style="left:45%;width:38%">Fall/Winter</div>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="timeline-label">Del. 3</div>
+              <div class="timeline-track">
+                <div class="timeline-bar delivery" style="left:48%;width:14%">Aug</div>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="timeline-label">Del. 4</div>
+              <div class="timeline-track">
+                <div class="timeline-bar delivery" style="left:68%;width:12%">Oct</div>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="timeline-label">Planning</div>
+              <div class="timeline-track">
+                <div class="timeline-bar planning" style="left:85%;width:14%">SS27</div>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-months">
+            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Landed Cost -->
+    <div class="deep-dive" data-dd>
+      <div class="dd-content">
+        <div class="dd-label">Landed Cost</div>
+        <h3>Know the true cost<br>of every garment.</h3>
+        <p>Capture every cost component from factory to warehouse. Freight, duty, insurance, and handling charges are automatically calculated and distributed to determine true landed cost per unit.</p>
+        <div class="dd-tags">
+          <span class="dd-tag">auto-distribute</span>
+          <span class="dd-tag">multi-currency</span>
+          <span class="dd-tag">duty calc</span>
+        </div>
+      </div>
+      <div class="dd-visual">
+        <div class="dd-visual-bar"><span></span><span></span><span></span></div>
+        <div class="dd-visual-body">
+          <div class="cost-breakdown">
+            <div class="cost-row">
+              <div class="cost-name"><span class="cost-dot" style="background:var(--gold)"></span> FOB Price</div>
+              <div><span class="cost-val">$12.50</span><span class="cost-pct">62.5%</span></div>
+            </div>
+            <div class="cost-row">
+              <div class="cost-name"><span class="cost-dot" style="background:var(--gold-light)"></span> Ocean Freight</div>
+              <div><span class="cost-val">$2.80</span><span class="cost-pct">14.0%</span></div>
+            </div>
+            <div class="cost-row">
+              <div class="cost-name"><span class="cost-dot" style="background:var(--gold-mid)"></span> Import Duty</div>
+              <div><span class="cost-val">$2.25</span><span class="cost-pct">11.3%</span></div>
+            </div>
+            <div class="cost-row">
+              <div class="cost-name"><span class="cost-dot" style="background:rgba(212,160,23,0.5)"></span> Insurance</div>
+              <div><span class="cost-val">$0.65</span><span class="cost-pct">3.3%</span></div>
+            </div>
+            <div class="cost-row">
+              <div class="cost-name"><span class="cost-dot" style="background:rgba(212,160,23,0.3)"></span> Handling</div>
+              <div><span class="cost-val">$0.95</span><span class="cost-pct">4.8%</span></div>
+            </div>
+            <div class="cost-row">
+              <div class="cost-name"><span class="cost-dot" style="background:rgba(212,160,23,0.15)"></span> Customs Broker</div>
+              <div><span class="cost-val">$0.85</span><span class="cost-pct">4.3%</span></div>
+            </div>
+            <div class="cost-total">
+              <div class="cost-name">Landed Cost / Unit</div>
+              <div class="cost-val">$20.00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- How It Works -->
+<section id="how-it-works">
+  <div class="dotted-grid"></div>
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="badge"><span class="dot"></span> Getting Started</div>
+      <h2>Four steps to apparel ERP.</h2>
+      <p>From install to running your business in record time.</p>
+    </div>
+    <div class="pipeline">
+      <div class="pipeline-step" data-step>
+        <div class="ps-number">01</div>
+        <div class="ps-cmd">$ volt install</div>
+        <h4>Install & Configure</h4>
+        <p>Deploy from AppSource. Configure your apparel settings in minutes.</p>
+      </div>
+      <div class="pipeline-step" data-step>
+        <div class="ps-number">02</div>
+        <div class="ps-cmd">$ volt catalog</div>
+        <h4>Define Your Catalog</h4>
+        <p>Set up your product variants, colors, sizes, and attribute templates.</p>
+      </div>
+      <div class="pipeline-step" data-step>
+        <div class="ps-number">03</div>
+        <div class="ps-cmd">$ volt season</div>
+        <h4>Plan Your Seasons</h4>
+        <p>Create seasons, define deliveries, and set up allocation rules.</p>
+      </div>
+      <div class="pipeline-step" data-step>
+        <div class="ps-number">04</div>
+        <div class="ps-cmd">$ volt launch</div>
+        <h4>Run Your Business</h4>
+        <p>Process orders, manage inventory, and track costs with full visibility.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Metrics -->
+<section id="metrics">
+  <div class="section-inner">
+    <div class="section-header" style="text-align:center;margin-bottom:56px">
+      <div class="badge"><span class="dot"></span> By the Numbers</div>
+      <h2 style="font-family:var(--heading);font-size:clamp(28px,4vw,42px);font-weight:700;letter-spacing:-0.02em">Impact that speaks for itself.</h2>
+    </div>
+    <div class="metrics-grid">
+      <div class="metric-card" data-metric>
+        <div class="mc-visual">
+          <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="42" class="mc-circle-bg"/>
+            <circle cx="50" cy="50" r="42" class="mc-circle-fill" stroke-dasharray="263.9" stroke-dashoffset="263.9" transform="rotate(-90 50 50)" data-target="26.4"/>
+          </svg>
+        </div>
+        <div class="mc-value"><span class="counter" data-target="90">0</span>%</div>
+        <div class="mc-unit">reduction</div>
+        <div class="mc-desc">Less time on variant setup</div>
+        <div class="mc-bar"><div class="mc-bar-fill" data-width="90" style="width:0%"></div></div>
+      </div>
+      <div class="metric-card" data-metric>
+        <div class="mc-visual">
+          <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="42" class="mc-circle-bg"/>
+            <circle cx="50" cy="50" r="42" class="mc-circle-fill" stroke-dasharray="263.9" stroke-dashoffset="263.9" transform="rotate(-90 50 50)" data-target="109.8"/>
+          </svg>
+        </div>
+        <div class="mc-value"><span class="counter" data-target="42">0</span></div>
+        <div class="mc-unit">tables</div>
+        <div class="mc-desc">Purpose-built data structures</div>
+        <div class="mc-bar"><div class="mc-bar-fill" data-width="42" style="width:0%"></div></div>
+      </div>
+      <div class="metric-card" data-metric>
+        <div class="mc-visual">
+          <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="42" class="mc-circle-bg"/>
+            <circle cx="50" cy="50" r="42" class="mc-circle-fill" stroke-dasharray="263.9" stroke-dashoffset="263.9" transform="rotate(-90 50 50)" data-target="185.7"/>
+          </svg>
+        </div>
+        <div class="mc-value"><span class="counter" data-target="30">0</span></div>
+        <div class="mc-unit">attributes</div>
+        <div class="mc-desc">Custom product attribute slots</div>
+        <div class="mc-bar"><div class="mc-bar-fill" data-width="30" style="width:0%"></div></div>
+      </div>
+      <div class="metric-card" data-metric>
+        <div class="mc-visual">
+          <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="42" class="mc-circle-bg"/>
+            <circle cx="50" cy="50" r="42" class="mc-circle-fill" stroke="rgba(212,160,23,0.3)" stroke-dasharray="263.9" stroke-dashoffset="0" transform="rotate(-90 50 50)" data-target="263.9"/>
+          </svg>
+        </div>
+        <div class="mc-value"><span class="counter" data-target="0">0</span></div>
+        <div class="mc-unit">dependencies</div>
+        <div class="mc-desc">Zero external dependencies</div>
+        <div class="mc-bar"><div class="mc-bar-fill" data-width="100" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonial -->
+<section id="testimonial">
+  <div class="section-inner">
+    <div class="testimonial-card" data-testimonial>
+      <div class="tc-quote-mark">&ldquo;</div>
+      <div class="tc-stars">
+        <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span>
+      </div>
+      <blockquote>Volt Apparel turned Business Central into the apparel ERP we always needed. The variant matrix alone saved our team hundreds of hours per season. It just works.</blockquote>
+      <div class="tc-author">Sarah Chen</div>
+      <div class="tc-role">VP of Operations, Pacific Garments Ltd</div>
+    </div>
+  </div>
+</section>
+
+<!-- Integration -->
+<section id="integration">
+  <div class="dotted-grid"></div>
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="badge"><span class="dot"></span> Architecture</div>
+      <h2>Native BC. Zero friction.</h2>
+      <p>Volt Apparel lives entirely within Business Central. No external services, no APIs to manage, no points of failure.</p>
+    </div>
+    <div class="integration-diagram" id="int-diagram">
+      <svg class="int-lines" id="int-lines" width="100%" height="100%">
+        <!-- Lines drawn by JS -->
+      </svg>
+      <!-- Center node -->
+      <div class="int-node center-node" id="node-center" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">
+        <div class="int-icon">V</div>
+        <div class="int-name">Volt Apparel</div>
+        <div class="int-desc">extension layer</div>
+      </div>
+      <!-- Surrounding nodes -->
+      <div class="int-node" id="node-bc" style="position:absolute;left:50%;top:0;transform:translate(-50%,0)">
+        <div class="int-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="2" stroke="var(--gold-light)" stroke-width="1.5"/><path d="M6 6h6M6 9h6M6 12h4" stroke="var(--gold-light)" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="int-name">Business Central</div>
+        <div class="int-desc">base platform</div>
+      </div>
+      <div class="int-node" id="node-sales" style="position:absolute;left:0;top:30%;transform:translate(0,0)">
+        <div class="int-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 14l4-8 4 5 4-6" stroke="var(--gold-light)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="int-name">Sales</div>
+        <div class="int-desc">orders & pricing</div>
+      </div>
+      <div class="int-node" id="node-inventory" style="position:absolute;right:0;top:30%;transform:translate(0,0)">
+        <div class="int-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="5" width="12" height="10" rx="1.5" stroke="var(--gold-light)" stroke-width="1.5"/><path d="M6 5V3.5a3 3 0 016 0V5" stroke="var(--gold-light)" stroke-width="1.5"/></svg>
+        </div>
+        <div class="int-name">Inventory</div>
+        <div class="int-desc">stock & variants</div>
+      </div>
+      <div class="int-node" id="node-purchasing" style="position:absolute;left:0;bottom:0;transform:translate(0,0)">
+        <div class="int-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="12" rx="2" stroke="var(--gold-light)" stroke-width="1.5"/><path d="M2 7h14" stroke="var(--gold-light)" stroke-width="1.5"/></svg>
+        </div>
+        <div class="int-name">Purchasing</div>
+        <div class="int-desc">procurement</div>
+      </div>
+      <div class="int-node" id="node-finance" style="position:absolute;right:0;bottom:0;transform:translate(0,0)">
+        <div class="int-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6.5" stroke="var(--gold-light)" stroke-width="1.5"/><path d="M9 5v8M7 7h4M7 11h4" stroke="var(--gold-light)" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="int-name">Finance</div>
+        <div class="int-desc">GL & costing</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="section-inner">
+    <div class="cta-card">
+      <div class="badge" style="margin:0 auto 20px;display:inline-flex"><span class="dot"></span> Get Started</div>
+      <h2>Ready to modernize your<br>apparel operations?</h2>
+      <p>Join apparel businesses already running on Volt Apparel for Business Central.</p>
+      <div class="cta-buttons">
+        <a href="#" class="btn-primary">
+          Request a Demo
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#" class="btn-secondary">Contact Sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="section-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="fb-logo">
+          <div class="logo-icon">V</div>
+          Volt Apparel
+        </div>
+        <p>Purpose-built apparel functionality for Microsoft Dynamics 365 Business Central. By Volt Technologies.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#deep-dives">Modules</a></li>
+          <li><a href="#integration">Integration</a></li>
+          <li><a href="#metrics">Metrics</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Modules</h4>
+        <ul>
+          <li><a href="#">Product Variants</a></li>
+          <li><a href="#">Seasonality</a></li>
+          <li><a href="#">Allocations</a></li>
+          <li><a href="#">Landed Costs</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Volt</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Partners</a></li>
+          <li><a href="#">Support</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Volt Technologies. All rights reserved.</p>
+      <div class="fb-links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Status</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ============================================================
+// INITIALIZATION
+// ============================================================
+
+// Lenis smooth scroll
+const lenis = new Lenis({
+  duration: 1.2,
+  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  smoothWheel: true,
+});
+
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+// Connect Lenis to GSAP ScrollTrigger
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+gsap.ticker.lagSmoothing(0);
+
+// Register GSAP plugins
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+// ============================================================
+// LOADING SCREEN
+// ============================================================
+const loader = document.getElementById('loader');
+const terminalLines = document.querySelectorAll('.terminal-line');
+const tl = gsap.timeline({
+  onComplete: () => {
+    gsap.to(loader, {
+      opacity: 0,
+      duration: 0.5,
+      delay: 0.3,
+      onComplete: () => {
+        loader.style.display = 'none';
+        document.body.style.overflow = '';
+        initPageAnimations();
+      }
+    });
+  }
+});
+
+document.body.style.overflow = 'hidden';
+
+terminalLines.forEach((line, i) => {
+  tl.to(line, { opacity: 1, duration: 0.05 }, i * 0.18 + 0.3);
+});
+
+// ============================================================
+// CURSOR GLOW
+// ============================================================
+const cursorGlow = document.getElementById('cursor-glow');
+let mouseX = 0, mouseY = 0;
+
+if (window.matchMedia('(pointer: fine)').matches) {
+  cursorGlow.style.display = 'block';
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    gsap.to(cursorGlow, {
+      x: mouseX,
+      y: mouseY,
+      duration: 0.6,
+      ease: 'power2.out',
+      overwrite: 'auto'
+    });
+  });
+}
+
+// ============================================================
+// SCROLL PROGRESS BAR
+// ============================================================
+const scrollProgress = document.getElementById('scroll-progress');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  scrollProgress.style.width = progress + '%';
+});
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+const nav = document.getElementById('main-nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      lenis.scrollTo(target, { offset: -80 });
+    }
+  });
+});
+
+// Mobile toggle (simple)
+const mobileToggle = document.getElementById('mobile-toggle');
+const navLinks = document.querySelector('.nav-links');
+mobileToggle.addEventListener('click', () => {
+  if (navLinks.style.display === 'flex') {
+    navLinks.style.display = 'none';
+  } else {
+    navLinks.style.display = 'flex';
+    navLinks.style.position = 'absolute';
+    navLinks.style.top = '60px';
+    navLinks.style.right = '24px';
+    navLinks.style.flexDirection = 'column';
+    navLinks.style.background = 'var(--bg-card)';
+    navLinks.style.border = '1px solid var(--border)';
+    navLinks.style.borderRadius = 'var(--radius)';
+    navLinks.style.padding = '16px';
+    navLinks.style.gap = '12px';
+    navLinks.style.zIndex = '999';
+  }
+});
+
+// ============================================================
+// PAGE ANIMATIONS (after loader completes)
+// ============================================================
+function initPageAnimations() {
+
+  // Hero entrance
+  const heroTl = gsap.timeline();
+  heroTl.from('#hero .badge', { opacity: 0, y: 20, duration: 0.6 })
+    .from('#hero h1', { opacity: 0, y: 30, duration: 0.7 }, '-=0.3')
+    .from('#hero .subtitle', { opacity: 0, y: 20, duration: 0.5 }, '-=0.3')
+    .from('.hero-buttons', { opacity: 0, y: 20, duration: 0.5 }, '-=0.2')
+    .from('#hero-dashboard', { opacity: 0, y: 40, duration: 0.8, ease: 'power3.out' }, '-=0.3')
+    .from('.stat-card', { opacity: 0, y: 20, duration: 0.5, stagger: 0.1 }, '-=0.4');
+
+  // Feature cards
+  gsap.utils.toArray('[data-feature]').forEach((card, i) => {
+    gsap.from(card, {
+      scrollTrigger: {
+        trigger: card,
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      },
+      opacity: 0,
+      y: 40,
+      duration: 0.6,
+      delay: i % 3 * 0.1,
+    });
+  });
+
+  // Deep dive sections
+  gsap.utils.toArray('[data-dd]').forEach((dd) => {
+    const content = dd.querySelector('.dd-content');
+    const visual = dd.querySelector('.dd-visual');
+    gsap.from(content, {
+      scrollTrigger: { trigger: dd, start: 'top 80%', toggleActions: 'play none none none' },
+      opacity: 0, x: -40, duration: 0.7,
+    });
+    gsap.from(visual, {
+      scrollTrigger: { trigger: dd, start: 'top 80%', toggleActions: 'play none none none' },
+      opacity: 0, x: 40, duration: 0.7,
+    });
+  });
+
+  // Allocation bars animation
+  ScrollTrigger.create({
+    trigger: '#alloc-bars',
+    start: 'top 80%',
+    onEnter: () => {
+      document.querySelectorAll('.alloc-bar-fill').forEach(bar => {
+        const w = bar.getAttribute('data-width');
+        gsap.to(bar, { width: w + '%', duration: 1.2, ease: 'power3.out', delay: 0.2 });
+      });
+    },
+    once: true,
+  });
+
+  // Pipeline steps
+  gsap.utils.toArray('[data-step]').forEach((step, i) => {
+    gsap.from(step, {
+      scrollTrigger: { trigger: step, start: 'top 85%', toggleActions: 'play none none none' },
+      opacity: 0, y: 30, duration: 0.6, delay: i * 0.15,
+    });
+  });
+
+  // Metrics - counters and circles
+  gsap.utils.toArray('[data-metric]').forEach((card) => {
+    ScrollTrigger.create({
+      trigger: card,
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        // Animate counter
+        const counter = card.querySelector('.counter');
+        const target = parseInt(counter.getAttribute('data-target'));
+        gsap.to({ val: 0 }, {
+          val: target,
+          duration: 2,
+          ease: 'power2.out',
+          onUpdate: function () {
+            counter.textContent = Math.round(this.targets()[0].val);
+          }
+        });
+
+        // Animate circle
+        const circle = card.querySelector('.mc-circle-fill');
+        if (circle) {
+          const targetOffset = parseFloat(circle.getAttribute('data-target'));
+          gsap.to(circle, {
+            strokeDashoffset: targetOffset,
+            duration: 2,
+            ease: 'power2.out',
+          });
+        }
+
+        // Animate bar
+        const barFill = card.querySelector('.mc-bar-fill');
+        if (barFill) {
+          const w = barFill.getAttribute('data-width');
+          gsap.to(barFill, { width: w + '%', duration: 1.5, ease: 'power2.out', delay: 0.3 });
+        }
+      }
+    });
+  });
+
+  // Testimonial
+  gsap.from('[data-testimonial]', {
+    scrollTrigger: { trigger: '[data-testimonial]', start: 'top 80%', toggleActions: 'play none none none' },
+    opacity: 0, y: 40, duration: 0.8,
+  });
+
+  // CTA
+  gsap.from('.cta-card', {
+    scrollTrigger: { trigger: '.cta-card', start: 'top 80%', toggleActions: 'play none none none' },
+    opacity: 0, y: 40, duration: 0.8,
+  });
+
+  // Integration diagram animation
+  initIntegrationDiagram();
+}
+
+// ============================================================
+// INTEGRATION DIAGRAM - Connecting lines and animated dots
+// ============================================================
+function initIntegrationDiagram() {
+  const diagram = document.getElementById('int-diagram');
+  const svgEl = document.getElementById('int-lines');
+  if (!diagram || !svgEl || window.innerWidth < 768) return;
+
+  const centerNode = document.getElementById('node-center');
+  const outerNodes = ['node-bc', 'node-sales', 'node-inventory', 'node-purchasing', 'node-finance'];
+
+  function getNodeCenter(el) {
+    const dRect = diagram.getBoundingClientRect();
+    const nRect = el.getBoundingClientRect();
+    return {
+      x: nRect.left - dRect.left + nRect.width / 2,
+      y: nRect.top - dRect.top + nRect.height / 2
+    };
+  }
+
+  function drawLines() {
+    svgEl.innerHTML = '';
+    const center = getNodeCenter(centerNode);
+
+    outerNodes.forEach((nodeId, i) => {
+      const node = document.getElementById(nodeId);
+      if (!node) return;
+      const pos = getNodeCenter(node);
+
+      // Create dashed line
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', center.x);
+      line.setAttribute('y1', center.y);
+      line.setAttribute('x2', pos.x);
+      line.setAttribute('y2', pos.y);
+      line.setAttribute('stroke', 'rgba(250,250,250,0.08)');
+      line.setAttribute('stroke-width', '1');
+      line.setAttribute('stroke-dasharray', '4,4');
+      svgEl.appendChild(line);
+
+      // Create animated dot
+      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.setAttribute('r', '3');
+      dot.setAttribute('fill', '#d4a017');
+      dot.setAttribute('cx', center.x);
+      dot.setAttribute('cy', center.y);
+      svgEl.appendChild(dot);
+
+      // Animate dot along line
+      gsap.to(dot, {
+        attr: { cx: pos.x, cy: pos.y },
+        duration: 2 + i * 0.3,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: i * 0.4,
+      });
+    });
+  }
+
+  // Use ScrollTrigger to init when visible
+  ScrollTrigger.create({
+    trigger: '#integration',
+    start: 'top 80%',
+    once: true,
+    onEnter: () => {
+      setTimeout(drawLines, 100);
+    }
+  });
+
+  // Redraw on resize
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(drawLines, 250);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,2432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volt Apparel — Fashion ERP for Business Central</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-primary: #09090b;
+    --bg-secondary: #0a0a0a;
+    --bg-card: #111113;
+    --bg-card-hover: #161618;
+    --gold: #d4a017;
+    --gold-light: #fbbf24;
+    --gold-mid: #f59e0b;
+    --text-primary: #fafafa;
+    --text-muted: rgba(250, 250, 250, 0.56);
+    --text-dim: rgba(250, 250, 250, 0.32);
+    --border-subtle: rgba(250, 250, 250, 0.08);
+    --border-gold: rgba(212, 160, 23, 0.3);
+    --serif: 'Cormorant Garamond', 'Georgia', serif;
+    --sans: 'Inter', -apple-system, sans-serif;
+}
+
+html {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--sans);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html.lenis, html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+body {
+    background: var(--bg-primary);
+    overflow-x: hidden;
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* ─── Scroll Progress ─── */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    z-index: 10000;
+    transition: none;
+}
+
+/* ─── Loading Screen ─── */
+.loader {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-primary);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.loader-logo {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    opacity: 0;
+}
+
+.loader-line-wrap {
+    width: 200px;
+    height: 1px;
+    background: var(--border-subtle);
+    position: relative;
+    overflow: hidden;
+}
+
+.loader-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: var(--gold);
+}
+
+/* ─── Navigation ─── */
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 0 60px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.6s ease, border-color 0.6s ease;
+    border-bottom: 1px solid transparent;
+}
+
+.nav.scrolled {
+    background: rgba(9, 9, 11, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom-color: var(--border-subtle);
+}
+
+.nav-inner {
+    width: 100%;
+    max-width: 1400px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-logo {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+}
+
+.nav-logo span {
+    color: var(--gold);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    list-style: none;
+}
+
+.nav-link {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    position: relative;
+    cursor: pointer;
+    transition: color 0.4s ease;
+    padding: 4px 0;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    transition: width 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.nav-link:hover {
+    color: var(--text-primary);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.nav-cta {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--border-gold);
+    padding: 10px 28px;
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+
+.nav-cta:hover {
+    background: rgba(212, 160, 23, 0.08);
+    border-color: var(--gold);
+}
+
+.nav-mobile-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.nav-mobile-toggle span {
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--text-primary);
+    transition: all 0.4s ease;
+}
+
+/* ─── Sections General ─── */
+.section {
+    padding: 160px 60px;
+    position: relative;
+}
+
+.section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-label {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.section-label::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+}
+
+.section-title {
+    font-family: var(--serif);
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+}
+
+.section-subtitle {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-muted);
+    max-width: 560px;
+}
+
+.gold-rule {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+    border: none;
+    margin: 0;
+}
+
+/* ─── Reveal Animation ─── */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+}
+
+/* ─── Hero ─── */
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 200px 60px 160px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 160, 23, 0.03) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero-content {
+    max-width: 900px;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--border-gold);
+    padding: 10px 24px;
+    margin-bottom: 56px;
+}
+
+.hero-badge-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse-dot 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+.hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(48px, 7vw, 96px);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+    color: var(--text-primary);
+}
+
+.hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+}
+
+.hero-subtitle {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-muted);
+    max-width: 520px;
+    margin: 0 auto 56px;
+}
+
+.hero-ctas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 96px;
+}
+
+.btn-primary {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--bg-primary);
+    background: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 16px 40px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    font-family: var(--sans);
+}
+
+.btn-primary:hover {
+    background: var(--gold-light);
+    border-color: var(--gold-light);
+}
+
+.btn-secondary {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    background: transparent;
+    border: 1px solid var(--border-gold);
+    padding: 16px 40px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    font-family: var(--sans);
+}
+
+.btn-secondary:hover {
+    background: rgba(212, 160, 23, 0.06);
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.hero-stats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+}
+
+.hero-stat {
+    padding: 0 48px;
+    text-align: center;
+    position: relative;
+}
+
+.hero-stat:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 48px;
+    background: var(--border-gold);
+}
+
+.hero-stat-value {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--gold);
+    margin-bottom: 6px;
+}
+
+.hero-stat-label {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+/* ─── Social Proof ─── */
+.social-proof {
+    padding: 80px 60px;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--bg-secondary);
+}
+
+.social-proof-title {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 48px;
+}
+
+.social-proof-items {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.social-proof-item {
+    padding: 12px 36px;
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    position: relative;
+    transition: color 0.5s ease;
+    white-space: nowrap;
+}
+
+.social-proof-item:hover {
+    color: var(--gold);
+}
+
+.social-proof-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 16px;
+    background: var(--border-gold);
+}
+
+/* ─── Features Grid ─── */
+.features-header {
+    text-align: center;
+    margin-bottom: 100px;
+}
+
+.features-header .section-title {
+    max-width: 700px;
+    margin: 0 auto 24px;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+}
+
+.feature-card {
+    padding: 56px 48px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    position: relative;
+    transition: all 0.6s ease;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.feature-card:hover {
+    background: var(--bg-card-hover);
+}
+
+.feature-card:hover::before {
+    transform: scaleX(1);
+}
+
+.feature-number {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--gold);
+    margin-bottom: 28px;
+    opacity: 0.6;
+}
+
+.feature-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.feature-icon svg {
+    width: 32px;
+    height: 32px;
+    stroke: var(--gold);
+    fill: none;
+    stroke-width: 1;
+}
+
+.feature-card h3 {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    letter-spacing: 0.01em;
+}
+
+.feature-card p {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-muted);
+}
+
+/* ─── Feature Deep Dives ─── */
+.deep-dive {
+    padding: 160px 60px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.deep-dive-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: center;
+}
+
+.deep-dive-inner.reverse {
+    direction: rtl;
+}
+
+.deep-dive-inner.reverse > * {
+    direction: ltr;
+}
+
+.deep-dive-content h3 {
+    font-family: var(--serif);
+    font-size: clamp(32px, 3.5vw, 44px);
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.deep-dive-content p {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+}
+
+.deep-dive-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.deep-dive-features li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+}
+
+.deep-dive-features li::before {
+    content: '';
+    width: 20px;
+    height: 1px;
+    background: var(--gold);
+    flex-shrink: 0;
+}
+
+/* Variant Matrix Visual */
+.variant-matrix-visual {
+    padding: 40px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+}
+
+.matrix-header {
+    display: grid;
+    grid-template-columns: 100px repeat(5, 1fr);
+    gap: 1px;
+    margin-bottom: 1px;
+}
+
+.matrix-header-cell {
+    padding: 14px 8px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(212, 160, 23, 0.04);
+    border: 1px solid var(--border-subtle);
+}
+
+.matrix-header-cell:first-child {
+    background: transparent;
+    border-color: transparent;
+}
+
+.matrix-row {
+    display: grid;
+    grid-template-columns: 100px repeat(5, 1fr);
+    gap: 1px;
+    margin-bottom: 1px;
+}
+
+.matrix-row-label {
+    padding: 14px 12px;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border-subtle);
+    background: rgba(212, 160, 23, 0.02);
+}
+
+.matrix-cell {
+    padding: 14px 8px;
+    text-align: center;
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--text-muted);
+    border: 1px solid var(--border-subtle);
+    transition: all 0.4s ease;
+    cursor: default;
+}
+
+.matrix-cell.filled {
+    color: var(--text-primary);
+}
+
+.matrix-cell:hover {
+    background: rgba(212, 160, 23, 0.06);
+    border-color: var(--border-gold);
+    color: var(--gold);
+}
+
+/* Allocation Bars */
+.allocation-visual {
+    padding: 48px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+}
+
+.allocation-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.allocation-row:last-child {
+    margin-bottom: 0;
+}
+
+.allocation-label {
+    width: 120px;
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.allocation-bar-wrap {
+    flex: 1;
+    height: 2px;
+    background: var(--border-subtle);
+    position: relative;
+    overflow: hidden;
+}
+
+.allocation-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    width: 0%;
+    transition: width 1.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.allocation-value {
+    width: 48px;
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--gold);
+    text-align: right;
+    flex-shrink: 0;
+}
+
+/* Season Visual */
+.season-visual {
+    padding: 48px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+}
+
+.season-timeline {
+    position: relative;
+    padding-left: 32px;
+}
+
+.season-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--border-gold);
+}
+
+.season-item {
+    position: relative;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.season-item:last-child {
+    border-bottom: none;
+}
+
+.season-item::before {
+    content: '';
+    position: absolute;
+    left: -36px;
+    top: 32px;
+    width: 8px;
+    height: 8px;
+    border: 1px solid var(--gold);
+    background: var(--bg-primary);
+    transform: rotate(45deg);
+}
+
+.season-name {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+
+.season-detail {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+}
+
+.season-tag {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--border-gold);
+    padding: 4px 12px;
+    margin-top: 10px;
+}
+
+/* Landed Costs Visual */
+.landed-costs-visual {
+    padding: 48px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+}
+
+.cost-layer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.cost-layer:last-child {
+    border-bottom: none;
+}
+
+.cost-layer-name {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+}
+
+.cost-layer-value {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--text-primary);
+}
+
+.cost-total {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-gold);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cost-total-label {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+.cost-total-value {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--gold);
+}
+
+/* ─── How It Works ─── */
+.how-it-works-header {
+    text-align: center;
+    margin-bottom: 100px;
+}
+
+.timeline {
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    padding-left: 60px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, var(--gold), var(--border-gold), transparent);
+}
+
+.timeline-step {
+    position: relative;
+    padding: 0 0 80px 0;
+}
+
+.timeline-step:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -52px;
+    top: 4px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timeline-marker-inner {
+    width: 8px;
+    height: 8px;
+    border: 1px solid var(--gold);
+    background: var(--bg-primary);
+    transform: rotate(45deg);
+    transition: all 0.4s ease;
+}
+
+.timeline-step:hover .timeline-marker-inner {
+    background: var(--gold);
+}
+
+.timeline-number {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--gold);
+    opacity: 0.5;
+    margin-bottom: 12px;
+    letter-spacing: 0.1em;
+}
+
+.timeline-step h4 {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+}
+
+.timeline-step p {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-muted);
+}
+
+/* ─── Metrics ─── */
+.metrics {
+    padding: 160px 60px;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.metrics-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.metrics-header {
+    text-align: center;
+    margin-bottom: 100px;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+}
+
+.metric-item {
+    text-align: center;
+    padding: 48px 32px;
+    position: relative;
+}
+
+.metric-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 64px;
+    background: var(--border-gold);
+}
+
+.metric-value {
+    font-family: var(--serif);
+    font-size: clamp(48px, 5vw, 72px);
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.metric-suffix {
+    font-family: var(--serif);
+    font-size: clamp(24px, 2.5vw, 36px);
+    font-weight: 300;
+    color: var(--gold);
+}
+
+.metric-label {
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-top: 12px;
+}
+
+/* ─── Testimonial ─── */
+.testimonial {
+    padding: 200px 60px;
+    text-align: center;
+    position: relative;
+}
+
+.testimonial::before {
+    content: '\201C';
+    font-family: var(--serif);
+    font-size: 200px;
+    color: rgba(212, 160, 23, 0.06);
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    line-height: 1;
+    pointer-events: none;
+}
+
+.testimonial-inner {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.testimonial-quote {
+    font-family: var(--serif);
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: 48px;
+}
+
+.testimonial-rule {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 0 auto 32px;
+}
+
+.testimonial-author {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.testimonial-role {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+}
+
+/* ─── Integration ─── */
+.integration-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: center;
+}
+
+.integration-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.integration-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+
+.integration-check {
+    flex-shrink: 0;
+    margin-top: 4px;
+    width: 18px;
+    height: 18px;
+    color: var(--gold);
+}
+
+.integration-flow {
+    padding: 48px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+}
+
+.flow-step {
+    text-align: center;
+    padding: 24px 0;
+    position: relative;
+}
+
+.flow-step:not(:last-child)::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 32px;
+    background: var(--border-gold);
+    margin: 24px auto 0;
+}
+
+.flow-step-label {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+
+.flow-step-desc {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+}
+
+.flow-arrow-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.6;
+    margin-top: 8px;
+    display: block;
+}
+
+/* ─── CTA Section ─── */
+.cta-section {
+    padding: 200px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 160, 23, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.cta-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.cta-inner .section-title {
+    margin-bottom: 24px;
+}
+
+.cta-inner .section-subtitle {
+    margin: 0 auto 56px;
+    text-align: center;
+}
+
+.cta-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+}
+
+/* ─── Footer ─── */
+.footer {
+    padding: 80px 60px 48px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-top {
+    display: grid;
+    grid-template-columns: 1.5fr repeat(3, 1fr);
+    gap: 60px;
+    margin-bottom: 80px;
+}
+
+.footer-brand {
+    max-width: 280px;
+}
+
+.footer-brand-name {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+}
+
+.footer-brand-name span {
+    color: var(--gold);
+}
+
+.footer-brand p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-dim);
+}
+
+.footer-col h4 {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+}
+
+.footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.footer-col a {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-dim);
+    transition: color 0.4s ease;
+    letter-spacing: 0.02em;
+}
+
+.footer-col a:hover {
+    color: var(--gold);
+}
+
+.footer-bottom {
+    padding-top: 32px;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer-copy {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+}
+
+.footer-bottom-links {
+    display: flex;
+    gap: 32px;
+}
+
+.footer-bottom-links a {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-dim);
+    transition: color 0.4s ease;
+    letter-spacing: 0.04em;
+}
+
+.footer-bottom-links a:hover {
+    color: var(--gold);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 1024px) {
+    .section {
+        padding: 120px 40px;
+    }
+
+    .hero {
+        padding: 160px 40px 120px;
+    }
+
+    .deep-dive-inner {
+        grid-template-columns: 1fr;
+        gap: 60px;
+    }
+
+    .deep-dive-inner.reverse {
+        direction: ltr;
+    }
+
+    .integration-inner {
+        grid-template-columns: 1fr;
+        gap: 60px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+    }
+
+    .metric-item:nth-child(2)::after {
+        display: none;
+    }
+
+    .metric-item:nth-child(1)::after,
+    .metric-item:nth-child(3)::after {
+        height: 48px;
+    }
+
+    .footer-top {
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav {
+        padding: 0 24px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .nav-cta {
+        display: none;
+    }
+
+    .nav-mobile-toggle {
+        display: flex;
+    }
+
+    .section {
+        padding: 100px 24px;
+    }
+
+    .hero {
+        padding: 140px 24px 100px;
+    }
+
+    .hero-stats {
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .hero-stat {
+        padding: 0;
+    }
+
+    .hero-stat:not(:last-child)::after {
+        display: none;
+    }
+
+    .hero-stat:not(:last-child) {
+        padding-bottom: 32px;
+        border-bottom: 1px solid var(--border-gold);
+    }
+
+    .hero-ctas {
+        flex-direction: column;
+    }
+
+    .social-proof {
+        padding: 60px 24px;
+    }
+
+    .social-proof-items {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .social-proof-item::after {
+        display: none !important;
+    }
+
+    .social-proof-item {
+        border-bottom: 1px solid var(--border-subtle);
+        width: 100%;
+        text-align: center;
+        padding: 16px 0;
+    }
+
+    .social-proof-item:last-child {
+        border-bottom: none;
+    }
+
+    .deep-dive {
+        padding: 100px 24px;
+    }
+
+    .metrics {
+        padding: 100px 24px;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .metric-item::after {
+        display: none !important;
+    }
+
+    .metric-item {
+        border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .metric-item:last-child {
+        border-bottom: none;
+    }
+
+    .testimonial {
+        padding: 120px 24px;
+    }
+
+    .cta-section {
+        padding: 120px 24px;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+    }
+
+    .footer {
+        padding: 60px 24px 32px;
+    }
+
+    .footer-top {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .matrix-header,
+    .matrix-row {
+        grid-template-columns: 80px repeat(5, 1fr);
+    }
+
+    .allocation-label {
+        width: 80px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .matrix-header,
+    .matrix-row {
+        grid-template-columns: 60px repeat(5, 1fr);
+    }
+
+    .matrix-header-cell,
+    .matrix-cell,
+    .matrix-row-label {
+        padding: 10px 4px;
+        font-size: 10px;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- Scroll Progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Loading Screen -->
+<div class="loader" id="loader">
+    <div class="loader-logo">Volt Apparel</div>
+    <div class="loader-line-wrap">
+        <div class="loader-line" id="loaderLine"></div>
+    </div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+    <div class="nav-inner">
+        <a href="#" class="nav-logo">Volt <span>Apparel</span></a>
+        <ul class="nav-links">
+            <li><a href="#features" class="nav-link" data-scroll>Features</a></li>
+            <li><a href="#how-it-works" class="nav-link" data-scroll>Process</a></li>
+            <li><a href="#metrics" class="nav-link" data-scroll>Metrics</a></li>
+            <li><a href="#integration" class="nav-link" data-scroll>Integration</a></li>
+        </ul>
+        <a href="#contact" class="nav-cta" data-scroll>Get in Touch</a>
+        <div class="nav-mobile-toggle" id="navToggle">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+    <div class="hero-content">
+        <div class="hero-badge reveal">
+            <span class="hero-badge-dot"></span>
+            Built for Business Central
+        </div>
+        <h1 class="reveal">Fashion ERP,<br><em>reimagined.</em></h1>
+        <p class="hero-subtitle reveal">The definitive apparel extension for Microsoft Dynamics 365 Business Central. Purpose-built for fashion companies that refuse to compromise.</p>
+        <div class="hero-ctas reveal">
+            <a href="#contact" class="btn-primary" data-scroll>Request a Demo</a>
+            <a href="#features" class="btn-secondary" data-scroll>Explore Features</a>
+        </div>
+        <div class="hero-stats reveal">
+            <div class="hero-stat">
+                <div class="hero-stat-value">11</div>
+                <div class="hero-stat-label">Feature Modules</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">42</div>
+                <div class="hero-stat-label">Custom Tables</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">100%</div>
+                <div class="hero-stat-label">Native BC</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">0</div>
+                <div class="hero-stat-label">External Dependencies</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Social Proof -->
+<section class="social-proof">
+    <div class="social-proof-title reveal">Trusted across the apparel industry</div>
+    <div class="social-proof-items reveal">
+        <div class="social-proof-item">Fashion Retail</div>
+        <div class="social-proof-item">Wholesale Distribution</div>
+        <div class="social-proof-item">Import & Customs</div>
+        <div class="social-proof-item">Private Label</div>
+        <div class="social-proof-item">Vertical Brands</div>
+        <div class="social-proof-item">D2C Apparel</div>
+        <div class="social-proof-item">Multi-Brand Retailers</div>
+        <div class="social-proof-item">Footwear</div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="section" id="features">
+    <div class="section-inner">
+        <div class="features-header">
+            <div class="section-label reveal" style="justify-content:center;">Capabilities</div>
+            <h2 class="section-title reveal">Everything apparel businesses need,<br>nothing they don't.</h2>
+            <p class="section-subtitle reveal" style="margin: 0 auto;">Six core modules designed with obsessive attention to the workflows that matter most in fashion and apparel.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card reveal">
+                <div class="feature-number">01</div>
+                <div class="feature-icon">
+                    <svg viewBox="0 0 32 32"><rect x="4" y="4" width="10" height="10" rx="1"/><rect x="18" y="4" width="10" height="10" rx="1"/><rect x="4" y="18" width="10" height="10" rx="1"/><rect x="18" y="18" width="10" height="10" rx="1"/></svg>
+                </div>
+                <h3>Product Variants</h3>
+                <p>Manage complex color, size, and style combinations through an intuitive variant matrix. Generate all permutations instantly and track inventory at the SKU level with full Business Central integration.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-number">02</div>
+                <div class="feature-icon">
+                    <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11"/><path d="M16 8v8l5.5 3.5"/></svg>
+                </div>
+                <h3>Seasonality</h3>
+                <p>Define seasons, delivery windows, and buying periods. Link products to seasons for complete lifecycle tracking from concept through markdown, with full visibility into seasonal performance.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-number">03</div>
+                <div class="feature-icon">
+                    <svg viewBox="0 0 32 32"><path d="M6 24V12l10-6 10 6v12l-10 6z"/><path d="M6 12l10 6 10-6"/><path d="M16 18v12"/></svg>
+                </div>
+                <h3>Soft Allocations</h3>
+                <p>Reserve inventory for key accounts before goods arrive. Manage allocation priorities, track fulfillment rates, and automatically convert allocations to sales orders when stock is received.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-number">04</div>
+                <div class="feature-icon">
+                    <svg viewBox="0 0 32 32"><path d="M4 26h24"/><path d="M8 26V14h4v12"/><path d="M14 26V8h4v18"/><path d="M20 26V18h4v8"/></svg>
+                </div>
+                <h3>Landed Costs</h3>
+                <p>Calculate true product costs including freight, duties, insurance, and handling. Distribute costs across purchase lines using weight, volume, or value methods for accurate margin analysis.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-number">05</div>
+                <div class="feature-icon">
+                    <svg viewBox="0 0 32 32"><path d="M16 4l3 7h7l-5.5 4.5 2 7L16 18l-6.5 4.5 2-7L6 11h7z"/></svg>
+                </div>
+                <h3>Product Attributes</h3>
+                <p>Extend product data with up to 30 custom attributes per item. Define fabric composition, care instructions, origin country, and any apparel-specific data your business requires.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-number">06</div>
+                <div class="feature-icon">
+                    <svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="4"/><path d="M16 4v4M16 24v4M4 16h4M24 16h4M7.8 7.8l2.8 2.8M21.4 21.4l2.8 2.8M7.8 24.2l2.8-2.8M21.4 10.6l2.8-2.8"/></svg>
+                </div>
+                <h3>Item Statuses</h3>
+                <p>Control product lifecycle with configurable status workflows. Manage items from development through active selling to discontinuation, with automatic enforcement of business rules at each stage.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- Deep Dive: Variant Matrix -->
+<section class="deep-dive" id="variant-matrix">
+    <div class="deep-dive-inner">
+        <div class="deep-dive-content">
+            <div class="section-label reveal">Variant Matrix</div>
+            <h3 class="reveal">Every color.<br>Every size.<br>One matrix.</h3>
+            <p class="reveal">Define your product dimensions once and generate every possible SKU combination instantly. The variant matrix gives your team complete visibility across your entire product range.</p>
+            <ul class="deep-dive-features reveal">
+                <li>Visual color/size grid for instant comprehension</li>
+                <li>Bulk operations across entire variant sets</li>
+                <li>Automatic barcode generation per SKU</li>
+                <li>Full inventory tracking at variant level</li>
+            </ul>
+        </div>
+        <div class="variant-matrix-visual reveal">
+            <div class="matrix-header">
+                <div class="matrix-header-cell"></div>
+                <div class="matrix-header-cell">XS</div>
+                <div class="matrix-header-cell">S</div>
+                <div class="matrix-header-cell">M</div>
+                <div class="matrix-header-cell">L</div>
+                <div class="matrix-header-cell">XL</div>
+            </div>
+            <div class="matrix-row">
+                <div class="matrix-row-label">Black</div>
+                <div class="matrix-cell filled">12</div>
+                <div class="matrix-cell filled">24</div>
+                <div class="matrix-cell filled">36</div>
+                <div class="matrix-cell filled">24</div>
+                <div class="matrix-cell filled">12</div>
+            </div>
+            <div class="matrix-row">
+                <div class="matrix-row-label">Navy</div>
+                <div class="matrix-cell filled">8</div>
+                <div class="matrix-cell filled">16</div>
+                <div class="matrix-cell filled">28</div>
+                <div class="matrix-cell filled">16</div>
+                <div class="matrix-cell filled">8</div>
+            </div>
+            <div class="matrix-row">
+                <div class="matrix-row-label">Ivory</div>
+                <div class="matrix-cell filled">6</div>
+                <div class="matrix-cell filled">12</div>
+                <div class="matrix-cell filled">18</div>
+                <div class="matrix-cell filled">12</div>
+                <div class="matrix-cell">—</div>
+            </div>
+            <div class="matrix-row">
+                <div class="matrix-row-label">Sage</div>
+                <div class="matrix-cell">—</div>
+                <div class="matrix-cell filled">10</div>
+                <div class="matrix-cell filled">14</div>
+                <div class="matrix-cell filled">10</div>
+                <div class="matrix-cell">—</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Deep Dive: Allocation -->
+<section class="deep-dive">
+    <div class="deep-dive-inner reverse">
+        <div class="deep-dive-content">
+            <div class="section-label reveal">Smart Allocation</div>
+            <h3 class="reveal">Priority-based<br>inventory allocation.</h3>
+            <p class="reveal">Reserve incoming inventory for your most important accounts before it even arrives. Set allocation priorities, track fulfillment percentages, and ensure your best customers always get what they need.</p>
+            <ul class="deep-dive-features reveal">
+                <li>Tiered priority system for key accounts</li>
+                <li>Real-time fulfillment tracking</li>
+                <li>Automatic order conversion on receipt</li>
+                <li>Allocation vs. actual reporting</li>
+            </ul>
+        </div>
+        <div class="allocation-visual reveal">
+            <div class="allocation-row">
+                <div class="allocation-label">VIP</div>
+                <div class="allocation-bar-wrap">
+                    <div class="allocation-bar" data-width="95"></div>
+                </div>
+                <div class="allocation-value">95%</div>
+            </div>
+            <div class="allocation-row">
+                <div class="allocation-label">Wholesale</div>
+                <div class="allocation-bar-wrap">
+                    <div class="allocation-bar" data-width="78"></div>
+                </div>
+                <div class="allocation-value">78%</div>
+            </div>
+            <div class="allocation-row">
+                <div class="allocation-label">Retail</div>
+                <div class="allocation-bar-wrap">
+                    <div class="allocation-bar" data-width="62"></div>
+                </div>
+                <div class="allocation-value">62%</div>
+            </div>
+            <div class="allocation-row">
+                <div class="allocation-label">E-Commerce</div>
+                <div class="allocation-bar-wrap">
+                    <div class="allocation-bar" data-width="45"></div>
+                </div>
+                <div class="allocation-value">45%</div>
+            </div>
+            <div class="allocation-row">
+                <div class="allocation-label">Outlet</div>
+                <div class="allocation-bar-wrap">
+                    <div class="allocation-bar" data-width="30"></div>
+                </div>
+                <div class="allocation-value">30%</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Deep Dive: Season & Delivery -->
+<section class="deep-dive">
+    <div class="deep-dive-inner">
+        <div class="deep-dive-content">
+            <div class="section-label reveal">Season & Delivery</div>
+            <h3 class="reveal">Plan by season.<br>Ship by delivery window.</h3>
+            <p class="reveal">Organize your entire product lifecycle around seasons and delivery windows. From pre-season planning through in-season replenishment to end-of-season markdown, every phase is tracked and managed.</p>
+            <ul class="deep-dive-features reveal">
+                <li>Season-based product grouping</li>
+                <li>Multiple delivery windows per season</li>
+                <li>Buying period management</li>
+                <li>Seasonal performance analytics</li>
+            </ul>
+        </div>
+        <div class="season-visual reveal">
+            <div class="season-timeline">
+                <div class="season-item">
+                    <div class="season-name">SS26 Pre-Collection</div>
+                    <div class="season-detail">Delivery: January 15 - February 28</div>
+                    <div class="season-tag">Shipping</div>
+                </div>
+                <div class="season-item">
+                    <div class="season-name">SS26 Main Collection</div>
+                    <div class="season-detail">Delivery: March 1 - April 30</div>
+                    <div class="season-tag">Confirmed</div>
+                </div>
+                <div class="season-item">
+                    <div class="season-name">AW26 Pre-Collection</div>
+                    <div class="season-detail">Delivery: July 1 - August 15</div>
+                    <div class="season-tag">Buying Open</div>
+                </div>
+                <div class="season-item">
+                    <div class="season-name">AW26 Main Collection</div>
+                    <div class="season-detail">Delivery: September 1 - October 31</div>
+                    <div class="season-tag">Planning</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Deep Dive: Landed Costs -->
+<section class="deep-dive">
+    <div class="deep-dive-inner reverse">
+        <div class="deep-dive-content">
+            <div class="section-label reveal">Landed Costs</div>
+            <h3 class="reveal">Know your true cost.<br>Protect your margins.</h3>
+            <p class="reveal">Import duties, freight, insurance, handling fees. Every cost that touches your product is captured and allocated, giving you the true landed cost and real margin visibility.</p>
+            <ul class="deep-dive-features reveal">
+                <li>Multi-layer cost accumulation</li>
+                <li>Flexible distribution methods</li>
+                <li>Duty and tariff management</li>
+                <li>Real-time margin calculation</li>
+            </ul>
+        </div>
+        <div class="landed-costs-visual reveal">
+            <div class="cost-layer">
+                <div class="cost-layer-name">Ex-Factory Price</div>
+                <div class="cost-layer-value">$24.00</div>
+            </div>
+            <div class="cost-layer">
+                <div class="cost-layer-name">Ocean Freight</div>
+                <div class="cost-layer-value">$3.20</div>
+            </div>
+            <div class="cost-layer">
+                <div class="cost-layer-name">Import Duty (12%)</div>
+                <div class="cost-layer-value">$2.88</div>
+            </div>
+            <div class="cost-layer">
+                <div class="cost-layer-name">Insurance</div>
+                <div class="cost-layer-value">$0.48</div>
+            </div>
+            <div class="cost-layer">
+                <div class="cost-layer-name">Customs Handling</div>
+                <div class="cost-layer-value">$1.10</div>
+            </div>
+            <div class="cost-layer">
+                <div class="cost-layer-name">Inland Freight</div>
+                <div class="cost-layer-value">$0.85</div>
+            </div>
+            <div class="cost-total">
+                <div class="cost-total-label">Total Landed Cost</div>
+                <div class="cost-total-value">$32.51</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- How It Works -->
+<section class="section" id="how-it-works">
+    <div class="section-inner">
+        <div class="how-it-works-header">
+            <div class="section-label reveal" style="justify-content: center;">Process</div>
+            <h2 class="section-title reveal">Four steps to<br>transform your operations.</h2>
+            <p class="section-subtitle reveal" style="margin: 0 auto;">From installation to full operation, Volt Apparel integrates seamlessly into your existing Business Central environment.</p>
+        </div>
+        <div class="timeline">
+            <div class="timeline-step reveal">
+                <div class="timeline-marker"><div class="timeline-marker-inner"></div></div>
+                <div class="timeline-number">Step 01</div>
+                <h4>Install & Configure</h4>
+                <p>Deploy Volt Apparel directly from Microsoft AppSource. Configure your apparel-specific settings: define size ranges, color palettes, and season structures that match your business.</p>
+            </div>
+            <div class="timeline-step reveal">
+                <div class="timeline-marker"><div class="timeline-marker-inner"></div></div>
+                <div class="timeline-number">Step 02</div>
+                <h4>Define Your Catalog</h4>
+                <p>Build your product catalog using the variant matrix. Set up color/size grids, assign attributes, and generate all SKU combinations. Link items to seasons and delivery windows.</p>
+            </div>
+            <div class="timeline-step reveal">
+                <div class="timeline-marker"><div class="timeline-marker-inner"></div></div>
+                <div class="timeline-number">Step 03</div>
+                <h4>Plan Your Seasons</h4>
+                <p>Create buying plans, set allocation priorities, and manage purchase orders. Track incoming inventory against customer commitments with full visibility across your supply chain.</p>
+            </div>
+            <div class="timeline-step reveal">
+                <div class="timeline-marker"><div class="timeline-marker-inner"></div></div>
+                <div class="timeline-number">Step 04</div>
+                <h4>Run Your Business</h4>
+                <p>Process sales orders, manage fulfillment, track landed costs, and analyze performance. Everything you need, running natively inside the Business Central you already know.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- Metrics -->
+<section class="metrics" id="metrics">
+    <div class="metrics-inner">
+        <div class="metrics-header">
+            <div class="section-label reveal" style="justify-content: center;">By the Numbers</div>
+            <h2 class="section-title reveal" style="text-align: center;">Measurable impact<br>from day one.</h2>
+        </div>
+        <div class="metrics-grid">
+            <div class="metric-item reveal">
+                <div class="metric-value"><span class="counter" data-target="90">0</span><span class="metric-suffix">%</span></div>
+                <div class="metric-label">Reduction in Manual Data Entry</div>
+            </div>
+            <div class="metric-item reveal">
+                <div class="metric-value"><span class="counter" data-target="42">0</span></div>
+                <div class="metric-label">Purpose-Built Tables</div>
+            </div>
+            <div class="metric-item reveal">
+                <div class="metric-value"><span class="counter" data-target="30">0</span></div>
+                <div class="metric-label">Custom Attributes per Item</div>
+            </div>
+            <div class="metric-item reveal">
+                <div class="metric-value"><span class="counter" data-target="0" data-start="0">0</span></div>
+                <div class="metric-label">External Dependencies</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonial -->
+<section class="testimonial">
+    <div class="testimonial-inner reveal">
+        <p class="testimonial-quote">"Volt Apparel turned Business Central into the apparel ERP we always needed. The variant matrix alone saved us hundreds of hours, and the seasonal planning tools finally give us the visibility we've been missing."</p>
+        <div class="testimonial-rule"></div>
+        <div class="testimonial-author">Apparel Operations Director</div>
+        <div class="testimonial-role">Fashion Wholesale Company</div>
+    </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- Integration -->
+<section class="section" id="integration">
+    <div class="section-inner">
+        <div class="integration-inner">
+            <div class="integration-content">
+                <div class="section-label reveal">Integration</div>
+                <h2 class="section-title reveal">Native BC.<br>Zero friction.</h2>
+                <p class="section-subtitle reveal" style="margin-bottom: 40px;">Volt Apparel is built entirely within the Business Central platform. No middleware, no external databases, no integration headaches. Just pure, native AL code.</p>
+                <ul class="integration-list reveal">
+                    <li>
+                        <svg class="integration-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+                        100% native AL development with no external dependencies
+                    </li>
+                    <li>
+                        <svg class="integration-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+                        Full respect for BC posting routines and approval workflows
+                    </li>
+                    <li>
+                        <svg class="integration-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+                        Works with all standard BC reports and analytics
+                    </li>
+                    <li>
+                        <svg class="integration-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+                        Compatible with other AppSource extensions
+                    </li>
+                    <li>
+                        <svg class="integration-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+                        Automatic updates through Microsoft AppSource
+                    </li>
+                    <li>
+                        <svg class="integration-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
+                        Enterprise-grade security and compliance
+                    </li>
+                </ul>
+            </div>
+            <div class="integration-flow reveal">
+                <div class="flow-step">
+                    <div class="flow-step-label">Microsoft Dynamics 365</div>
+                    <div class="flow-step-desc">Business Central Platform</div>
+                    <span class="flow-arrow-label">Hosts</span>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-label" style="color: var(--gold);">Volt Apparel</div>
+                    <div class="flow-step-desc">Native AL Extension</div>
+                    <span class="flow-arrow-label">Extends</span>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-label">Your Business</div>
+                    <div class="flow-step-desc">Apparel Operations</div>
+                    <span class="flow-arrow-label">Empowers</span>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-label">Your Customers</div>
+                    <div class="flow-step-desc">Seamless Experience</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="gold-rule">
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+    <div class="cta-inner">
+        <div class="section-label reveal" style="justify-content: center;">Get Started</div>
+        <h2 class="section-title reveal" style="text-align: center;">Ready to modernize your<br>apparel operations?</h2>
+        <p class="section-subtitle reveal" style="text-align: center; margin: 0 auto 56px;">Join the apparel companies that have already transformed their Business Central into a true fashion ERP.</p>
+        <div class="cta-buttons reveal">
+            <a href="#" class="btn-primary">Request a Demo</a>
+            <a href="#" class="btn-secondary">Download Overview</a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <div class="footer-brand-name">Volt <span>Apparel</span></div>
+                <p>Fashion ERP built natively for Microsoft Dynamics 365 Business Central. Designed for apparel companies that demand more.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Integration</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Documentation</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Modules</h4>
+                <ul>
+                    <li><a href="#">Product Variants</a></li>
+                    <li><a href="#">Seasonality</a></li>
+                    <li><a href="#">Allocations</a></li>
+                    <li><a href="#">Landed Costs</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Volt</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Partners</a></li>
+                    <li><a href="#">AppSource</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copy">&copy; 2026 Volt Technologies. All rights reserved.</div>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollToPlugin.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<script>
+(function() {
+    'use strict';
+
+    // ─── Loading Animation ───
+    const loader = document.getElementById('loader');
+    const loaderLine = document.getElementById('loaderLine');
+    const loaderLogo = document.querySelector('.loader-logo');
+
+    // Animate loader
+    const loaderTl = gsap.timeline({
+        onComplete: () => {
+            gsap.to(loader, {
+                opacity: 0,
+                duration: 0.8,
+                ease: 'power2.inOut',
+                onComplete: () => {
+                    loader.style.display = 'none';
+                    initPage();
+                }
+            });
+        }
+    });
+
+    loaderTl
+        .to(loaderLogo, {
+            opacity: 1,
+            duration: 0.6,
+            ease: 'power2.out'
+        })
+        .to(loaderLine, {
+            width: '100%',
+            duration: 1.8,
+            ease: 'power2.inOut'
+        }, 0.3)
+        .to(loaderLogo, {
+            opacity: 0,
+            duration: 0.4,
+            ease: 'power2.in'
+        }, 1.8);
+
+    function initPage() {
+        // ─── Lenis Smooth Scroll ───
+        const lenis = new Lenis({
+            duration: 1.4,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            orientation: 'vertical',
+            smoothWheel: true,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // Sync Lenis with GSAP ScrollTrigger
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+        // ─── Scroll Progress Bar ───
+        const scrollProgress = document.getElementById('scrollProgress');
+        gsap.to(scrollProgress, {
+            width: '100%',
+            ease: 'none',
+            scrollTrigger: {
+                trigger: document.body,
+                start: 'top top',
+                end: 'bottom bottom',
+                scrub: 0.3,
+            }
+        });
+
+        // ─── Nav Scroll Effect ───
+        const nav = document.getElementById('nav');
+        ScrollTrigger.create({
+            start: 'top -80',
+            onUpdate: (self) => {
+                if (self.scroll() > 80) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            }
+        });
+
+        // ─── Smooth Scroll Links ───
+        document.querySelectorAll('[data-scroll]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    lenis.scrollTo(target, {
+                        offset: -80,
+                        duration: 1.6,
+                    });
+                }
+            });
+        });
+
+        // ─── Reveal Animations ───
+        const reveals = document.querySelectorAll('.reveal');
+        reveals.forEach((el) => {
+            gsap.fromTo(el,
+                {
+                    opacity: 0,
+                    y: 40,
+                },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 88%',
+                        toggleActions: 'play none none none',
+                    }
+                }
+            );
+        });
+
+        // ─── Allocation Bar Animation ───
+        document.querySelectorAll('.allocation-bar').forEach(bar => {
+            const targetWidth = bar.getAttribute('data-width');
+            ScrollTrigger.create({
+                trigger: bar,
+                start: 'top 85%',
+                onEnter: () => {
+                    gsap.to(bar, {
+                        width: targetWidth + '%',
+                        duration: 1.5,
+                        ease: 'power3.out',
+                    });
+                },
+                once: true,
+            });
+        });
+
+        // ─── Counter Animation ───
+        document.querySelectorAll('.counter').forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-target'));
+            ScrollTrigger.create({
+                trigger: counter,
+                start: 'top 85%',
+                onEnter: () => {
+                    if (target === 0) {
+                        counter.textContent = '0';
+                        return;
+                    }
+                    const obj = { val: 0 };
+                    gsap.to(obj, {
+                        val: target,
+                        duration: 2,
+                        ease: 'power2.out',
+                        onUpdate: () => {
+                            counter.textContent = Math.round(obj.val);
+                        }
+                    });
+                },
+                once: true,
+            });
+        });
+
+        // ─── Feature Card Stagger ───
+        gsap.utils.toArray('.feature-card').forEach((card, i) => {
+            gsap.fromTo(card,
+                { opacity: 0, y: 40 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    delay: (i % 2) * 0.15,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: card,
+                        start: 'top 88%',
+                    }
+                }
+            );
+        });
+
+        // ─── Social Proof Items Stagger ───
+        const spItems = gsap.utils.toArray('.social-proof-item');
+        if (spItems.length) {
+            gsap.fromTo(spItems,
+                { opacity: 0, y: 20 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    stagger: 0.08,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: '.social-proof-items',
+                        start: 'top 85%',
+                    }
+                }
+            );
+        }
+
+        // ─── Matrix Cell Stagger ───
+        const matrixCells = gsap.utils.toArray('.matrix-cell');
+        if (matrixCells.length) {
+            gsap.fromTo(matrixCells,
+                { opacity: 0, scale: 0.8 },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.5,
+                    stagger: 0.04,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: '.variant-matrix-visual',
+                        start: 'top 80%',
+                    }
+                }
+            );
+        }
+
+        // ─── Timeline Steps Stagger ───
+        const timelineSteps = gsap.utils.toArray('.timeline-step');
+        timelineSteps.forEach((step, i) => {
+            gsap.fromTo(step,
+                { opacity: 0, x: -30 },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 1,
+                    delay: i * 0.2,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: step,
+                        start: 'top 85%',
+                    }
+                }
+            );
+        });
+
+        // ─── Cost Layers Stagger ───
+        const costLayers = gsap.utils.toArray('.cost-layer');
+        if (costLayers.length) {
+            gsap.fromTo(costLayers,
+                { opacity: 0, x: 20 },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.6,
+                    stagger: 0.1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: '.landed-costs-visual',
+                        start: 'top 80%',
+                    }
+                }
+            );
+        }
+
+        // ─── Season Items Stagger ───
+        const seasonItems = gsap.utils.toArray('.season-item');
+        if (seasonItems.length) {
+            gsap.fromTo(seasonItems,
+                { opacity: 0, x: 20 },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.7,
+                    stagger: 0.12,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: '.season-visual',
+                        start: 'top 80%',
+                    }
+                }
+            );
+        }
+
+        // ─── Integration Flow Stagger ───
+        const flowSteps = gsap.utils.toArray('.flow-step');
+        if (flowSteps.length) {
+            gsap.fromTo(flowSteps,
+                { opacity: 0, y: 20 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.7,
+                    stagger: 0.15,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: '.integration-flow',
+                        start: 'top 80%',
+                    }
+                }
+            );
+        }
+
+        // ─── Gold Rules Animation ───
+        gsap.utils.toArray('.gold-rule').forEach(rule => {
+            gsap.fromTo(rule,
+                { scaleX: 0 },
+                {
+                    scaleX: 1,
+                    duration: 1.5,
+                    ease: 'power3.inOut',
+                    scrollTrigger: {
+                        trigger: rule,
+                        start: 'top 90%',
+                    }
+                }
+            );
+        });
+    }
+})();
+</script>
+</body>
+</html>

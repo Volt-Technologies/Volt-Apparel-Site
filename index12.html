@@ -1,0 +1,2074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOLT APPAREL -- FASHION ERP DROP</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --black: #09090b;
+    --dark: #111;
+    --gold: #d4a017;
+    --gold-light: #fbbf24;
+    --white: #fff;
+    --gray: #888;
+    --border: 3px solid var(--white);
+    --border-gold: 3px solid var(--gold);
+    --border-thick: 4px solid var(--white);
+}
+
+html.lenis, html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+    text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ========== LOADING SCREEN ========== */
+#loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.loader-label {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.7rem, 1.2vw, 1rem);
+    letter-spacing: 0.4em;
+    color: var(--gold);
+}
+
+.loader-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 15vw, 12rem);
+    line-height: 0.85;
+    text-align: center;
+}
+
+.loader-title span {
+    display: block;
+    color: var(--gold);
+}
+
+.loader-bar-track {
+    width: min(80vw, 500px);
+    height: 4px;
+    background: #222;
+    position: relative;
+    overflow: hidden;
+}
+
+.loader-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--gold);
+}
+
+.loader-pct {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.2rem;
+    color: var(--gray);
+}
+
+.loader-stamp {
+    position: absolute;
+    bottom: 3rem;
+    right: 3rem;
+    border: 3px solid var(--gold);
+    padding: 0.6rem 1.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    transform: rotate(-8deg);
+    opacity: 0.6;
+}
+
+/* ========== NAVIGATION ========== */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 0;
+    border-bottom: var(--border);
+    background: rgba(9, 9, 11, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: stretch;
+    height: 70px;
+}
+
+.nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.05em;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    border-right: var(--border);
+    white-space: nowrap;
+}
+
+.nav-logo span {
+    color: var(--gold);
+    margin-left: 0.3em;
+}
+
+.nav-links {
+    display: flex;
+    align-items: stretch;
+    flex: 1;
+}
+
+.nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid #333;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+}
+
+.nav-links a:hover {
+    background: var(--gold);
+    color: var(--black);
+}
+
+.nav-cta {
+    margin-left: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    background: var(--gold);
+    color: var(--black);
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.nav-cta:hover {
+    background: var(--gold-light);
+}
+
+.nav-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    border-left: var(--border);
+    padding: 0 1.5rem;
+    cursor: pointer;
+    color: var(--white);
+    font-size: 1.4rem;
+}
+
+/* ========== HERO ========== */
+.hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    padding-top: 70px;
+}
+
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(9,9,11,0.3) 0%, rgba(9,9,11,0.6) 50%, rgba(9,9,11,0.95) 100%);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 0 3rem 4rem;
+}
+
+.hero-label {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.6rem, 1vw, 0.8rem);
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    border: 2px solid var(--gold);
+    padding: 0.4rem 1rem;
+}
+
+.hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 20vw, 22rem);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+}
+
+.hero-title .line2 {
+    color: var(--gold);
+    display: block;
+    font-size: 0.5em;
+    letter-spacing: 0.08em;
+}
+
+.hero-stamp {
+    position: absolute;
+    top: 35%;
+    right: 5%;
+    z-index: 3;
+    border: 4px solid var(--gold);
+    padding: 1rem 2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.2rem, 2.5vw, 2rem);
+    color: var(--gold);
+    transform: rotate(-12deg);
+    letter-spacing: 0.1em;
+    background: rgba(9, 9, 11, 0.6);
+    box-shadow: 0 0 0 2px var(--black), 0 0 0 5px var(--gold);
+}
+
+.hero-stamp::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px dashed var(--gold);
+}
+
+.hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #333;
+}
+
+.hero-stat {
+    text-align: left;
+}
+
+.hero-stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    color: var(--gold);
+    line-height: 1;
+}
+
+.hero-stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--gray);
+    margin-top: 0.3rem;
+}
+
+/* ========== MARQUEE ========== */
+.marquee {
+    border-top: var(--border);
+    border-bottom: var(--border);
+    padding: 1.5rem 0;
+    overflow: hidden;
+    background: var(--dark);
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marqueeScroll 20s linear infinite;
+}
+
+.marquee-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 6vw, 5rem);
+    white-space: nowrap;
+    padding-right: 1rem;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--white);
+}
+
+.marquee-text .gold {
+    -webkit-text-stroke-color: var(--gold);
+}
+
+@keyframes marqueeScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* ========== THE DROP (FEATURES) ========== */
+.section {
+    padding: 6rem 3rem;
+    position: relative;
+}
+
+.section-header {
+    margin-bottom: 4rem;
+}
+
+.section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.section-label::before {
+    content: '';
+    width: 40px;
+    height: 2px;
+    background: var(--gold);
+}
+
+.section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 10vw, 10rem);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+}
+
+.section-title span {
+    color: var(--gold);
+}
+
+/* Drop Cards */
+.drop-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.drop-card {
+    border: var(--border);
+    background: var(--dark);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.drop-card:hover {
+    transform: translateY(-4px);
+}
+
+.drop-card:nth-child(2) {
+    margin-top: 3rem;
+}
+
+.drop-card:nth-child(3) {
+    margin-top: 6rem;
+}
+
+.drop-card:nth-child(5) {
+    margin-top: 3rem;
+}
+
+.drop-card:nth-child(6) {
+    margin-top: 6rem;
+}
+
+.drop-card-img {
+    height: 280px;
+    position: relative;
+    overflow: hidden;
+}
+
+.drop-card-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, var(--dark) 100%);
+}
+
+.drop-card-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 2;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    padding: 0.3rem 0.8rem;
+    background: var(--gold);
+    color: var(--black);
+    font-weight: 700;
+    transform: rotate(-2deg);
+}
+
+.drop-card-body {
+    padding: 1.5rem;
+    border-top: var(--border);
+}
+
+.drop-card-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: #222;
+    line-height: 1;
+    position: absolute;
+    top: -0.2rem;
+    right: 1rem;
+}
+
+.drop-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.drop-card-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    margin-bottom: 1rem;
+}
+
+.drop-card-desc {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--gray);
+    text-transform: none;
+}
+
+.drop-card-tag {
+    display: inline-block;
+    margin-top: 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    border: 1px solid #333;
+    padding: 0.3rem 0.8rem;
+    color: var(--gray);
+}
+
+/* ========== VARIANT MATRIX ========== */
+.matrix-section {
+    background: var(--dark);
+    border-top: var(--border);
+    border-bottom: var(--border);
+}
+
+.matrix-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.matrix-visual {
+    border: var(--border-thick);
+    padding: 0;
+    font-family: 'Space Mono', monospace;
+    overflow: hidden;
+}
+
+.matrix-header {
+    display: grid;
+    grid-template-columns: 100px repeat(4, 1fr);
+    border-bottom: 2px solid var(--white);
+}
+
+.matrix-header div {
+    padding: 0.8rem 0.6rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-align: center;
+    border-right: 1px solid #333;
+}
+
+.matrix-header div:first-child {
+    background: var(--gold);
+    color: var(--black);
+    text-align: left;
+    font-weight: 700;
+}
+
+.matrix-header div:last-child {
+    border-right: none;
+}
+
+.matrix-row {
+    display: grid;
+    grid-template-columns: 100px repeat(4, 1fr);
+    border-bottom: 1px solid #222;
+}
+
+.matrix-row:last-child {
+    border-bottom: none;
+}
+
+.matrix-row div {
+    padding: 0.7rem 0.6rem;
+    text-align: center;
+    font-size: 0.75rem;
+    border-right: 1px solid #1a1a1a;
+}
+
+.matrix-row div:first-child {
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+    border-right: 2px solid #333;
+    color: var(--gold);
+}
+
+.matrix-row div:last-child {
+    border-right: none;
+}
+
+.matrix-cell-filled {
+    color: var(--gold);
+    font-weight: 700;
+}
+
+.matrix-cell-empty {
+    color: #333;
+}
+
+.matrix-info h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 0.9;
+    margin-bottom: 1.5rem;
+}
+
+.matrix-info h3 span {
+    color: var(--gold);
+}
+
+.matrix-info p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--gray);
+    text-transform: none;
+    margin-bottom: 1.5rem;
+    max-width: 500px;
+}
+
+.matrix-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.matrix-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    border: 2px solid #333;
+    padding: 0.4rem 1rem;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.matrix-tag:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+/* ========== ALLOCATION BARS ========== */
+.alloc-section {
+    background: var(--black);
+}
+
+.alloc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.alloc-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.alloc-bar-item {
+    position: relative;
+}
+
+.alloc-bar-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.6rem;
+}
+
+.alloc-bar-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.05em;
+}
+
+.alloc-bar-pct {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--gold);
+    font-weight: 700;
+}
+
+.alloc-bar-track {
+    height: 12px;
+    background: #1a1a1a;
+    border: 2px solid #333;
+    position: relative;
+    overflow: hidden;
+}
+
+.alloc-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    width: 0%;
+    transition: width 1.5s ease;
+}
+
+.alloc-bar-fill.priority {
+    background: var(--gold-light);
+}
+
+.alloc-img-wrap {
+    position: relative;
+    border: var(--border-thick);
+    overflow: hidden;
+    height: 500px;
+}
+
+.alloc-img-wrap::after {
+    content: 'PRIORITY ACCESS';
+    position: absolute;
+    bottom: 2rem;
+    left: -2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--gold);
+    background: var(--black);
+    padding: 0.5rem 2rem;
+    border: 3px solid var(--gold);
+    transform: rotate(-5deg);
+    z-index: 2;
+}
+
+/* ========== STATS ========== */
+.stats-section {
+    background: var(--dark);
+    border-top: var(--border);
+    border-bottom: var(--border);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+}
+
+.stat-card {
+    border-right: var(--border);
+    padding: 4rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.stat-card:last-child {
+    border-right: none;
+}
+
+.stat-card-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.08;
+    z-index: 0;
+}
+
+.stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 8vw, 8rem);
+    line-height: 1;
+    position: relative;
+    z-index: 1;
+    color: var(--gold);
+}
+
+.stat-suffix {
+    font-size: 0.5em;
+    color: var(--white);
+}
+
+.stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--gray);
+    margin-top: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.stat-desc {
+    font-size: 0.8rem;
+    color: #555;
+    text-transform: none;
+    margin-top: 0.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* ========== TESTIMONIAL ========== */
+.testimonial-section {
+    background: var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.testimonial-card {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    padding: 4rem 3rem;
+    border: 4px solid var(--gold);
+}
+
+.testimonial-card::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1px dashed var(--gold);
+    pointer-events: none;
+}
+
+.testimonial-card::after {
+    content: 'VERIFIED';
+    position: absolute;
+    top: -1rem;
+    right: 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    background: var(--gold);
+    color: var(--black);
+    padding: 0.3rem 1rem;
+    font-weight: 700;
+}
+
+.testimonial-quote {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3.5rem);
+    line-height: 1.15;
+    letter-spacing: 0.02em;
+    margin-bottom: 2rem;
+}
+
+.testimonial-quote span {
+    color: var(--gold);
+}
+
+.testimonial-author {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+}
+
+.testimonial-role {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--gray);
+    margin-top: 0.4rem;
+}
+
+/* ========== HOW IT WORKS ========== */
+.steps-section {
+    background: var(--dark);
+    border-top: var(--border);
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+}
+
+.step-card {
+    border-right: var(--border);
+    padding: 3rem 2rem;
+    position: relative;
+}
+
+.step-card:last-child {
+    border-right: none;
+}
+
+.step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 10vw, 9rem);
+    line-height: 0.85;
+    color: #1a1a1a;
+    -webkit-text-stroke: 2px #333;
+    margin-bottom: 1.5rem;
+}
+
+.step-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.4rem, 2vw, 2rem);
+    margin-bottom: 0.8rem;
+    line-height: 1;
+}
+
+.step-desc {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--gray);
+    text-transform: none;
+}
+
+.step-tag {
+    display: inline-block;
+    margin-top: 1.2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.2em;
+    border: 2px solid var(--gold);
+    padding: 0.3rem 0.8rem;
+    color: var(--gold);
+}
+
+/* ========== INTEGRATION ========== */
+.integration-section {
+    background: var(--black);
+}
+
+.integration-wrap {
+    text-align: center;
+}
+
+.integration-blocks {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-top: 4rem;
+    flex-wrap: wrap;
+}
+
+.integration-block {
+    border: var(--border);
+    padding: 2rem 2.5rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    background: var(--dark);
+    position: relative;
+    white-space: nowrap;
+}
+
+.integration-block.gold {
+    background: var(--gold);
+    color: var(--black);
+    border-color: var(--gold);
+    transform: scale(1.1) rotate(-1deg);
+    z-index: 2;
+    box-shadow: 0 0 30px rgba(212, 160, 23, 0.3);
+}
+
+.integration-connector {
+    width: 40px;
+    height: 3px;
+    background: var(--gold);
+    flex-shrink: 0;
+}
+
+.integration-sub {
+    margin-top: 3rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--gray);
+}
+
+/* ========== CTA ========== */
+.cta-section {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+.cta-bg {
+    position: absolute;
+    inset: 0;
+}
+
+.cta-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(9, 9, 11, 0.8);
+}
+
+.cta-content {
+    position: relative;
+    z-index: 2;
+    padding: 3rem;
+}
+
+.cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 14vw, 14rem);
+    line-height: 0.85;
+    margin-bottom: 1.5rem;
+}
+
+.cta-title span {
+    color: var(--gold);
+}
+
+.cta-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--gray);
+    margin-bottom: 3rem;
+}
+
+.cta-btn {
+    display: inline-block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.1em;
+    padding: 1.2rem 4rem;
+    border: 4px solid var(--gold);
+    color: var(--gold);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.cta-btn::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px dashed var(--gold);
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.cta-btn:hover {
+    background: var(--gold);
+    color: var(--black);
+}
+
+.cta-stamp {
+    position: absolute;
+    bottom: 4rem;
+    left: 4rem;
+    border: 3px solid var(--gold);
+    padding: 0.8rem 1.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    transform: rotate(6deg);
+    opacity: 0.5;
+    z-index: 2;
+}
+
+/* ========== FOOTER ========== */
+footer {
+    border-top: var(--border);
+    background: var(--dark);
+}
+
+.footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    padding: 4rem 3rem;
+    border-bottom: 1px solid #222;
+}
+
+.footer-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    line-height: 1;
+    margin-bottom: 1rem;
+}
+
+.footer-brand span {
+    color: var(--gold);
+}
+
+.footer-tagline {
+    font-size: 0.8rem;
+    color: var(--gray);
+    text-transform: none;
+    line-height: 1.5;
+    max-width: 300px;
+}
+
+.footer-col-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+}
+
+.footer-col a {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-bottom: 0.7rem;
+    transition: color 0.2s;
+    text-transform: none;
+}
+
+.footer-col a:hover {
+    color: var(--white);
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: #444;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+    .drop-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .drop-card:nth-child(2),
+    .drop-card:nth-child(3),
+    .drop-card:nth-child(5),
+    .drop-card:nth-child(6) {
+        margin-top: 0;
+    }
+    .drop-card:nth-child(even) {
+        margin-top: 2rem;
+    }
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .stat-card:nth-child(2) {
+        border-right: none;
+    }
+    .stat-card:nth-child(3),
+    .stat-card:nth-child(4) {
+        border-top: var(--border);
+    }
+    .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .step-card:nth-child(2) {
+        border-right: none;
+    }
+    .step-card:nth-child(3),
+    .step-card:nth-child(4) {
+        border-top: var(--border);
+    }
+    .step-card:nth-child(4) {
+        border-right: none;
+    }
+    .matrix-wrap,
+    .alloc-grid {
+        grid-template-columns: 1fr;
+    }
+    .footer-top {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+    .nav-cta {
+        display: none;
+    }
+    .nav-menu-btn {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+    }
+    .hero-content {
+        padding: 0 1.5rem 3rem;
+    }
+    .hero-stats {
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+    .hero-stamp {
+        top: 20%;
+        right: 3%;
+        font-size: 1rem;
+        padding: 0.6rem 1rem;
+    }
+    .section {
+        padding: 4rem 1.5rem;
+    }
+    .drop-grid {
+        grid-template-columns: 1fr;
+    }
+    .drop-card:nth-child(even) {
+        margin-top: 0;
+    }
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    .stat-card {
+        border-right: none !important;
+        border-bottom: var(--border);
+    }
+    .stat-card:last-child {
+        border-bottom: none;
+    }
+    .steps-grid {
+        grid-template-columns: 1fr;
+    }
+    .step-card {
+        border-right: none !important;
+        border-bottom: var(--border);
+    }
+    .step-card:last-child {
+        border-bottom: none;
+    }
+    .integration-blocks {
+        flex-direction: column;
+    }
+    .integration-connector {
+        width: 3px;
+        height: 30px;
+    }
+    .footer-top {
+        grid-template-columns: 1fr;
+    }
+    .alloc-img-wrap {
+        height: 350px;
+    }
+}
+
+@media (max-width: 480px) {
+    .matrix-header,
+    .matrix-row {
+        grid-template-columns: 70px repeat(4, 1fr);
+    }
+    .matrix-header div,
+    .matrix-row div {
+        padding: 0.5rem 0.3rem;
+        font-size: 0.55rem;
+    }
+}
+
+/* ========== ANIMATION HELPERS ========== */
+.reveal {
+    opacity: 0;
+    transform: translateY(60px);
+}
+
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-60px);
+}
+
+.reveal-right {
+    opacity: 0;
+    transform: translateX(60px);
+}
+
+.reveal-scale {
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.tilt-in {
+    opacity: 0;
+    transform: rotate(-4deg) translateY(40px);
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+    <div class="loader-label">INITIALIZING DROP SEQUENCE</div>
+    <div class="loader-title">
+        VOLT
+        <span>APPAREL</span>
+    </div>
+    <div class="loader-bar-track">
+        <div class="loader-bar" id="loaderBar"></div>
+    </div>
+    <div class="loader-pct" id="loaderPct">0%</div>
+    <div class="loader-stamp">EST. 2024 // DYNAMICS 365</div>
+</div>
+
+<!-- NAVIGATION -->
+<nav id="mainNav">
+    <div class="nav-logo">VOLT<span>APPAREL</span></div>
+    <div class="nav-links">
+        <a href="#drop">THE DROP</a>
+        <a href="#matrix">VARIANTS</a>
+        <a href="#stats">STATS</a>
+        <a href="#steps">HOW IT WORKS</a>
+    </div>
+    <a href="#cta" class="nav-cta">GET EARLY ACCESS</a>
+    <button class="nav-menu-btn" id="menuBtn" aria-label="Menu">&#9776;</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+    <div class="hero-bg">
+        <img src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1920&q=80" alt="Streetwear fashion" loading="eager">
+    </div>
+    <div class="hero-stamp" id="heroStamp">BUILT FOR BC</div>
+    <div class="hero-content">
+        <div class="hero-label" id="heroLabel">DYNAMICS 365 BUSINESS CENTRAL EXTENSION</div>
+        <h1 class="hero-title" id="heroTitle">
+            <span class="line1">FASHION ERP</span>
+            <span class="line2">REIMAGINED.</span>
+        </h1>
+        <div class="hero-stats" id="heroStats">
+            <div class="hero-stat">
+                <div class="hero-stat-value" data-count="6">0</div>
+                <div class="hero-stat-label">CORE MODULES</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value" data-count="30">0</div>
+                <div class="hero-stat-label">PRODUCT ATTRIBUTES</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value" data-count="100">0</div>
+                <div class="hero-stat-label">% NATIVE BC</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value" data-count="0">0</div>
+                <div class="hero-stat-label">EXTERNAL DEPS</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+    <div class="marquee-track">
+        <div class="marquee-text">VARIANTS <span class="gold">&middot;</span> SEASONS <span class="gold">&middot;</span> ALLOCATIONS <span class="gold">&middot;</span> LANDED COSTS <span class="gold">&middot;</span> ATTRIBUTES <span class="gold">&middot;</span> LIFECYCLE <span class="gold">&middot;</span> VARIANTS <span class="gold">&middot;</span> SEASONS <span class="gold">&middot;</span> ALLOCATIONS <span class="gold">&middot;</span> LANDED COSTS <span class="gold">&middot;</span> ATTRIBUTES <span class="gold">&middot;</span> LIFECYCLE <span class="gold">&middot;</span>&nbsp;</div>
+        <div class="marquee-text">VARIANTS <span class="gold">&middot;</span> SEASONS <span class="gold">&middot;</span> ALLOCATIONS <span class="gold">&middot;</span> LANDED COSTS <span class="gold">&middot;</span> ATTRIBUTES <span class="gold">&middot;</span> LIFECYCLE <span class="gold">&middot;</span> VARIANTS <span class="gold">&middot;</span> SEASONS <span class="gold">&middot;</span> ALLOCATIONS <span class="gold">&middot;</span> LANDED COSTS <span class="gold">&middot;</span> ATTRIBUTES <span class="gold">&middot;</span> LIFECYCLE <span class="gold">&middot;</span>&nbsp;</div>
+    </div>
+</div>
+
+<!-- THE DROP -->
+<section class="section" id="drop">
+    <div class="section-header">
+        <div class="section-label reveal">COLLECTION 01 // CORE MODULES</div>
+        <h2 class="section-title reveal">THE <span>DROP</span></h2>
+    </div>
+    <div class="drop-grid">
+        <!-- Card 1 -->
+        <div class="drop-card tilt-in">
+            <div class="drop-card-img">
+                <img src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=800&q=80" alt="Clothing display" loading="lazy">
+                <div class="drop-card-badge">NEW DROP</div>
+            </div>
+            <div class="drop-card-body">
+                <div class="drop-card-num">01</div>
+                <h3 class="drop-card-title">PRODUCT VARIANTS</h3>
+                <div class="drop-card-sub">EVERY COLOR. EVERY SIZE.</div>
+                <p class="drop-card-desc">Full matrix management for color-size combinations. Generate thousands of SKUs from a single style with one click. No more spreadsheet chaos.</p>
+                <span class="drop-card-tag">COLOR / SIZE / FIT</span>
+            </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="drop-card tilt-in">
+            <div class="drop-card-img">
+                <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=800&q=80" alt="Fashion detail" loading="lazy">
+                <div class="drop-card-badge">SEASONAL</div>
+            </div>
+            <div class="drop-card-body">
+                <div class="drop-card-num">02</div>
+                <h3 class="drop-card-title">SEASONALITY</h3>
+                <div class="drop-card-sub">SEASON AFTER SEASON.</div>
+                <p class="drop-card-desc">Manage your collections by season, pre-season, and drop. Track sell-through, carryover styles, and plan next season with real data.</p>
+                <span class="drop-card-tag">SS / FW / CAPSULE</span>
+            </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="drop-card tilt-in">
+            <div class="drop-card-img">
+                <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=800&q=80" alt="Urban fashion" loading="lazy">
+                <div class="drop-card-badge">LIMITED</div>
+            </div>
+            <div class="drop-card-body">
+                <div class="drop-card-num">03</div>
+                <h3 class="drop-card-title">SOFT ALLOCATIONS</h3>
+                <div class="drop-card-sub">PRIORITY ACCESS.</div>
+                <p class="drop-card-desc">Reserve inventory before it arrives. Allocate by customer, channel, or region. First-come-first-served or priority tiers -- your rules.</p>
+                <span class="drop-card-tag">RESERVE / COMMIT / SHIP</span>
+            </div>
+        </div>
+        <!-- Card 4 -->
+        <div class="drop-card tilt-in">
+            <div class="drop-card-img">
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80" alt="Sneakers" loading="lazy">
+                <div class="drop-card-badge">ESSENTIAL</div>
+            </div>
+            <div class="drop-card-body">
+                <div class="drop-card-num">04</div>
+                <h3 class="drop-card-title">LANDED COSTS</h3>
+                <div class="drop-card-sub">TRUE COST. NO CAP.</div>
+                <p class="drop-card-desc">Calculate the real cost of every unit -- freight, duties, insurance, warehousing. Know your true margins before you set the price.</p>
+                <span class="drop-card-tag">DUTY / FREIGHT / MARGIN</span>
+            </div>
+        </div>
+        <!-- Card 5 -->
+        <div class="drop-card tilt-in">
+            <div class="drop-card-img">
+                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80" alt="Fashion model" loading="lazy">
+                <div class="drop-card-badge">CUSTOM</div>
+            </div>
+            <div class="drop-card-body">
+                <div class="drop-card-num">05</div>
+                <h3 class="drop-card-title">PRODUCT ATTRIBUTES</h3>
+                <div class="drop-card-sub">30 CUSTOM SPECS.</div>
+                <p class="drop-card-desc">Define up to 30 custom attributes per product -- fabric, weight, care instructions, country of origin. Your catalog, your structure.</p>
+                <span class="drop-card-tag">FABRIC / CARE / ORIGIN</span>
+            </div>
+        </div>
+        <!-- Card 6 -->
+        <div class="drop-card tilt-in">
+            <div class="drop-card-img">
+                <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=800&q=80" alt="Streetwear" loading="lazy">
+                <div class="drop-card-badge">CONTROL</div>
+            </div>
+            <div class="drop-card-body">
+                <div class="drop-card-num">06</div>
+                <h3 class="drop-card-title">ITEM STATUSES</h3>
+                <div class="drop-card-sub">LIFECYCLE CONTROL.</div>
+                <p class="drop-card-desc">Track every product from concept to clearance. Development, sampling, active, markdown, discontinued -- automated transitions, full visibility.</p>
+                <span class="drop-card-tag">ACTIVE / HOLD / EOL</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- VARIANT MATRIX -->
+<section class="section matrix-section" id="matrix">
+    <div class="section-header">
+        <div class="section-label reveal">MODULE DEEP DIVE // 01</div>
+        <h2 class="section-title reveal">VARIANT<br><span>MATRIX</span></h2>
+    </div>
+    <div class="matrix-wrap">
+        <div class="matrix-visual reveal-left">
+            <div class="matrix-header">
+                <div>STYLE</div>
+                <div>XS</div>
+                <div>S</div>
+                <div>M</div>
+                <div>L</div>
+            </div>
+            <div class="matrix-row">
+                <div>BLACK</div>
+                <div class="matrix-cell-filled">24</div>
+                <div class="matrix-cell-filled">48</div>
+                <div class="matrix-cell-filled">72</div>
+                <div class="matrix-cell-filled">48</div>
+            </div>
+            <div class="matrix-row">
+                <div>WHITE</div>
+                <div class="matrix-cell-filled">12</div>
+                <div class="matrix-cell-filled">36</div>
+                <div class="matrix-cell-filled">60</div>
+                <div class="matrix-cell-filled">36</div>
+            </div>
+            <div class="matrix-row">
+                <div>GOLD</div>
+                <div class="matrix-cell-empty">--</div>
+                <div class="matrix-cell-filled">24</div>
+                <div class="matrix-cell-filled">48</div>
+                <div class="matrix-cell-filled">24</div>
+            </div>
+            <div class="matrix-row">
+                <div>OLIVE</div>
+                <div class="matrix-cell-empty">--</div>
+                <div class="matrix-cell-filled">18</div>
+                <div class="matrix-cell-filled">36</div>
+                <div class="matrix-cell-filled">18</div>
+            </div>
+            <div class="matrix-row">
+                <div>NAVY</div>
+                <div class="matrix-cell-filled">12</div>
+                <div class="matrix-cell-filled">24</div>
+                <div class="matrix-cell-filled">48</div>
+                <div class="matrix-cell-filled">24</div>
+            </div>
+        </div>
+        <div class="matrix-info reveal-right">
+            <h3>EVERY <span>COMBO</span> COVERED</h3>
+            <p>Generate complete color-size matrices from a single product template. Volt Apparel handles the complexity so your team can focus on what matters -- selling.</p>
+            <p>One click creates all variants, assigns barcodes, sets prices, and syncs inventory across channels.</p>
+            <div class="matrix-tags">
+                <span class="matrix-tag">AUTO-GENERATE</span>
+                <span class="matrix-tag">BARCODE SYNC</span>
+                <span class="matrix-tag">PRICE MATRIX</span>
+                <span class="matrix-tag">BULK EDIT</span>
+                <span class="matrix-tag">CHANNEL SYNC</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ALLOCATION BARS -->
+<section class="section alloc-section" id="allocations">
+    <div class="section-header">
+        <div class="section-label reveal">MODULE DEEP DIVE // 03</div>
+        <h2 class="section-title reveal">SOFT<br><span>ALLOCATIONS</span></h2>
+    </div>
+    <div class="alloc-grid">
+        <div class="alloc-bars">
+            <div class="alloc-bar-item reveal">
+                <div class="alloc-bar-head">
+                    <span class="alloc-bar-label">NORDSTROM FLAGSHIP</span>
+                    <span class="alloc-bar-pct">85%</span>
+                </div>
+                <div class="alloc-bar-track">
+                    <div class="alloc-bar-fill priority" data-width="85"></div>
+                </div>
+            </div>
+            <div class="alloc-bar-item reveal">
+                <div class="alloc-bar-head">
+                    <span class="alloc-bar-label">SSENSE E-COMM</span>
+                    <span class="alloc-bar-pct">72%</span>
+                </div>
+                <div class="alloc-bar-track">
+                    <div class="alloc-bar-fill" data-width="72"></div>
+                </div>
+            </div>
+            <div class="alloc-bar-item reveal">
+                <div class="alloc-bar-head">
+                    <span class="alloc-bar-label">KITH RETAIL</span>
+                    <span class="alloc-bar-pct">64%</span>
+                </div>
+                <div class="alloc-bar-track">
+                    <div class="alloc-bar-fill priority" data-width="64"></div>
+                </div>
+            </div>
+            <div class="alloc-bar-item reveal">
+                <div class="alloc-bar-head">
+                    <span class="alloc-bar-label">END CLOTHING</span>
+                    <span class="alloc-bar-pct">51%</span>
+                </div>
+                <div class="alloc-bar-track">
+                    <div class="alloc-bar-fill" data-width="51"></div>
+                </div>
+            </div>
+            <div class="alloc-bar-item reveal">
+                <div class="alloc-bar-head">
+                    <span class="alloc-bar-label">DTC WEBSTORE</span>
+                    <span class="alloc-bar-pct">93%</span>
+                </div>
+                <div class="alloc-bar-track">
+                    <div class="alloc-bar-fill priority" data-width="93"></div>
+                </div>
+            </div>
+        </div>
+        <div class="alloc-img-wrap reveal-right">
+            <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=800&q=80" alt="Urban fashion" loading="lazy">
+        </div>
+    </div>
+</section>
+
+<!-- STATS -->
+<section class="section stats-section" id="stats">
+    <div class="section-header" style="padding: 0 0 3rem 0;">
+        <div class="section-label reveal">THE NUMBERS // DON'T LIE</div>
+        <h2 class="section-title reveal">BY THE <span>NUMBERS</span></h2>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-card reveal-scale">
+            <div class="stat-card-bg">
+                <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
+            </div>
+            <div class="stat-value"><span class="counter" data-target="90">0</span><span class="stat-suffix">%</span></div>
+            <div class="stat-label">FASTER VARIANT SETUP</div>
+            <div class="stat-desc">What took hours now takes minutes</div>
+        </div>
+        <div class="stat-card reveal-scale">
+            <div class="stat-card-bg">
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
+            </div>
+            <div class="stat-value"><span class="counter" data-target="42">0</span></div>
+            <div class="stat-label">VARIANT DIMENSIONS</div>
+            <div class="stat-desc">Color, size, fit, length, width and more</div>
+        </div>
+        <div class="stat-card reveal-scale">
+            <div class="stat-card-bg">
+                <img src="https://images.unsplash.com/photo-1506634572416-48cdfe530110?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
+            </div>
+            <div class="stat-value"><span class="counter" data-target="30">0</span></div>
+            <div class="stat-label">CUSTOM ATTRIBUTES</div>
+            <div class="stat-desc">Per product, fully configurable</div>
+        </div>
+        <div class="stat-card reveal-scale">
+            <div class="stat-card-bg">
+                <img src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
+            </div>
+            <div class="stat-value"><span class="counter" data-target="0">0</span></div>
+            <div class="stat-label">EXTERNAL DEPENDENCIES</div>
+            <div class="stat-desc">100% native Business Central</div>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="section testimonial-section">
+    <div class="testimonial-card tilt-in">
+        <div class="testimonial-quote">
+            "VOLT APPAREL <span>COMPLETELY TRANSFORMED</span> HOW WE MANAGE OUR PRODUCT CATALOG. WHAT USED TO TAKE OUR TEAM AN ENTIRE WEEK NOW HAPPENS IN <span>UNDER AN HOUR</span>."
+        </div>
+        <div class="testimonial-author">SARAH CHEN</div>
+        <div class="testimonial-role">HEAD OF OPERATIONS // CONTEMPORARY FASHION BRAND</div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section steps-section" id="steps">
+    <div class="section-header">
+        <div class="section-label reveal">THE PROCESS // SIMPLIFIED</div>
+        <h2 class="section-title reveal">HOW IT <span>WORKS</span></h2>
+    </div>
+    <div class="steps-grid">
+        <div class="step-card reveal">
+            <div class="step-num">01</div>
+            <h3 class="step-title">INSTALL THE EXTENSION</h3>
+            <p class="step-desc">Deploy Volt Apparel directly from AppSource into your Business Central environment. Zero downtime, zero disruption.</p>
+            <span class="step-tag">5 MINUTES</span>
+        </div>
+        <div class="step-card reveal">
+            <div class="step-num">02</div>
+            <h3 class="step-title">CONFIGURE YOUR MATRIX</h3>
+            <p class="step-desc">Define your color palettes, size runs, and variant dimensions. Set up your product hierarchy exactly how your brand operates.</p>
+            <span class="step-tag">YOUR RULES</span>
+        </div>
+        <div class="step-card reveal">
+            <div class="step-num">03</div>
+            <h3 class="step-title">IMPORT YOUR CATALOG</h3>
+            <p class="step-desc">Migrate existing products or start fresh. Auto-generate all variant combinations, barcodes, and pricing in bulk.</p>
+            <span class="step-tag">ONE CLICK</span>
+        </div>
+        <div class="step-card reveal">
+            <div class="step-num">04</div>
+            <h3 class="step-title">START SHIPPING</h3>
+            <p class="step-desc">Allocate inventory, manage seasons, track landed costs, and scale your fashion business with confidence.</p>
+            <span class="step-tag">LET'S GO</span>
+        </div>
+    </div>
+</section>
+
+<!-- INTEGRATION -->
+<section class="section integration-section" id="integration">
+    <div class="integration-wrap">
+        <div class="section-label reveal" style="justify-content: center;">ARCHITECTURE // NATIVE</div>
+        <h2 class="section-title reveal" style="margin-top: 1rem;">NATIVE BC.<br><span>ZERO FRICTION.</span></h2>
+        <div class="integration-blocks">
+            <div class="integration-block reveal-left">SALES ORDERS</div>
+            <div class="integration-connector"></div>
+            <div class="integration-block reveal-left">INVENTORY</div>
+            <div class="integration-connector"></div>
+            <div class="integration-block gold reveal-scale">VOLT APPAREL</div>
+            <div class="integration-connector"></div>
+            <div class="integration-block reveal-right">PURCHASING</div>
+            <div class="integration-connector"></div>
+            <div class="integration-block reveal-right">FINANCE</div>
+        </div>
+        <p class="integration-sub reveal">BUILT ON BUSINESS CENTRAL // NO MIDDLEWARE // NO API CHAOS // JUST WORKS</p>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+    <div class="cta-bg">
+        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1920&q=80" alt="Fashion" loading="lazy">
+    </div>
+    <div class="cta-content">
+        <h2 class="cta-title reveal-scale">READY<br>TO <span>DROP</span>?</h2>
+        <p class="cta-sub reveal">THE FUTURE OF FASHION ERP IS HERE</p>
+        <a href="#" class="cta-btn reveal">GET EARLY ACCESS</a>
+    </div>
+    <div class="cta-stamp">VOLT TECHNOLOGIES // EST. 2024</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-top">
+        <div>
+            <div class="footer-brand">VOLT<span>APPAREL</span></div>
+            <p class="footer-tagline">The fashion-first ERP extension for Microsoft Dynamics 365 Business Central. Built by Volt Technologies -- the best AI-first Microsoft partner.</p>
+        </div>
+        <div class="footer-col">
+            <div class="footer-col-title">PRODUCT</div>
+            <a href="#">Product Variants</a>
+            <a href="#">Seasonality</a>
+            <a href="#">Allocations</a>
+            <a href="#">Landed Costs</a>
+            <a href="#">Attributes</a>
+            <a href="#">Item Statuses</a>
+        </div>
+        <div class="footer-col">
+            <div class="footer-col-title">RESOURCES</div>
+            <a href="#">Documentation</a>
+            <a href="#">API Reference</a>
+            <a href="#">Release Notes</a>
+            <a href="#">AppSource</a>
+        </div>
+        <div class="footer-col">
+            <div class="footer-col-title">COMPANY</div>
+            <a href="#">About Volt</a>
+            <a href="#">Contact</a>
+            <a href="#">Partners</a>
+            <a href="#">Careers</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div>&copy; 2024 VOLT TECHNOLOGIES. ALL RIGHTS RESERVED.</div>
+        <div>FASHION ERP // DYNAMICS 365 // BUSINESS CENTRAL</div>
+    </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<script>
+(function() {
+    // ========== LOADING SCREEN ==========
+    const loaderBar = document.getElementById('loaderBar');
+    const loaderPct = document.getElementById('loaderPct');
+    const loader = document.getElementById('loader');
+    let progress = 0;
+
+    function animateLoader() {
+        const interval = setInterval(() => {
+            progress += Math.random() * 15 + 5;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                loaderBar.style.width = '100%';
+                loaderPct.textContent = '100%';
+                setTimeout(hideLoader, 400);
+            }
+            loaderBar.style.width = progress + '%';
+            loaderPct.textContent = Math.floor(progress) + '%';
+        }, 150);
+    }
+
+    function hideLoader() {
+        gsap.to(loader, {
+            yPercent: -100,
+            duration: 0.8,
+            ease: 'power4.inOut',
+            onComplete: () => {
+                loader.style.display = 'none';
+                initAnimations();
+            }
+        });
+    }
+
+    // ========== LENIS SMOOTH SCROLL ==========
+    const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        smoothWheel: true,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.querySelector(anchor.getAttribute('href'));
+            if (target) {
+                lenis.scrollTo(target, { offset: -70 });
+            }
+        });
+    });
+
+    // ========== GSAP ANIMATIONS ==========
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+    function initAnimations() {
+        // Hero entrance
+        const heroTl = gsap.timeline({ defaults: { ease: 'power4.out' }});
+        heroTl
+            .from('#heroLabel', { y: 40, opacity: 0, duration: 0.8 }, 0.1)
+            .from('#heroTitle .line1', { y: 80, opacity: 0, duration: 1, skewY: 3 }, 0.2)
+            .from('#heroTitle .line2', { y: 60, opacity: 0, duration: 0.8 }, 0.5)
+            .from('#heroStamp', { scale: 0, rotation: -30, opacity: 0, duration: 0.6, ease: 'back.out(1.7)' }, 0.7)
+            .from('#heroStats .hero-stat', { y: 30, opacity: 0, duration: 0.6, stagger: 0.1 }, 0.9);
+
+        // Animate hero stat counters
+        document.querySelectorAll('.hero-stat-value').forEach(el => {
+            const target = parseInt(el.dataset.count);
+            gsap.to(el, {
+                textContent: target,
+                duration: 2,
+                ease: 'power2.out',
+                snap: { textContent: 1 },
+                delay: 1.2,
+            });
+        });
+
+        // Reveal animations
+        gsap.utils.toArray('.reveal').forEach(el => {
+            gsap.to(el, {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: el,
+                    start: 'top 85%',
+                    toggleActions: 'play none none none',
+                }
+            });
+        });
+
+        gsap.utils.toArray('.reveal-left').forEach(el => {
+            gsap.to(el, {
+                x: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: el,
+                    start: 'top 85%',
+                    toggleActions: 'play none none none',
+                }
+            });
+        });
+
+        gsap.utils.toArray('.reveal-right').forEach(el => {
+            gsap.to(el, {
+                x: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: el,
+                    start: 'top 85%',
+                    toggleActions: 'play none none none',
+                }
+            });
+        });
+
+        gsap.utils.toArray('.reveal-scale').forEach(el => {
+            gsap.to(el, {
+                scale: 1,
+                opacity: 1,
+                duration: 0.8,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: el,
+                    start: 'top 85%',
+                    toggleActions: 'play none none none',
+                }
+            });
+        });
+
+        gsap.utils.toArray('.tilt-in').forEach((el, i) => {
+            gsap.to(el, {
+                rotation: 0,
+                y: 0,
+                opacity: 1,
+                duration: 0.7,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: el,
+                    start: 'top 88%',
+                    toggleActions: 'play none none none',
+                },
+                delay: (i % 3) * 0.12,
+            });
+        });
+
+        // Allocation bars
+        gsap.utils.toArray('.alloc-bar-fill').forEach(bar => {
+            const width = bar.dataset.width;
+            gsap.to(bar, {
+                width: width + '%',
+                duration: 1.5,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: bar,
+                    start: 'top 90%',
+                    toggleActions: 'play none none none',
+                }
+            });
+        });
+
+        // Stat counters
+        gsap.utils.toArray('.counter').forEach(counter => {
+            const target = parseInt(counter.dataset.target);
+            gsap.to(counter, {
+                textContent: target,
+                duration: 2.5,
+                ease: 'power2.out',
+                snap: { textContent: 1 },
+                scrollTrigger: {
+                    trigger: counter,
+                    start: 'top 85%',
+                    toggleActions: 'play none none none',
+                }
+            });
+        });
+
+        // Matrix rows stagger
+        gsap.utils.toArray('.matrix-row').forEach((row, i) => {
+            gsap.from(row, {
+                x: -30,
+                opacity: 0,
+                duration: 0.5,
+                delay: i * 0.1,
+                scrollTrigger: {
+                    trigger: row,
+                    start: 'top 90%',
+                    toggleActions: 'play none none none',
+                }
+            });
+        });
+
+        // Parallax hero image
+        gsap.to('.hero-bg img', {
+            yPercent: 20,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '.hero',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true,
+            }
+        });
+
+        // Nav background on scroll
+        ScrollTrigger.create({
+            start: 'top -100',
+            onUpdate: (self) => {
+                const nav = document.getElementById('mainNav');
+                if (self.direction === 1 && self.scroll() > 200) {
+                    gsap.to(nav, { yPercent: -100, duration: 0.3, ease: 'power2.in' });
+                } else {
+                    gsap.to(nav, { yPercent: 0, duration: 0.3, ease: 'power2.out' });
+                }
+            }
+        });
+
+        // Step numbers parallax
+        gsap.utils.toArray('.step-num').forEach(num => {
+            gsap.to(num, {
+                y: -30,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: num,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 1,
+                }
+            });
+        });
+
+        // Integration blocks
+        gsap.utils.toArray('.integration-block').forEach((block, i) => {
+            gsap.from(block, {
+                y: 30 * (i % 2 === 0 ? 1 : -1),
+                opacity: 0,
+                duration: 0.6,
+                delay: i * 0.08,
+                scrollTrigger: {
+                    trigger: '.integration-blocks',
+                    start: 'top 80%',
+                    toggleActions: 'play none none none',
+                }
+            });
+        });
+
+        // CTA section reveal
+        gsap.from('.cta-bg img', {
+            scale: 1.2,
+            scrollTrigger: {
+                trigger: '.cta-section',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true,
+            }
+        });
+    }
+
+    // Start loader on page ready
+    if (document.readyState === 'complete') {
+        animateLoader();
+    } else {
+        window.addEventListener('load', animateLoader);
+    }
+
+    // Mobile menu toggle (simple)
+    const menuBtn = document.getElementById('menuBtn');
+    const navLinks = document.querySelector('.nav-links');
+    const navCta = document.querySelector('.nav-cta');
+    let menuOpen = false;
+
+    if (menuBtn) {
+        menuBtn.addEventListener('click', () => {
+            menuOpen = !menuOpen;
+            if (menuOpen) {
+                navLinks.style.display = 'flex';
+                navLinks.style.position = 'fixed';
+                navLinks.style.top = '70px';
+                navLinks.style.left = '0';
+                navLinks.style.right = '0';
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.background = 'rgba(9,9,11,0.98)';
+                navLinks.style.borderBottom = '3px solid #fff';
+                navLinks.style.zIndex = '999';
+
+                document.querySelectorAll('.nav-links a').forEach(a => {
+                    a.style.borderRight = 'none';
+                    a.style.borderBottom = '1px solid #222';
+                    a.style.padding = '1.2rem 2rem';
+                    a.style.justifyContent = 'flex-start';
+                });
+
+                navCta.style.display = 'flex';
+                navCta.style.position = 'fixed';
+                navCta.style.bottom = '0';
+                navCta.style.left = '0';
+                navCta.style.right = '0';
+                navCta.style.justifyContent = 'center';
+                navCta.style.zIndex = '999';
+                navCta.style.padding = '1.2rem';
+
+                menuBtn.innerHTML = '&#10005;';
+            } else {
+                navLinks.style.display = '';
+                navLinks.style.position = '';
+                navLinks.style.top = '';
+                navLinks.style.left = '';
+                navLinks.style.right = '';
+                navLinks.style.flexDirection = '';
+                navLinks.style.background = '';
+                navLinks.style.borderBottom = '';
+                navLinks.style.zIndex = '';
+
+                document.querySelectorAll('.nav-links a').forEach(a => {
+                    a.style.borderRight = '';
+                    a.style.borderBottom = '';
+                    a.style.padding = '';
+                    a.style.justifyContent = '';
+                });
+
+                navCta.style.display = '';
+                navCta.style.position = '';
+                navCta.style.bottom = '';
+                navCta.style.left = '';
+                navCta.style.right = '';
+                navCta.style.justifyContent = '';
+                navCta.style.zIndex = '';
+                navCta.style.padding = '';
+
+                menuBtn.innerHTML = '&#9776;';
+            }
+        });
+
+        // Close menu on link click
+        document.querySelectorAll('.nav-links a').forEach(a => {
+            a.addEventListener('click', () => {
+                if (menuOpen) menuBtn.click();
+            });
+        });
+    }
+})();
+</script>
+</body>
+</html>

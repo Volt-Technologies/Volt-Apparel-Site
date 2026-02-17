@@ -1,0 +1,2102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volt Apparel - Fashion ERP, Reimagined</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #09090b;
+  --gold: #d4a017;
+  --gold-light: #fbbf24;
+  --gold-mid: #f59e0b;
+  --white: #fafafa;
+  --muted: rgba(250, 250, 250, 0.56);
+  --muted-dim: rgba(250, 250, 250, 0.25);
+  --heading: 'Space Grotesk', sans-serif;
+  --body: 'DM Sans', sans-serif;
+}
+
+html { background: var(--bg); }
+
+body {
+  font-family: var(--body);
+  background: var(--bg);
+  color: var(--white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+
+/* ============ LOADING SCREEN ============ */
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+#loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+#loader .loader-label {
+  font-family: var(--heading);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 2rem;
+}
+#loader .chapter-counter {
+  font-family: var(--heading);
+  font-size: clamp(4rem, 12vw, 10rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+}
+#loader .chapter-counter .slash { color: var(--muted-dim); }
+#loader .loader-bar-track {
+  width: 200px;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  margin-top: 2rem;
+  border-radius: 1px;
+  overflow: hidden;
+}
+#loader .loader-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 1px;
+}
+
+/* ============ SCROLL PROGRESS ============ */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold-mid));
+  z-index: 9999;
+  transform-origin: left;
+}
+
+/* ============ NAVIGATION ============ */
+#nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9000;
+  padding: 1.25rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(9, 9, 11, 0);
+  backdrop-filter: blur(0px);
+  transition: background 0.4s ease, backdrop-filter 0.4s ease;
+}
+#nav.scrolled {
+  background: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(250,250,250,0.06);
+}
+.nav-logo {
+  font-family: var(--heading);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--white);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nav-logo .volt-mark {
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+}
+.nav-chapters {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nav-chapter-dot {
+  width: 28px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.15);
+  cursor: pointer;
+  transition: background 0.3s ease, width 0.3s ease;
+  position: relative;
+}
+.nav-chapter-dot.active {
+  background: var(--gold);
+  width: 40px;
+}
+.nav-chapter-label {
+  font-family: var(--heading);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-left: 0.75rem;
+  min-width: 120px;
+}
+.nav-cta-btn {
+  font-family: var(--body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.55rem 1.25rem;
+  background: transparent;
+  border: 1px solid rgba(212, 160, 23, 0.4);
+  color: var(--gold-light);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.nav-cta-btn:hover { background: rgba(212, 160, 23, 0.1); border-color: var(--gold); }
+
+/* ============ COMMON ============ */
+.section-spacer { height: 100vh; }
+.chapter-label {
+  font-family: var(--heading);
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.chapter-label::before {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--gold);
+}
+.section-heading {
+  font-family: var(--heading);
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--white);
+  max-width: 800px;
+}
+.section-heading .accent { color: var(--gold-light); }
+.section-sub {
+  font-size: 1.1rem;
+  color: var(--muted);
+  max-width: 560px;
+  line-height: 1.7;
+  margin-top: 1.25rem;
+}
+
+/* ============ CHAPTER 1 - HERO ============ */
+#hero-pin {
+  position: relative;
+  height: 400vh;
+}
+#hero {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  overflow: hidden;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1rem;
+  border: 1px solid rgba(212, 160, 23, 0.3);
+  border-radius: 100px;
+  font-family: var(--body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--gold-light);
+  margin-bottom: 2rem;
+  opacity: 0;
+}
+.hero-badge .badge-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+}
+.hero-title {
+  font-family: var(--heading);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--white);
+  margin-bottom: 1.5rem;
+}
+.hero-title .line { display: block; overflow: hidden; }
+.hero-title .line-inner { display: block; }
+.hero-title .accent { color: var(--gold-light); }
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--muted);
+  max-width: 560px;
+  line-height: 1.7;
+  margin: 0 auto;
+  opacity: 0;
+}
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-top: 4rem;
+  max-width: 800px;
+  width: 100%;
+}
+.hero-stat {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.hero-stat-value {
+  font-family: var(--heading);
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 700;
+  color: var(--gold-light);
+  line-height: 1.2;
+}
+.hero-stat-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.35rem;
+}
+.hero-scroll-cue {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+}
+.hero-scroll-cue span {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted-dim);
+}
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+/* ============ MARQUEE ============ */
+.marquee-section {
+  padding: 3rem 0;
+  overflow: hidden;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 3rem;
+}
+.marquee-item {
+  font-family: var(--heading);
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  color: var(--muted-dim);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.marquee-item::after {
+  content: '';
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ============ CHAPTER 2 - FEATURES ============ */
+#features-pin {
+  position: relative;
+  height: 500vh;
+}
+#features-panel {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 0 clamp(2rem, 6vw, 8rem);
+  overflow: hidden;
+}
+.features-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: center;
+}
+.features-left { position: relative; }
+.features-right { position: relative; height: 400px; }
+.feature-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(40px);
+}
+.feature-card-inner {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 2.5rem;
+}
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(212, 160, 23, 0.1);
+  border: 1px solid rgba(212, 160, 23, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+}
+.feature-card-title {
+  font-family: var(--heading);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.75rem;
+}
+.feature-card-desc {
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.feature-counter {
+  font-family: var(--heading);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--muted-dim);
+  margin-top: 1.25rem;
+}
+.feature-dots {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+.feature-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  transition: background 0.3s;
+}
+.feature-dot.active { background: var(--gold); }
+
+/* ============ CHAPTER 3 - DEEP DIVES ============ */
+#deep-dives-pin {
+  position: relative;
+  height: 600vh;
+}
+#deep-dives-panel {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2rem;
+  overflow: hidden;
+}
+.deep-dives-container {
+  max-width: 1000px;
+  width: 100%;
+  position: relative;
+}
+.dd-section {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  opacity: 0;
+}
+.dd-section.dd-active { opacity: 1; }
+
+/* Variant Matrix */
+.variant-matrix {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.matrix-title {
+  font-family: var(--heading);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+.matrix-sub {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.matrix-grid {
+  display: grid;
+  grid-template-columns: 80px repeat(5, 1fr);
+  gap: 3px;
+  width: 100%;
+  max-width: 600px;
+}
+.matrix-header {
+  font-family: var(--heading);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  text-align: center;
+  padding: 0.5rem;
+}
+.matrix-row-label {
+  font-family: var(--heading);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  padding-right: 0.5rem;
+}
+.matrix-cell {
+  background: rgba(212, 160, 23, 0);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 4px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: transparent;
+  transition: all 0.3s;
+}
+.matrix-cell.filled {
+  background: rgba(212, 160, 23, 0.15);
+  border-color: rgba(212, 160, 23, 0.3);
+  color: var(--gold-light);
+}
+
+/* Allocation Bars */
+.allocation-viz {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.alloc-title {
+  font-family: var(--heading);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+.alloc-sub {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.alloc-bars {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.alloc-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.alloc-label {
+  font-family: var(--heading);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--muted);
+  width: 100px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.alloc-bar-track {
+  flex: 1;
+  height: 28px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+.alloc-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  transition: width 0.1s linear;
+}
+.alloc-bar-value {
+  font-family: var(--heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  width: 40px;
+  flex-shrink: 0;
+}
+
+/* Season Timeline */
+.season-timeline-viz {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.season-title {
+  font-family: var(--heading);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+.season-sub {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+.season-track {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  padding: 0 1rem;
+}
+.season-line {
+  position: absolute;
+  top: 18px;
+  left: 1rem;
+  right: 1rem;
+  height: 2px;
+  background: rgba(255,255,255,0.08);
+}
+.season-line-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+}
+.season-nodes {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+.season-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  opacity: 0;
+}
+.season-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  background: var(--bg);
+  position: relative;
+  z-index: 2;
+}
+.season-dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: rgba(212, 160, 23, 0.2);
+}
+.season-node-label {
+  font-family: var(--heading);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--white);
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+.season-node-date {
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+
+/* Landed Cost */
+.landed-cost-viz {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.lc-title {
+  font-family: var(--heading);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+.lc-sub {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.lc-breakdown {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.lc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1.25rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  opacity: 0;
+  transform: translateX(-20px);
+}
+.lc-row-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.lc-row-value {
+  font-family: var(--heading);
+  font-weight: 600;
+  color: var(--white);
+}
+.lc-total {
+  border-color: rgba(212, 160, 23, 0.3);
+  background: rgba(212, 160, 23, 0.08);
+}
+.lc-total .lc-row-label { color: var(--gold-light); font-weight: 600; }
+.lc-total .lc-row-value { color: var(--gold-light); font-size: 1.1rem; }
+
+/* ============ CHAPTER 4 - HOW IT WORKS ============ */
+#how-pin {
+  position: relative;
+  height: 400vh;
+}
+#how-panel {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2rem;
+}
+.how-container {
+  max-width: 900px;
+  width: 100%;
+}
+.how-steps {
+  position: relative;
+  margin-top: 3rem;
+}
+.how-timeline-line {
+  position: absolute;
+  left: 23px;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: rgba(255,255,255,0.06);
+}
+.how-timeline-fill {
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(to bottom, var(--gold), var(--gold-light));
+}
+.how-step {
+  display: flex;
+  gap: 2rem;
+  padding-bottom: 2.5rem;
+  opacity: 0;
+  transform: translateX(-20px);
+}
+.how-step-marker {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+.how-step-num {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.1);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--heading);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--muted);
+  transition: all 0.4s ease;
+}
+.how-step.active .how-step-num {
+  border-color: var(--gold);
+  color: var(--gold-light);
+  box-shadow: 0 0 20px rgba(212, 160, 23, 0.2);
+}
+.how-step-content { padding-top: 0.65rem; }
+.how-step-title {
+  font-family: var(--heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.4rem;
+}
+.how-step-desc {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ============ CHAPTER 5 - IMPACT ============ */
+#impact-pin {
+  position: relative;
+  height: 300vh;
+}
+#impact-panel {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2rem;
+}
+.impact-container {
+  max-width: 1000px;
+  width: 100%;
+  text-align: center;
+}
+.impact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+.impact-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+}
+.impact-value {
+  font-family: var(--heading);
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: var(--gold-light);
+  line-height: 1;
+}
+.impact-suffix {
+  font-size: 0.6em;
+  color: var(--gold);
+}
+.impact-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.75rem;
+  line-height: 1.5;
+}
+
+/* ============ TESTIMONIAL ============ */
+.testimonial-section {
+  padding: 10rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+}
+.testimonial-inner {
+  max-width: 800px;
+  text-align: center;
+}
+.testimonial-quote {
+  font-family: var(--heading);
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--white);
+}
+.testimonial-quote .word {
+  opacity: 0.1;
+  transition: opacity 0.15s ease;
+}
+.testimonial-quote .word.revealed { opacity: 1; }
+.testimonial-attribution {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.testimonial-attribution strong { color: var(--gold-light); }
+
+/* ============ CHAPTER 6 - INTEGRATION ============ */
+#integration-pin {
+  position: relative;
+  height: 350vh;
+}
+#integration-panel {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2rem;
+}
+.integration-container {
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+}
+.flow-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-top: 3rem;
+  flex-wrap: wrap;
+}
+.flow-node {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  text-align: center;
+  opacity: 0;
+  transform: scale(0.8);
+  min-width: 140px;
+}
+.flow-node-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.flow-node-label {
+  font-family: var(--heading);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--white);
+}
+.flow-node-sub {
+  font-size: 0.65rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+.flow-node.center-node {
+  border-color: rgba(212, 160, 23, 0.3);
+  background: rgba(212, 160, 23, 0.08);
+  padding: 1.5rem 2rem;
+}
+.flow-node.center-node .flow-node-label { color: var(--gold-light); }
+.flow-arrow {
+  font-size: 1.5rem;
+  color: var(--gold);
+  opacity: 0;
+  padding: 0 0.75rem;
+}
+.flow-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+}
+.flow-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.flow-sub-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-top: 1.5rem;
+}
+.flow-vert-arrow {
+  font-size: 1.5rem;
+  color: var(--gold);
+  opacity: 0;
+  padding: 0.5rem 0;
+  text-align: center;
+}
+
+/* ============ CTA ============ */
+.cta-section {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem;
+  overflow: hidden;
+}
+.cta-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(212, 160, 23, 0.08) 0%, transparent 70%);
+}
+.cta-inner {
+  position: relative;
+  text-align: center;
+  max-width: 700px;
+}
+.cta-heading {
+  font-family: var(--heading);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--white);
+  margin-bottom: 1.25rem;
+}
+.cta-sub {
+  font-size: 1.1rem;
+  color: var(--muted);
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+}
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  font-family: var(--body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.85rem 2rem;
+  background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+  color: var(--bg);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(212, 160, 23, 0.3); }
+.btn-secondary {
+  font-family: var(--body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.85rem 2rem;
+  background: transparent;
+  color: var(--white);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.btn-secondary:hover { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.03); }
+
+/* ============ FOOTER ============ */
+footer {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 4rem 2rem 2rem;
+}
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+}
+.footer-brand-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 0.75rem;
+  max-width: 280px;
+}
+.footer-col-title {
+  font-family: var(--heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.footer-links a {
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--gold-light); }
+.footer-bottom {
+  max-width: 1100px;
+  margin: 3rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-copy { font-size: 0.75rem; color: var(--muted-dim); }
+.footer-volt {
+  font-family: var(--heading);
+  font-size: 0.75rem;
+  color: var(--muted-dim);
+}
+.footer-volt .ft-accent { color: var(--gold); }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 900px) {
+  .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .features-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .features-right { height: 350px; }
+  .impact-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .flow-row, .flow-sub-row { flex-wrap: wrap; gap: 0.5rem; }
+  .flow-node { min-width: 110px; padding: 1rem; }
+  .nav-chapters { display: none; }
+  .nav-chapter-label { display: none; }
+}
+@media (max-width: 600px) {
+  .hero-stats { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .impact-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .impact-card { padding: 1.5rem 1rem; }
+  .matrix-grid { grid-template-columns: 60px repeat(4, 1fr); }
+  .matrix-grid .mc5 { display: none; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 0.75rem; text-align: center; }
+  .flow-arrow { padding: 0 0.25rem; font-size: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loader">
+  <div class="loader-label">Loading Chapters</div>
+  <div class="chapter-counter"><span id="loader-current">0</span><span class="slash"> / </span><span>6</span></div>
+  <div class="loader-bar-track"><div class="loader-bar-fill" id="loader-bar"></div></div>
+</div>
+
+<!-- SCROLL PROGRESS -->
+<div id="scroll-progress"></div>
+
+<!-- NAVIGATION -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <span class="volt-mark"></span>
+    Volt Apparel
+  </a>
+  <div class="nav-chapters">
+    <div class="nav-chapter-dot active" data-chapter="1"></div>
+    <div class="nav-chapter-dot" data-chapter="2"></div>
+    <div class="nav-chapter-dot" data-chapter="3"></div>
+    <div class="nav-chapter-dot" data-chapter="4"></div>
+    <div class="nav-chapter-dot" data-chapter="5"></div>
+    <div class="nav-chapter-dot" data-chapter="6"></div>
+  </div>
+  <span class="nav-chapter-label">Chapter 1 &mdash; Origin</span>
+  <a href="#cta" class="nav-cta-btn">Get Started</a>
+</nav>
+
+<!-- =============================== -->
+<!-- CHAPTER 1 - HERO -->
+<!-- =============================== -->
+<section id="hero-pin">
+  <div id="hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Built for Business Central
+    </div>
+    <h1 class="hero-title">
+      <span class="line"><span class="line-inner">Fashion ERP,</span></span>
+      <span class="line"><span class="line-inner accent">reimagined.</span></span>
+    </h1>
+    <p class="hero-subtitle">Volt Apparel extends Microsoft Dynamics 365 Business Central with everything apparel brands need to manage products, seasons, and global operations.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">11</div>
+        <div class="hero-stat-label">Feature Modules</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">42</div>
+        <div class="hero-stat-label">Custom Tables</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">100%</div>
+        <div class="hero-stat-label">Native BC</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">0</div>
+        <div class="hero-stat-label">External Dependencies</div>
+      </div>
+    </div>
+    <div class="hero-scroll-cue">
+      <span>Scroll to explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- SOCIAL PROOF MARQUEE -->
+<!-- =============================== -->
+<section class="marquee-section">
+  <div class="marquee-track" id="marquee">
+    <span class="marquee-item">Variant Matrix Management</span>
+    <span class="marquee-item">Season Planning</span>
+    <span class="marquee-item">Soft Allocations</span>
+    <span class="marquee-item">Landed Cost Tracking</span>
+    <span class="marquee-item">Product Attributes</span>
+    <span class="marquee-item">Item Status Workflows</span>
+    <span class="marquee-item">Color &amp; Size Management</span>
+    <span class="marquee-item">Purchase Order Allocation</span>
+    <span class="marquee-item">100% Native to Business Central</span>
+    <span class="marquee-item">Zero External Dependencies</span>
+    <span class="marquee-item">Variant Matrix Management</span>
+    <span class="marquee-item">Season Planning</span>
+    <span class="marquee-item">Soft Allocations</span>
+    <span class="marquee-item">Landed Cost Tracking</span>
+    <span class="marquee-item">Product Attributes</span>
+    <span class="marquee-item">Item Status Workflows</span>
+    <span class="marquee-item">Color &amp; Size Management</span>
+    <span class="marquee-item">Purchase Order Allocation</span>
+    <span class="marquee-item">100% Native to Business Central</span>
+    <span class="marquee-item">Zero External Dependencies</span>
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- CHAPTER 2 - FEATURES -->
+<!-- =============================== -->
+<section id="features-pin">
+  <div id="features-panel">
+    <div class="features-layout">
+      <div class="features-left">
+        <div class="chapter-label">Chapter 2 &mdash; Capabilities</div>
+        <h2 class="section-heading">Everything apparel businesses need, <span class="accent">nothing they don't.</span></h2>
+        <p class="section-sub">Six purpose-built modules designed for the unique demands of fashion, footwear, and apparel brands.</p>
+        <div class="feature-dots">
+          <div class="feature-dot active" data-i="0"></div>
+          <div class="feature-dot" data-i="1"></div>
+          <div class="feature-dot" data-i="2"></div>
+          <div class="feature-dot" data-i="3"></div>
+          <div class="feature-dot" data-i="4"></div>
+          <div class="feature-dot" data-i="5"></div>
+        </div>
+      </div>
+      <div class="features-right">
+        <div class="feature-card" data-fi="0">
+          <div class="feature-card-inner">
+            <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d4a017" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+            <h3 class="feature-card-title">Product Variants</h3>
+            <p class="feature-card-desc">Define colors, sizes, and custom dimensions in a visual matrix. Generate every combination with one click and manage availability across channels.</p>
+            <div class="feature-counter">01 / 06</div>
+          </div>
+        </div>
+        <div class="feature-card" data-fi="1">
+          <div class="feature-card-inner">
+            <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d4a017" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+            <h3 class="feature-card-title">Seasonality</h3>
+            <p class="feature-card-desc">Organize collections by season with date ranges, delivery windows, and status tracking. Manage the full lifecycle from design to markdown.</p>
+            <div class="feature-counter">02 / 06</div>
+          </div>
+        </div>
+        <div class="feature-card" data-fi="2">
+          <div class="feature-card-inner">
+            <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d4a017" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+            <h3 class="feature-card-title">Soft Allocations</h3>
+            <p class="feature-card-desc">Reserve inventory before it arrives. Allocate purchase orders to sales orders, customers, or stores with priority-based rules.</p>
+            <div class="feature-counter">03 / 06</div>
+          </div>
+        </div>
+        <div class="feature-card" data-fi="3">
+          <div class="feature-card-inner">
+            <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d4a017" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><circle cx="7" cy="7" r="1"/></svg></div>
+            <h3 class="feature-card-title">Landed Costs</h3>
+            <p class="feature-card-desc">Calculate true product costs including freight, duties, insurance, and handling. Allocate charges across items by weight, value, or quantity.</p>
+            <div class="feature-counter">04 / 06</div>
+          </div>
+        </div>
+        <div class="feature-card" data-fi="4">
+          <div class="feature-card-inner">
+            <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d4a017" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/><circle cx="20" cy="17" r="2"/></svg></div>
+            <h3 class="feature-card-title">Product Attributes</h3>
+            <p class="feature-card-desc">Extend items with up to 30 custom attributes per product. Define fabric, fit, wash type, and more with typed, validated fields.</p>
+            <div class="feature-counter">05 / 06</div>
+          </div>
+        </div>
+        <div class="feature-card" data-fi="5">
+          <div class="feature-card-inner">
+            <div class="feature-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d4a017" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+            <h3 class="feature-card-title">Item Statuses</h3>
+            <p class="feature-card-desc">Control product lifecycle with custom status workflows. Block sales, purchases, or transfers based on item status with automatic enforcement.</p>
+            <div class="feature-counter">06 / 06</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- CHAPTER 3 - DEEP DIVES -->
+<!-- =============================== -->
+<section id="deep-dives-pin">
+  <div id="deep-dives-panel">
+    <div class="deep-dives-container">
+      <!-- Variant Matrix -->
+      <div class="dd-section dd-active" id="dd-matrix">
+        <div class="variant-matrix">
+          <div class="chapter-label">Chapter 3 &mdash; Deep Dive</div>
+          <h3 class="matrix-title">Variant Matrix</h3>
+          <p class="matrix-sub">Every color-size combination, generated and managed visually</p>
+          <div class="matrix-grid">
+            <div class="matrix-header"></div>
+            <div class="matrix-header">XS</div>
+            <div class="matrix-header">S</div>
+            <div class="matrix-header">M</div>
+            <div class="matrix-header">L</div>
+            <div class="matrix-header mc5">XL</div>
+
+            <div class="matrix-row-label">Black</div>
+            <div class="matrix-cell" data-v="12">12</div>
+            <div class="matrix-cell" data-v="24">24</div>
+            <div class="matrix-cell" data-v="36">36</div>
+            <div class="matrix-cell" data-v="24">24</div>
+            <div class="matrix-cell mc5" data-v="12">12</div>
+
+            <div class="matrix-row-label">Navy</div>
+            <div class="matrix-cell" data-v="8">8</div>
+            <div class="matrix-cell" data-v="18">18</div>
+            <div class="matrix-cell" data-v="30">30</div>
+            <div class="matrix-cell" data-v="18">18</div>
+            <div class="matrix-cell mc5" data-v="8">8</div>
+
+            <div class="matrix-row-label">Ivory</div>
+            <div class="matrix-cell" data-v="6">6</div>
+            <div class="matrix-cell" data-v="12">12</div>
+            <div class="matrix-cell" data-v="20">20</div>
+            <div class="matrix-cell" data-v="12">12</div>
+            <div class="matrix-cell mc5" data-v="6">6</div>
+
+            <div class="matrix-row-label">Olive</div>
+            <div class="matrix-cell" data-v="4">4</div>
+            <div class="matrix-cell" data-v="10">10</div>
+            <div class="matrix-cell" data-v="18">18</div>
+            <div class="matrix-cell" data-v="10">10</div>
+            <div class="matrix-cell mc5" data-v="4">4</div>
+
+            <div class="matrix-row-label">Rust</div>
+            <div class="matrix-cell" data-v="4">4</div>
+            <div class="matrix-cell" data-v="8">8</div>
+            <div class="matrix-cell" data-v="14">14</div>
+            <div class="matrix-cell" data-v="8">8</div>
+            <div class="matrix-cell mc5" data-v="4">4</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Allocation Bars -->
+      <div class="dd-section" id="dd-alloc">
+        <div class="allocation-viz">
+          <h3 class="alloc-title">Soft Allocations</h3>
+          <p class="alloc-sub">Reserve incoming inventory before it reaches your warehouse</p>
+          <div class="alloc-bars">
+            <div class="alloc-bar-row">
+              <span class="alloc-label">Nordstrom</span>
+              <div class="alloc-bar-track"><div class="alloc-bar-fill" data-target="85"></div></div>
+              <span class="alloc-bar-value">0%</span>
+            </div>
+            <div class="alloc-bar-row">
+              <span class="alloc-label">Saks Fifth</span>
+              <div class="alloc-bar-track"><div class="alloc-bar-fill" data-target="65"></div></div>
+              <span class="alloc-bar-value">0%</span>
+            </div>
+            <div class="alloc-bar-row">
+              <span class="alloc-label">Direct</span>
+              <div class="alloc-bar-track"><div class="alloc-bar-fill" data-target="45"></div></div>
+              <span class="alloc-bar-value">0%</span>
+            </div>
+            <div class="alloc-bar-row">
+              <span class="alloc-label">Wholesale</span>
+              <div class="alloc-bar-track"><div class="alloc-bar-fill" data-target="30"></div></div>
+              <span class="alloc-bar-value">0%</span>
+            </div>
+            <div class="alloc-bar-row">
+              <span class="alloc-label">Reserve</span>
+              <div class="alloc-bar-track"><div class="alloc-bar-fill" data-target="15"></div></div>
+              <span class="alloc-bar-value">0%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Season Timeline -->
+      <div class="dd-section" id="dd-season">
+        <div class="season-timeline-viz">
+          <h3 class="season-title">Season Timeline</h3>
+          <p class="season-sub">Plan your collections from concept to clearance</p>
+          <div class="season-track">
+            <div class="season-line"><div class="season-line-fill" id="season-line-fill"></div></div>
+            <div class="season-nodes">
+              <div class="season-node">
+                <div class="season-dot"></div>
+                <span class="season-node-label">Design</span>
+                <span class="season-node-date">Jan - Feb</span>
+              </div>
+              <div class="season-node">
+                <div class="season-dot"></div>
+                <span class="season-node-label">Sourcing</span>
+                <span class="season-node-date">Mar - Apr</span>
+              </div>
+              <div class="season-node">
+                <div class="season-dot"></div>
+                <span class="season-node-label">Production</span>
+                <span class="season-node-date">May - Jul</span>
+              </div>
+              <div class="season-node">
+                <div class="season-dot"></div>
+                <span class="season-node-label">Delivery</span>
+                <span class="season-node-date">Aug - Sep</span>
+              </div>
+              <div class="season-node">
+                <div class="season-dot"></div>
+                <span class="season-node-label">Selling</span>
+                <span class="season-node-date">Sep - Dec</span>
+              </div>
+              <div class="season-node">
+                <div class="season-dot"></div>
+                <span class="season-node-label">Markdown</span>
+                <span class="season-node-date">Jan - Feb</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Landed Cost -->
+      <div class="dd-section" id="dd-landed">
+        <div class="landed-cost-viz">
+          <h3 class="lc-title">Landed Cost Breakdown</h3>
+          <p class="lc-sub">Know the true cost of every product</p>
+          <div class="lc-breakdown">
+            <div class="lc-row">
+              <span class="lc-row-label">Unit Price (FOB)</span>
+              <span class="lc-row-value">$18.50</span>
+            </div>
+            <div class="lc-row">
+              <span class="lc-row-label">Ocean Freight</span>
+              <span class="lc-row-value">$2.30</span>
+            </div>
+            <div class="lc-row">
+              <span class="lc-row-label">Import Duty (12%)</span>
+              <span class="lc-row-value">$2.22</span>
+            </div>
+            <div class="lc-row">
+              <span class="lc-row-label">Insurance</span>
+              <span class="lc-row-value">$0.45</span>
+            </div>
+            <div class="lc-row">
+              <span class="lc-row-label">Handling &amp; Warehousing</span>
+              <span class="lc-row-value">$1.10</span>
+            </div>
+            <div class="lc-row lc-total">
+              <span class="lc-row-label">Total Landed Cost</span>
+              <span class="lc-row-value">$24.57</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- CHAPTER 4 - HOW IT WORKS -->
+<!-- =============================== -->
+<section id="how-pin">
+  <div id="how-panel">
+    <div class="how-container">
+      <div class="chapter-label">Chapter 4 &mdash; Getting Started</div>
+      <h2 class="section-heading">From install to <span class="accent">impact</span> in four steps.</h2>
+      <div class="how-steps">
+        <div class="how-timeline-line"><div class="how-timeline-fill" id="how-line-fill"></div></div>
+        <div class="how-step">
+          <div class="how-step-marker"><div class="how-step-num">01</div></div>
+          <div class="how-step-content">
+            <h3 class="how-step-title">Install &amp; Configure</h3>
+            <p class="how-step-desc">Install Volt Apparel from AppSource directly into your Business Central environment. Configure your apparel setup including variant dimensions and attribute templates.</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-marker"><div class="how-step-num">02</div></div>
+          <div class="how-step-content">
+            <h3 class="how-step-title">Define Your Catalog</h3>
+            <p class="how-step-desc">Set up your product catalog with variant matrices, custom attributes, and size scales. Define color palettes and fabric specifications for each collection.</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-marker"><div class="how-step-num">03</div></div>
+          <div class="how-step-content">
+            <h3 class="how-step-title">Plan Your Seasons</h3>
+            <p class="how-step-desc">Create seasons with delivery windows and manage the full lifecycle. Allocate purchase orders, set pricing tiers, and plan your go-to-market strategy.</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-marker"><div class="how-step-num">04</div></div>
+          <div class="how-step-content">
+            <h3 class="how-step-title">Run Your Business</h3>
+            <p class="how-step-desc">Process orders, manage inventory across variants, track landed costs, and gain complete visibility into your apparel operations with real-time Business Central data.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- CHAPTER 5 - IMPACT -->
+<!-- =============================== -->
+<section id="impact-pin">
+  <div id="impact-panel">
+    <div class="impact-container">
+      <div class="chapter-label" style="justify-content:center;">Chapter 5 &mdash; Impact</div>
+      <h2 class="section-heading" style="margin:0 auto; text-align:center;">The numbers behind the <span class="accent">transformation.</span></h2>
+      <div class="impact-grid">
+        <div class="impact-card">
+          <div class="impact-value"><span class="impact-counter" data-target="90">0</span><span class="impact-suffix">%</span></div>
+          <div class="impact-label">Reduction in variant setup time</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-value"><span class="impact-counter" data-target="42">0</span></div>
+          <div class="impact-label">Custom tables purpose-built for apparel</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-value"><span class="impact-counter" data-target="30">0</span></div>
+          <div class="impact-label">Product attributes per item</div>
+        </div>
+        <div class="impact-card">
+          <div class="impact-value"><span class="impact-counter" data-target="0" data-display="0">0</span></div>
+          <div class="impact-label">External dependencies required</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- TESTIMONIAL -->
+<!-- =============================== -->
+<section class="testimonial-section" id="testimonial">
+  <div class="testimonial-inner">
+    <div class="testimonial-quote" id="quote-text"></div>
+    <div class="testimonial-attribution">
+      <strong>Sarah Chen</strong> &mdash; VP of Operations, Meridian Fashion Group
+    </div>
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- CHAPTER 6 - INTEGRATION -->
+<!-- =============================== -->
+<section id="integration-pin">
+  <div id="integration-panel">
+    <div class="integration-container">
+      <div class="chapter-label" style="justify-content:center;">Chapter 6 &mdash; Integration</div>
+      <h2 class="section-heading" style="margin:0 auto; text-align:center;">Native BC. <span class="accent">Zero friction.</span></h2>
+      <p class="section-sub" style="margin:0.75rem auto 0; text-align:center;">Volt Apparel lives inside Business Central. No middleware, no sync, no workarounds.</p>
+
+      <div class="flow-diagram" id="flow-diagram">
+        <div class="flow-row">
+          <div class="flow-column">
+            <div class="flow-node" data-flow="0">
+              <div class="flow-node-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4a017" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+              <div class="flow-node-label">Sales</div>
+              <div class="flow-node-sub">Orders &amp; Pricing</div>
+            </div>
+          </div>
+          <div class="flow-arrow" data-flow="1">&rarr;</div>
+          <div class="flow-node center-node" data-flow="2">
+            <div class="flow-node-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+            <div class="flow-node-label">Volt Apparel</div>
+            <div class="flow-node-sub">Extension Layer</div>
+          </div>
+          <div class="flow-arrow" data-flow="3">&larr;</div>
+          <div class="flow-column">
+            <div class="flow-node" data-flow="4">
+              <div class="flow-node-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4a017" stroke-width="1.5"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg></div>
+              <div class="flow-node-label">Inventory</div>
+              <div class="flow-node-sub">Variants &amp; Stock</div>
+            </div>
+          </div>
+        </div>
+        <div class="flow-vert-arrow" data-flow="5">&uarr; &darr;</div>
+        <div class="flow-sub-row">
+          <div class="flow-node" data-flow="6">
+            <div class="flow-node-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4a017" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></div>
+            <div class="flow-node-label">Purchasing</div>
+            <div class="flow-node-sub">PO &amp; Landed Cost</div>
+          </div>
+          <div class="flow-arrow" data-flow="7">&bull;</div>
+          <div class="flow-node" data-flow="8">
+            <div class="flow-node-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4a017" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg></div>
+            <div class="flow-node-label">Finance</div>
+            <div class="flow-node-sub">GL &amp; Costing</div>
+          </div>
+          <div class="flow-arrow" data-flow="9">&bull;</div>
+          <div class="flow-node" data-flow="10">
+            <div class="flow-node-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d4a017" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+            <div class="flow-node-label">CRM</div>
+            <div class="flow-node-sub">Contacts &amp; Seasons</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- CTA -->
+<!-- =============================== -->
+<section class="cta-section" id="cta">
+  <div class="cta-bg"></div>
+  <div class="cta-inner">
+    <h2 class="cta-heading">Ready to modernize your apparel operations?</h2>
+    <p class="cta-sub">Join apparel brands already running on Volt Apparel for Business Central. Get started with a personalized demo today.</p>
+    <div class="cta-buttons">
+      <a href="#" class="btn-primary">Request a Demo</a>
+      <a href="#" class="btn-secondary">View Documentation</a>
+    </div>
+  </div>
+</section>
+
+<!-- =============================== -->
+<!-- FOOTER -->
+<!-- =============================== -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <a href="#" class="nav-logo" style="margin-bottom:0.5rem;display:inline-flex;">
+        <span class="volt-mark"></span>
+        Volt Apparel
+      </a>
+      <p class="footer-brand-desc">Fashion-grade ERP built natively on Microsoft Dynamics 365 Business Central. Designed for apparel brands that refuse to compromise.</p>
+    </div>
+    <div>
+      <h4 class="footer-col-title">Product</h4>
+      <ul class="footer-links">
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Documentation</a></li>
+        <li><a href="#">Release Notes</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer-col-title">Modules</h4>
+      <ul class="footer-links">
+        <li><a href="#">Product Variants</a></li>
+        <li><a href="#">Seasonality</a></li>
+        <li><a href="#">Allocations</a></li>
+        <li><a href="#">Landed Costs</a></li>
+        <li><a href="#">Attributes</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="footer-col-title">Company</h4>
+      <ul class="footer-links">
+        <li><a href="#">About Volt</a></li>
+        <li><a href="#">Partners</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Support</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">&copy; 2026 Volt Technologies. All rights reserved.</span>
+    <span class="footer-volt">Powered by <span class="ft-accent">Volt Technologies</span></span>
+  </div>
+</footer>
+
+<script>
+(function() {
+  "use strict";
+
+  /* ============================== */
+  /* LOADING SCREEN                 */
+  /* ============================== */
+  const loader = document.getElementById('loader');
+  const loaderCurrent = document.getElementById('loader-current');
+  const loaderBar = document.getElementById('loader-bar');
+  let loadCount = 0;
+  const loadInterval = setInterval(() => {
+    loadCount++;
+    loaderCurrent.textContent = loadCount;
+    loaderBar.style.width = (loadCount / 6 * 100) + '%';
+    if (loadCount >= 6) {
+      clearInterval(loadInterval);
+      setTimeout(() => {
+        loader.classList.add('hidden');
+        initPage();
+      }, 400);
+    }
+  }, 250);
+
+  /* ============================== */
+  /* INIT                           */
+  /* ============================== */
+  function initPage() {
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+    // Lenis smooth scroll
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      smoothWheel: true,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+
+    // Nav scroll detection
+    const nav = document.getElementById('nav');
+    ScrollTrigger.create({
+      start: 'top -80',
+      onUpdate: (self) => {
+        if (self.scroll() > 80) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+      }
+    });
+
+    // Scroll progress bar
+    gsap.to('#scroll-progress', {
+      width: '100%',
+      ease: 'none',
+      scrollTrigger: {
+        trigger: document.body,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.3,
+      }
+    });
+
+    // Chapter labels for nav
+    const chapterLabels = [
+      'Chapter 1 \u2014 Origin',
+      'Chapter 2 \u2014 Capabilities',
+      'Chapter 3 \u2014 Deep Dive',
+      'Chapter 4 \u2014 Getting Started',
+      'Chapter 5 \u2014 Impact',
+      'Chapter 6 \u2014 Integration'
+    ];
+    const navDots = document.querySelectorAll('.nav-chapter-dot');
+    const navLabel = document.querySelector('.nav-chapter-label');
+
+    function setActiveChapter(n) {
+      navDots.forEach((d, i) => d.classList.toggle('active', i === n));
+      navLabel.textContent = chapterLabels[n] || '';
+    }
+
+    // Nav dot click -> scroll to chapter
+    const chapterTriggers = ['#hero-pin', '#features-pin', '#deep-dives-pin', '#how-pin', '#impact-pin', '#integration-pin'];
+    navDots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        lenis.scrollTo(chapterTriggers[i], { duration: 1.5 });
+      });
+    });
+
+    /* ============================== */
+    /* CHAPTER 1 - HERO               */
+    /* ============================== */
+    const heroTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#hero-pin',
+        start: 'top top',
+        end: '+=300%',
+        scrub: 1,
+        pin: '#hero',
+        onUpdate: (self) => {
+          if (self.progress < 0.5) setActiveChapter(0);
+        }
+      }
+    });
+
+    // Initial appearance (non-scroll)
+    gsap.set('.hero-title .line-inner', { y: '110%' });
+    gsap.set('.hero-badge', { opacity: 0, y: 20 });
+    gsap.set('.hero-subtitle', { opacity: 0, y: 20 });
+    gsap.set('.hero-scroll-cue', { opacity: 0 });
+
+    // Entrance animations (quick, triggered on load)
+    const heroEntrance = gsap.timeline({ delay: 0.2 });
+    heroEntrance
+      .to('.hero-badge', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' })
+      .to('.hero-title .line-inner', { y: '0%', duration: 0.8, ease: 'power3.out', stagger: 0.15 }, '-=0.3')
+      .to('.hero-subtitle', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.3')
+      .to('.hero-scroll-cue', { opacity: 1, duration: 0.5 }, '-=0.2');
+
+    // Scroll-driven hero animations
+    heroTl
+      .to('.hero-badge', { opacity: 0, y: -30, duration: 0.15 }, 0)
+      .to('.hero-title', { scale: 1.15, opacity: 0, duration: 0.2 }, 0.05)
+      .to('.hero-subtitle', { opacity: 0, y: -20, duration: 0.15 }, 0.1)
+      .to('.hero-scroll-cue', { opacity: 0, duration: 0.05 }, 0)
+      // Stats come in one by one
+      .fromTo('.hero-stat:nth-child(1)', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.1 }, 0.35)
+      .fromTo('.hero-stat:nth-child(2)', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.1 }, 0.45)
+      .fromTo('.hero-stat:nth-child(3)', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.1 }, 0.55)
+      .fromTo('.hero-stat:nth-child(4)', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.1 }, 0.65)
+      // Stats fade out
+      .to('.hero-stats', { opacity: 0, y: -30, duration: 0.15 }, 0.85);
+
+    /* ============================== */
+    /* MARQUEE                         */
+    /* ============================== */
+    const marqueeTrack = document.getElementById('marquee');
+    const marqueeWidth = marqueeTrack.scrollWidth;
+    gsap.to(marqueeTrack, {
+      x: -marqueeWidth / 2,
+      duration: 40,
+      ease: 'none',
+      repeat: -1,
+    });
+
+    /* ============================== */
+    /* CHAPTER 2 - FEATURES            */
+    /* ============================== */
+    const featureCards = document.querySelectorAll('.feature-card');
+    const featureDots = document.querySelectorAll('.feature-dot');
+    const numFeatures = featureCards.length;
+
+    const featuresTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#features-pin',
+        start: 'top top',
+        end: '+=400%',
+        scrub: 1,
+        pin: '#features-panel',
+        onUpdate: (self) => {
+          if (self.progress > 0.01) setActiveChapter(1);
+          const idx = Math.min(numFeatures - 1, Math.floor(self.progress * numFeatures));
+          featureDots.forEach((d, i) => d.classList.toggle('active', i === idx));
+        }
+      }
+    });
+
+    // Animate feature cards in/out sequentially
+    featureCards.forEach((card, i) => {
+      const segStart = i / numFeatures;
+      const segEnd = (i + 1) / numFeatures;
+      const segMid = segStart + (segEnd - segStart) * 0.5;
+
+      // Fade in
+      featuresTl.fromTo(card,
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0, duration: segEnd - segStart, ease: 'power2.out' },
+        segStart
+      );
+      // Fade out (except last)
+      if (i < numFeatures - 1) {
+        featuresTl.to(card,
+          { opacity: 0, y: -30, duration: (segEnd - segStart) * 0.3 },
+          segMid + (segEnd - segStart) * 0.15
+        );
+      }
+    });
+
+    /* ============================== */
+    /* CHAPTER 3 - DEEP DIVES          */
+    /* ============================== */
+    const ddSections = document.querySelectorAll('.dd-section');
+    const matrixCells = document.querySelectorAll('.matrix-cell');
+    const allocBars = document.querySelectorAll('.alloc-bar-fill');
+    const allocValues = document.querySelectorAll('.alloc-bar-value');
+    const seasonNodes = document.querySelectorAll('.season-node');
+    const seasonLineFill = document.getElementById('season-line-fill');
+    const lcRows = document.querySelectorAll('.lc-row');
+
+    const ddTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#deep-dives-pin',
+        start: 'top top',
+        end: '+=500%',
+        scrub: 1,
+        pin: '#deep-dives-panel',
+        onUpdate: (self) => {
+          if (self.progress > 0.01) setActiveChapter(2);
+
+          const p = self.progress;
+
+          // Determine which dd section is active
+          ddSections.forEach(s => { s.style.opacity = 0; s.style.pointerEvents = 'none'; });
+          if (p < 0.25) {
+            ddSections[0].style.opacity = 1;
+            animateMatrix(Math.min(1, p / 0.2));
+          } else if (p < 0.5) {
+            ddSections[1].style.opacity = 1;
+            animateAllocBars((p - 0.25) / 0.2);
+          } else if (p < 0.75) {
+            ddSections[2].style.opacity = 1;
+            animateSeasonTimeline((p - 0.5) / 0.2);
+          } else {
+            ddSections[3].style.opacity = 1;
+            animateLandedCost((p - 0.75) / 0.2);
+          }
+        }
+      }
+    });
+
+    function animateMatrix(progress) {
+      const total = matrixCells.length;
+      const count = Math.floor(progress * total);
+      matrixCells.forEach((cell, i) => {
+        if (i < count) {
+          cell.classList.add('filled');
+        } else {
+          cell.classList.remove('filled');
+        }
+      });
+    }
+
+    function animateAllocBars(progress) {
+      const p = Math.min(1, Math.max(0, progress));
+      allocBars.forEach((bar, i) => {
+        const target = parseFloat(bar.getAttribute('data-target'));
+        const val = Math.round(target * p);
+        bar.style.width = (target * p) + '%';
+        allocValues[i].textContent = val + '%';
+      });
+    }
+
+    function animateSeasonTimeline(progress) {
+      const p = Math.min(1, Math.max(0, progress));
+      seasonLineFill.style.width = (p * 100) + '%';
+      const total = seasonNodes.length;
+      seasonNodes.forEach((node, i) => {
+        const threshold = i / (total - 1);
+        if (p >= threshold) {
+          node.style.opacity = 1;
+          node.style.transform = 'translateY(0)';
+        } else {
+          node.style.opacity = 0;
+          node.style.transform = 'translateY(15px)';
+        }
+      });
+    }
+
+    function animateLandedCost(progress) {
+      const p = Math.min(1, Math.max(0, progress));
+      const total = lcRows.length;
+      lcRows.forEach((row, i) => {
+        const threshold = i / total;
+        if (p >= threshold) {
+          row.style.opacity = 1;
+          row.style.transform = 'translateX(0)';
+        } else {
+          row.style.opacity = 0;
+          row.style.transform = 'translateX(-20px)';
+        }
+      });
+    }
+
+    /* ============================== */
+    /* CHAPTER 4 - HOW IT WORKS        */
+    /* ============================== */
+    const howSteps = document.querySelectorAll('.how-step');
+    const howLineFill = document.getElementById('how-line-fill');
+
+    const howTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#how-pin',
+        start: 'top top',
+        end: '+=300%',
+        scrub: 1,
+        pin: '#how-panel',
+        onUpdate: (self) => {
+          if (self.progress > 0.01) setActiveChapter(3);
+          const p = self.progress;
+          howLineFill.style.height = Math.min(100, p * 120) + '%';
+
+          howSteps.forEach((step, i) => {
+            const threshold = i / howSteps.length;
+            if (p >= threshold) {
+              step.style.opacity = 1;
+              step.style.transform = 'translateX(0)';
+              step.classList.add('active');
+            } else {
+              step.style.opacity = 0;
+              step.style.transform = 'translateX(-20px)';
+              step.classList.remove('active');
+            }
+          });
+        }
+      }
+    });
+
+    /* ============================== */
+    /* CHAPTER 5 - IMPACT              */
+    /* ============================== */
+    const impactCounters = document.querySelectorAll('.impact-counter');
+
+    ScrollTrigger.create({
+      trigger: '#impact-pin',
+      start: 'top top',
+      end: '+=200%',
+      scrub: 1,
+      pin: '#impact-panel',
+      onUpdate: (self) => {
+        if (self.progress > 0.01) setActiveChapter(4);
+        const p = Math.min(1, self.progress * 2);
+
+        impactCounters.forEach(counter => {
+          const target = parseInt(counter.getAttribute('data-target'));
+          const current = Math.round(target * p);
+          counter.textContent = current;
+        });
+      }
+    });
+
+    /* ============================== */
+    /* TESTIMONIAL - WORD REVEAL       */
+    /* ============================== */
+    const quoteText = "Volt Apparel turned Business Central into the apparel ERP we always needed. Variant management that used to take days now happens in minutes. Our team can finally focus on selling fashion instead of fighting spreadsheets.";
+    const quoteEl = document.getElementById('quote-text');
+    const words = quoteText.split(' ');
+    quoteEl.innerHTML = words.map(w => `<span class="word">${w}</span>`).join(' ');
+    const wordEls = quoteEl.querySelectorAll('.word');
+
+    ScrollTrigger.create({
+      trigger: '#testimonial',
+      start: 'top 80%',
+      end: 'bottom 20%',
+      scrub: 1,
+      onUpdate: (self) => {
+        const p = self.progress;
+        const revealCount = Math.floor(p * wordEls.length);
+        wordEls.forEach((w, i) => {
+          w.classList.toggle('revealed', i < revealCount);
+        });
+      }
+    });
+
+    /* ============================== */
+    /* CHAPTER 6 - INTEGRATION         */
+    /* ============================== */
+    const flowNodes = document.querySelectorAll('.flow-node');
+    const flowArrows = document.querySelectorAll('.flow-arrow');
+    const flowVertArrows = document.querySelectorAll('.flow-vert-arrow');
+    const allFlowElements = document.querySelectorAll('[data-flow]');
+
+    ScrollTrigger.create({
+      trigger: '#integration-pin',
+      start: 'top top',
+      end: '+=250%',
+      scrub: 1,
+      pin: '#integration-panel',
+      onUpdate: (self) => {
+        if (self.progress > 0.01) setActiveChapter(5);
+        const p = self.progress;
+
+        allFlowElements.forEach(el => {
+          const idx = parseInt(el.getAttribute('data-flow'));
+          const total = allFlowElements.length;
+          const threshold = idx / total;
+
+          if (p >= threshold) {
+            el.style.opacity = 1;
+            el.style.transform = el.classList.contains('flow-node') ? 'scale(1)' : 'none';
+          } else {
+            el.style.opacity = 0;
+            el.style.transform = el.classList.contains('flow-node') ? 'scale(0.8)' : 'none';
+          }
+        });
+      }
+    });
+
+    /* ============================== */
+    /* CTA PARALLAX                    */
+    /* ============================== */
+    gsap.fromTo('.cta-bg', {
+      y: -50,
+    }, {
+      y: 50,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.cta-section',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1,
+      }
+    });
+
+    gsap.fromTo('.cta-inner', {
+      y: 60,
+      opacity: 0,
+    }, {
+      y: 0,
+      opacity: 1,
+      scrollTrigger: {
+        trigger: '.cta-section',
+        start: 'top 80%',
+        end: 'top 30%',
+        scrub: 1,
+      }
+    });
+
+  } // end initPage
+
+})();
+</script>
+</body>
+</html>

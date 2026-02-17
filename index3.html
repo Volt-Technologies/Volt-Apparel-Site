@@ -1,0 +1,2193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volt Apparel — Fashion ERP, Reimagined</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #09090b;
+  --gold: #d4a017;
+  --gold-light: #fbbf24;
+  --gold-mid: #f59e0b;
+  --white: #fafafa;
+  --muted: rgba(250, 250, 250, 0.56);
+  --muted-low: rgba(250, 250, 250, 0.12);
+  --muted-border: rgba(250, 250, 250, 0.08);
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'Space Grotesk', system-ui, sans-serif;
+}
+
+html { font-size: 16px; }
+
+html.lenis, html.lenis body { height: auto; }
+
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+
+.lenis.lenis-stopped { overflow: hidden; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Noise Overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* Scroll Progress Bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  z-index: 10001;
+  transition: none;
+}
+
+/* ============ LOADER ============ */
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.loader-text {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  overflow: hidden;
+}
+
+.loader-text span {
+  display: inline-block;
+  transform: translateY(120%);
+}
+
+.loader-line {
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+}
+
+.loader-sub {
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0;
+}
+
+/* ============ NAVIGATION ============ */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9998;
+  padding: 1.5rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  mix-blend-mode: difference;
+  opacity: 0;
+}
+
+.nav-logo {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 1.125rem;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.nav-logo em {
+  font-style: normal;
+  color: var(--gold-light);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--white);
+  text-decoration: none;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover { color: var(--gold-light); }
+
+.nav-cta {
+  padding: 0.625rem 1.5rem;
+  border: 1px solid var(--white);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.nav-cta:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--bg);
+}
+
+@media (max-width: 768px) {
+  .nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+}
+
+/* ============ HERO ============ */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rem 4rem 4rem 4rem;
+  position: relative;
+}
+
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8rem 4rem 4rem 0;
+  position: relative;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--muted-border);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 2rem;
+  width: fit-content;
+  opacity: 0;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--gold-light);
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.hero-heading {
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.hero-heading .line {
+  overflow: hidden;
+  display: block;
+}
+
+.hero-heading .line span {
+  display: block;
+  transform: translateY(110%);
+}
+
+.hero-left .hero-heading {
+  font-size: clamp(4rem, 9vw, 9rem);
+  color: var(--white);
+}
+
+.hero-right .hero-heading {
+  font-size: clamp(4rem, 9vw, 9rem);
+  background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold-mid));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-style: italic;
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 1.25vw, 1.25rem);
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 420px;
+  margin-top: 2rem;
+  opacity: 0;
+  font-weight: 300;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  opacity: 0;
+}
+
+.btn-primary {
+  padding: 1rem 2.5rem;
+  background: var(--gold);
+  color: var(--bg);
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(212, 160, 23, 0.3);
+}
+
+.btn-secondary {
+  padding: 1rem 2.5rem;
+  background: transparent;
+  color: var(--white);
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--muted-low);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-secondary:hover {
+  border-color: var(--gold);
+  color: var(--gold-light);
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: 4rem;
+  opacity: 0;
+  position: absolute;
+  bottom: 4rem;
+  left: 4rem;
+  right: 0;
+}
+
+.hero .hero-stats { grid-column: 1 / -1; position: relative; bottom: auto; left: auto; padding: 0 4rem 4rem; }
+
+.stat-item {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--muted-border);
+}
+
+.stat-number {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3vw, 3rem);
+  color: var(--gold-light);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+
+@media (max-width: 968px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-left { padding: 8rem 2rem 2rem; }
+  .hero-right { padding: 0 2rem 2rem; }
+  .hero .hero-stats { padding: 0 2rem 3rem; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 0; }
+}
+
+/* ============ MARQUEE ============ */
+.marquee-section {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--muted-border);
+  border-bottom: 1px solid var(--muted-border);
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 0;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.marquee-item {
+  font-family: var(--serif);
+  font-size: clamp(1.25rem, 2.5vw, 2rem);
+  color: var(--muted);
+  padding: 0 1.5rem;
+  flex-shrink: 0;
+  font-style: italic;
+  transition: color 0.3s;
+}
+
+.marquee-item:hover { color: var(--gold-light); }
+
+.marquee-dot {
+  color: var(--gold);
+  padding: 0 0.5rem;
+  flex-shrink: 0;
+  font-size: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+/* ============ SOCIAL PROOF ============ */
+.social-proof {
+  padding: 8rem 4rem;
+  overflow: hidden;
+}
+
+.social-proof-title {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.social-proof-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.proof-item {
+  padding: 2rem 3rem;
+  border: 1px solid var(--muted-border);
+  margin: -0.5px;
+  font-family: var(--serif);
+  font-size: 1.125rem;
+  color: var(--muted);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.proof-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(212, 160, 23, 0.08), transparent);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.proof-item:hover {
+  color: var(--gold-light);
+  border-color: rgba(212, 160, 23, 0.2);
+  z-index: 1;
+}
+
+.proof-item:hover::before { opacity: 1; }
+
+@media (max-width: 768px) {
+  .social-proof { padding: 4rem 1.5rem; }
+  .proof-item { padding: 1.25rem 1.75rem; font-size: 0.95rem; }
+}
+
+/* ============ FEATURES STAGGERED GRID ============ */
+.features {
+  padding: 8rem 4rem;
+  position: relative;
+}
+
+.features-header {
+  max-width: 800px;
+  margin-bottom: 6rem;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.features-title {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.features-title em {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+  max-width: 1400px;
+}
+
+.feature-card {
+  padding: 2.5rem;
+  border: 1px solid var(--muted-border);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.feature-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.feature-card:hover::after { transform: scaleX(1); }
+
+.feature-card:hover {
+  border-color: rgba(212, 160, 23, 0.2);
+  transform: translateY(-4px);
+}
+
+/* Staggered layout */
+.feature-card:nth-child(1) { grid-column: 1 / 8; }
+.feature-card:nth-child(2) { grid-column: 8 / 13; margin-top: 4rem; }
+.feature-card:nth-child(3) { grid-column: 1 / 5; }
+.feature-card:nth-child(4) { grid-column: 5 / 13; margin-top: -2rem; }
+.feature-card:nth-child(5) { grid-column: 1 / 7; margin-top: 2rem; }
+.feature-card:nth-child(6) { grid-column: 7 / 13; }
+
+.feature-index {
+  font-family: var(--serif);
+  font-size: 3rem;
+  color: rgba(212, 160, 23, 0.15);
+  line-height: 1;
+  margin-bottom: 1.5rem;
+}
+
+.feature-name {
+  font-family: var(--serif);
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.feature-desc {
+  font-size: 0.9375rem;
+  color: var(--muted);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.clip-reveal {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clip-reveal.revealed {
+  clip-path: inset(0 0% 0 0);
+}
+
+@media (max-width: 968px) {
+  .features { padding: 4rem 1.5rem; }
+  .features-grid { grid-template-columns: 1fr; }
+  .feature-card:nth-child(n) { grid-column: auto; margin-top: 0; }
+}
+
+/* ============ DEEP DIVES (Split Screens) ============ */
+.deep-dives {
+  padding: 0;
+}
+
+.deep-dive {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  border-top: 1px solid var(--muted-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.deep-dive:nth-child(even) .dd-content { order: 2; }
+.deep-dive:nth-child(even) .dd-visual { order: 1; }
+
+.dd-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 6rem 5rem;
+}
+
+.dd-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 2rem;
+}
+
+.dd-title {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.dd-text {
+  font-size: 1.0625rem;
+  color: var(--muted);
+  line-height: 1.8;
+  max-width: 480px;
+  font-weight: 300;
+}
+
+.dd-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  position: relative;
+  background: rgba(250, 250, 250, 0.02);
+}
+
+/* Variant Matrix Visual */
+.matrix-grid {
+  display: grid;
+  grid-template-columns: auto repeat(5, 1fr);
+  gap: 2px;
+  width: 100%;
+  max-width: 440px;
+}
+
+.matrix-header {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.matrix-row-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--white);
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.matrix-cell {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--muted-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6875rem;
+  color: var(--muted);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.matrix-cell.active {
+  border-color: var(--gold);
+  color: var(--gold-light);
+  background: rgba(212, 160, 23, 0.08);
+}
+
+.matrix-cell.active::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(212, 160, 23, 0.12), transparent);
+}
+
+/* Allocation Bars */
+.allocation-bars {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.alloc-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.alloc-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.alloc-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.alloc-value {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  color: var(--gold-light);
+}
+
+.alloc-bar-bg {
+  height: 3px;
+  background: var(--muted-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.alloc-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  width: 0;
+  transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Season Timeline */
+.season-timeline {
+  width: 100%;
+  max-width: 400px;
+}
+
+.season-item {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--muted-border);
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.season-marker {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-size: 0.875rem;
+  color: var(--gold-light);
+  flex-shrink: 0;
+}
+
+.season-info h4 {
+  font-family: var(--serif);
+  font-size: 1.125rem;
+  margin-bottom: 0.25rem;
+}
+
+.season-info p {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  font-weight: 300;
+}
+
+/* Landed Cost Visual */
+.cost-breakdown {
+  width: 100%;
+  max-width: 400px;
+}
+
+.cost-layer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--muted-border);
+  margin-bottom: -1px;
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.cost-layer:hover {
+  border-color: rgba(212, 160, 23, 0.2);
+  z-index: 1;
+}
+
+.cost-layer-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.cost-layer-amount {
+  font-family: var(--serif);
+  font-size: 1.125rem;
+  color: var(--gold-light);
+}
+
+.cost-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  background: rgba(212, 160, 23, 0.08);
+  border: 1px solid var(--gold);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.cost-total .cost-layer-name {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.75rem;
+}
+
+.cost-total .cost-layer-amount {
+  font-size: 1.375rem;
+}
+
+@media (max-width: 968px) {
+  .deep-dive { grid-template-columns: 1fr; min-height: auto; }
+  .deep-dive:nth-child(even) .dd-content { order: 1; }
+  .deep-dive:nth-child(even) .dd-visual { order: 2; }
+  .dd-content { padding: 4rem 2rem; }
+  .dd-visual { padding: 2rem; min-height: 400px; }
+}
+
+/* ============ HOW IT WORKS ============ */
+.how-it-works {
+  padding: 8rem 4rem;
+  position: relative;
+}
+
+.hiw-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 6rem;
+  align-items: end;
+}
+
+.hiw-title {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.hiw-desc {
+  font-size: 1.0625rem;
+  color: var(--muted);
+  line-height: 1.8;
+  font-weight: 300;
+  max-width: 500px;
+}
+
+.hiw-timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  position: relative;
+}
+
+.hiw-timeline::before {
+  content: '';
+  position: absolute;
+  top: 2.5rem;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--muted-border);
+}
+
+.hiw-step {
+  padding: 0 2rem;
+  border-left: 1px solid var(--muted-border);
+  position: relative;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.hiw-step:first-child { border-left: none; }
+
+.hiw-step-num {
+  font-family: var(--serif);
+  font-size: 3.5rem;
+  color: rgba(212, 160, 23, 0.2);
+  line-height: 1;
+  margin-bottom: 2rem;
+}
+
+.hiw-step-title {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.hiw-step-text {
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+@media (max-width: 968px) {
+  .how-it-works { padding: 4rem 1.5rem; }
+  .hiw-header { grid-template-columns: 1fr; gap: 1.5rem; }
+  .hiw-timeline { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .hiw-timeline::before { display: none; }
+  .hiw-step { border-left: none; padding: 0; }
+}
+
+@media (max-width: 600px) {
+  .hiw-timeline { grid-template-columns: 1fr; }
+}
+
+/* ============ METRICS ============ */
+.metrics {
+  padding: 8rem 4rem;
+  border-top: 1px solid var(--muted-border);
+  border-bottom: 1px solid var(--muted-border);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.metric-item {
+  padding: 3rem 2rem;
+  border-right: 1px solid var(--muted-border);
+  text-align: center;
+}
+
+.metric-item:last-child { border-right: none; }
+
+.metric-number {
+  font-family: var(--serif);
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.metric-suffix {
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.metric-label {
+  font-size: 0.875rem;
+  color: var(--muted);
+  font-weight: 300;
+  max-width: 200px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .metrics { padding: 4rem 1.5rem; }
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .metric-item { padding: 2rem 1rem; }
+  .metric-item:nth-child(2) { border-right: none; }
+  .metric-item:nth-child(3) { border-top: 1px solid var(--muted-border); }
+  .metric-item:nth-child(4) { border-top: 1px solid var(--muted-border); border-right: none; }
+}
+
+/* ============ TESTIMONIAL ============ */
+.testimonial {
+  padding: 10rem 4rem;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.testimonial-inner {
+  max-width: 900px;
+  text-align: center;
+}
+
+.testimonial-quote-mark {
+  font-family: var(--serif);
+  font-size: 6rem;
+  color: var(--gold);
+  line-height: 0.5;
+  margin-bottom: 2rem;
+  opacity: 0.4;
+}
+
+.testimonial-text {
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  line-height: 1.5;
+  font-style: italic;
+  margin-bottom: 3rem;
+  letter-spacing: -0.01em;
+}
+
+.testimonial-author {
+  font-size: 0.875rem;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.testimonial-author strong {
+  color: var(--gold-light);
+  font-weight: 500;
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.9375rem;
+}
+
+@media (max-width: 768px) {
+  .testimonial { padding: 5rem 1.5rem; }
+}
+
+/* ============ INTEGRATION ============ */
+.integration {
+  padding: 8rem 4rem;
+  border-top: 1px solid var(--muted-border);
+}
+
+.integration-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.integration-title {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.integration-title em {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+.integration-text {
+  font-size: 1.0625rem;
+  color: var(--muted);
+  line-height: 1.8;
+  font-weight: 300;
+  margin-bottom: 2rem;
+}
+
+.integration-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.integration-list li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.9375rem;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.integration-list li::before {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+.integration-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.flow-node {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  border: 1px solid var(--muted-border);
+  margin-bottom: -1px;
+  position: relative;
+  transition: all 0.4s;
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.flow-node:hover {
+  border-color: rgba(212, 160, 23, 0.3);
+  background: rgba(212, 160, 23, 0.03);
+}
+
+.flow-icon {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.flow-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--gold-light);
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.flow-label {
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.flow-sub {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: 300;
+  margin-top: 0.125rem;
+}
+
+.flow-connector {
+  width: 1px;
+  height: 24px;
+  background: var(--gold);
+  margin-left: 3.375rem;
+  opacity: 0.3;
+}
+
+@media (max-width: 968px) {
+  .integration { padding: 4rem 1.5rem; }
+  .integration-split { grid-template-columns: 1fr; gap: 3rem; }
+}
+
+/* ============ CTA SECTION ============ */
+.cta-section {
+  padding: 10rem 4rem;
+  text-align: center;
+  position: relative;
+  border-top: 1px solid var(--muted-border);
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212, 160, 23, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-title {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  letter-spacing: -0.02em;
+}
+
+.cta-subtitle {
+  font-size: 1.0625rem;
+  color: var(--muted);
+  margin-bottom: 3rem;
+  font-weight: 300;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .cta-section { padding: 5rem 1.5rem; }
+}
+
+/* ============ FOOTER ============ */
+.footer {
+  padding: 4rem;
+  border-top: 1px solid var(--muted-border);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 4rem;
+  max-width: 1400px;
+  margin: 0 auto 4rem;
+}
+
+.footer-brand p {
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  margin-top: 1rem;
+  max-width: 300px;
+  font-weight: 300;
+}
+
+.footer-col h4 {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-col a {
+  color: var(--white);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 400;
+  transition: color 0.3s;
+}
+
+.footer-col a:hover { color: var(--gold-light); }
+
+.footer-bottom {
+  padding-top: 2rem;
+  border-top: 1px solid var(--muted-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.footer-copy {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-weight: 300;
+}
+
+.footer-legal {
+  display: flex;
+  gap: 2rem;
+}
+
+.footer-legal a {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-legal a:hover { color: var(--gold-light); }
+
+@media (max-width: 768px) {
+  .footer { padding: 3rem 1.5rem; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Scroll Progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Loader -->
+<div class="loader" id="loader">
+  <div class="loader-text"><span>Volt Apparel</span></div>
+  <div class="loader-line"></div>
+  <div class="loader-sub">Fashion ERP, Reimagined</div>
+</div>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">Volt<em>.</em></a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how-it-works">Process</a></li>
+    <li><a href="#integration">Integration</a></li>
+    <li><a href="#contact" class="nav-cta">Get Started</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">Built for Business Central</div>
+    <h1 class="hero-heading">
+      <span class="line"><span>Fashion</span></span>
+      <span class="line"><span>ERP,</span></span>
+    </h1>
+  </div>
+  <div class="hero-right">
+    <h1 class="hero-heading">
+      <span class="line"><span>reimagined.</span></span>
+    </h1>
+    <p class="hero-subtitle">The complete apparel management platform that transforms Microsoft Dynamics 365 Business Central into an industry-specific powerhouse.</p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-primary">Start Now</a>
+      <a href="#features" class="btn-secondary">Explore Features</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-number">11</div>
+      <div class="stat-label">Feature Modules</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">42</div>
+      <div class="stat-label">Custom Tables</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">100%</div>
+      <div class="stat-label">Native BC</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">0</div>
+      <div class="stat-label">External Dependencies</div>
+    </div>
+  </div>
+</section>
+
+<!-- Marquee 1 -->
+<section class="marquee-section">
+  <div class="marquee-track" id="marquee1">
+    <span class="marquee-item">FASHION</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">ERP</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">REIMAGINED</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">VOLT APPAREL</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">BUSINESS CENTRAL</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">FASHION</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">ERP</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">REIMAGINED</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">VOLT APPAREL</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">BUSINESS CENTRAL</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">FASHION</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">ERP</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">REIMAGINED</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">VOLT APPAREL</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">BUSINESS CENTRAL</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">FASHION</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">ERP</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">REIMAGINED</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">VOLT APPAREL</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">BUSINESS CENTRAL</span><span class="marquee-dot">&middot;</span>
+  </div>
+</section>
+
+<!-- Social Proof -->
+<section class="social-proof">
+  <p class="social-proof-title">Trusted across the apparel industry</p>
+  <div class="social-proof-grid">
+    <div class="proof-item">Fashion Retail</div>
+    <div class="proof-item">Wholesale Distribution</div>
+    <div class="proof-item">Import &amp; Customs</div>
+    <div class="proof-item">Private Label</div>
+    <div class="proof-item">Vertical Brands</div>
+    <div class="proof-item">D2C Apparel</div>
+    <div class="proof-item">Multi-Brand Retailers</div>
+    <div class="proof-item">Footwear</div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+  <div class="features-header">
+    <span class="section-label">Core Capabilities</span>
+    <h2 class="features-title">Everything apparel businesses need, <em>nothing they don't.</em></h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-index">01</div>
+      <h3 class="feature-name clip-reveal">Product Variants</h3>
+      <p class="feature-desc clip-reveal">Auto-generate every color-size combination from a single style. Build your entire catalog in minutes, not days.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-index">02</div>
+      <h3 class="feature-name clip-reveal">Seasonality</h3>
+      <p class="feature-desc clip-reveal">Organize collections, deliveries, and pricing into defined seasons. Plan ahead, deliver on time.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-index">03</div>
+      <h3 class="feature-name clip-reveal">Soft Allocations</h3>
+      <p class="feature-desc clip-reveal">Match anticipated demand to incoming supply before inventory arrives. Prioritize your best customers.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-index">04</div>
+      <h3 class="feature-name clip-reveal">Landed Costs</h3>
+      <p class="feature-desc clip-reveal">Automatic accruals, HTS codes, duty calculations, and freight distribution. Know your true cost of goods.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-index">05</div>
+      <h3 class="feature-name clip-reveal">Product Attributes</h3>
+      <p class="feature-desc clip-reveal">30 custom attribute slots per product. Fabric, care instructions, country of origin, and anything else you need.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-index">06</div>
+      <h3 class="feature-name clip-reveal">Item Statuses</h3>
+      <p class="feature-desc clip-reveal">Full lifecycle control with 7 blocking operations. Manage items from development through discontinuation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Deep Dives -->
+<section class="deep-dives">
+  <!-- Variant Matrix -->
+  <div class="deep-dive">
+    <div class="dd-content">
+      <span class="dd-label">Feature Deep Dive</span>
+      <h3 class="dd-title">Variant Matrix</h3>
+      <p class="dd-text">Define colors and sizes once. The matrix auto-generates every valid combination as BC item variants, complete with barcodes, pricing, and inventory tracking. What took a full day now takes a single click.</p>
+    </div>
+    <div class="dd-visual">
+      <div class="matrix-grid">
+        <div class="matrix-header"></div>
+        <div class="matrix-header">XS</div>
+        <div class="matrix-header">S</div>
+        <div class="matrix-header">M</div>
+        <div class="matrix-header">L</div>
+        <div class="matrix-header">XL</div>
+        <div class="matrix-row-label">Black</div>
+        <div class="matrix-cell active">BK-XS</div>
+        <div class="matrix-cell active">BK-S</div>
+        <div class="matrix-cell active">BK-M</div>
+        <div class="matrix-cell active">BK-L</div>
+        <div class="matrix-cell active">BK-XL</div>
+        <div class="matrix-row-label">Navy</div>
+        <div class="matrix-cell active">NV-XS</div>
+        <div class="matrix-cell active">NV-S</div>
+        <div class="matrix-cell active">NV-M</div>
+        <div class="matrix-cell active">NV-L</div>
+        <div class="matrix-cell">NV-XL</div>
+        <div class="matrix-row-label">White</div>
+        <div class="matrix-cell active">WH-XS</div>
+        <div class="matrix-cell active">WH-S</div>
+        <div class="matrix-cell active">WH-M</div>
+        <div class="matrix-cell active">WH-L</div>
+        <div class="matrix-cell active">WH-XL</div>
+        <div class="matrix-row-label">Sand</div>
+        <div class="matrix-cell">SD-XS</div>
+        <div class="matrix-cell active">SD-S</div>
+        <div class="matrix-cell active">SD-M</div>
+        <div class="matrix-cell active">SD-L</div>
+        <div class="matrix-cell">SD-XL</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Smart Allocation -->
+  <div class="deep-dive">
+    <div class="dd-content">
+      <span class="dd-label">Demand Planning</span>
+      <h3 class="dd-title">Smart Allocation</h3>
+      <p class="dd-text">Soft-allocate incoming inventory to customer segments before it arrives. Priority tiers ensure your VIP accounts get first pick while optimizing fill rates across all channels.</p>
+    </div>
+    <div class="dd-visual">
+      <div class="allocation-bars" id="allocBars">
+        <div class="alloc-row">
+          <div class="alloc-info">
+            <span class="alloc-label">VIP Accounts</span>
+            <span class="alloc-value">95%</span>
+          </div>
+          <div class="alloc-bar-bg"><div class="alloc-bar-fill" data-width="95"></div></div>
+        </div>
+        <div class="alloc-row">
+          <div class="alloc-info">
+            <span class="alloc-label">Wholesale</span>
+            <span class="alloc-value">78%</span>
+          </div>
+          <div class="alloc-bar-bg"><div class="alloc-bar-fill" data-width="78"></div></div>
+        </div>
+        <div class="alloc-row">
+          <div class="alloc-info">
+            <span class="alloc-label">Retail</span>
+            <span class="alloc-value">62%</span>
+          </div>
+          <div class="alloc-bar-bg"><div class="alloc-bar-fill" data-width="62"></div></div>
+        </div>
+        <div class="alloc-row">
+          <div class="alloc-info">
+            <span class="alloc-label">E-Commerce</span>
+            <span class="alloc-value">45%</span>
+          </div>
+          <div class="alloc-bar-bg"><div class="alloc-bar-fill" data-width="45"></div></div>
+        </div>
+        <div class="alloc-row">
+          <div class="alloc-info">
+            <span class="alloc-label">Outlet</span>
+            <span class="alloc-value">30%</span>
+          </div>
+          <div class="alloc-bar-bg"><div class="alloc-bar-fill" data-width="30"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Season & Delivery -->
+  <div class="deep-dive">
+    <div class="dd-content">
+      <span class="dd-label">Collection Planning</span>
+      <h3 class="dd-title">Season &amp; Delivery Management</h3>
+      <p class="dd-text">Organize your entire product lifecycle around seasons and delivery windows. Track from initial design through production to final delivery, with full visibility across the supply chain.</p>
+    </div>
+    <div class="dd-visual">
+      <div class="season-timeline" id="seasonTimeline">
+        <div class="season-item">
+          <div class="season-marker">SS</div>
+          <div class="season-info">
+            <h4>Spring/Summer 2026</h4>
+            <p>4 deliveries &middot; 128 styles &middot; In stores</p>
+          </div>
+        </div>
+        <div class="season-item">
+          <div class="season-marker">FW</div>
+          <div class="season-info">
+            <h4>Fall/Winter 2026</h4>
+            <p>3 deliveries &middot; 96 styles &middot; Production</p>
+          </div>
+        </div>
+        <div class="season-item">
+          <div class="season-marker">CR</div>
+          <div class="season-info">
+            <h4>Cruise 2027</h4>
+            <p>2 deliveries &middot; 64 styles &middot; Design</p>
+          </div>
+        </div>
+        <div class="season-item">
+          <div class="season-marker">RE</div>
+          <div class="season-info">
+            <h4>Resort 2027</h4>
+            <p>2 deliveries &middot; 48 styles &middot; Concept</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Landed Costs -->
+  <div class="deep-dive">
+    <div class="dd-content">
+      <span class="dd-label">Cost Management</span>
+      <h3 class="dd-title">Landed Cost Accruals</h3>
+      <p class="dd-text">Every cost element from factory floor to warehouse door, automatically calculated and accrued. HTS classification, duty rates, freight allocation, and insurance built into every purchase order.</p>
+    </div>
+    <div class="dd-visual">
+      <div class="cost-breakdown" id="costBreakdown">
+        <div class="cost-layer">
+          <span class="cost-layer-name">FOB Cost</span>
+          <span class="cost-layer-amount">$12.40</span>
+        </div>
+        <div class="cost-layer">
+          <span class="cost-layer-name">Ocean Freight</span>
+          <span class="cost-layer-amount">$1.85</span>
+        </div>
+        <div class="cost-layer">
+          <span class="cost-layer-name">Import Duty (12.5%)</span>
+          <span class="cost-layer-amount">$1.55</span>
+        </div>
+        <div class="cost-layer">
+          <span class="cost-layer-name">Customs Brokerage</span>
+          <span class="cost-layer-amount">$0.35</span>
+        </div>
+        <div class="cost-layer">
+          <span class="cost-layer-name">Inland Freight</span>
+          <span class="cost-layer-amount">$0.65</span>
+        </div>
+        <div class="cost-layer">
+          <span class="cost-layer-name">Insurance</span>
+          <span class="cost-layer-amount">$0.20</span>
+        </div>
+        <div class="cost-total">
+          <span class="cost-layer-name">Landed Cost per Unit</span>
+          <span class="cost-layer-amount">$17.00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Marquee 2 -->
+<section class="marquee-section">
+  <div class="marquee-track" id="marquee2">
+    <span class="marquee-item">VARIANTS</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">SEASONS</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">ALLOCATIONS</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">LANDED COSTS</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">ATTRIBUTES</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">STATUSES</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">VARIANTS</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">SEASONS</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">ALLOCATIONS</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">LANDED COSTS</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">ATTRIBUTES</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">STATUSES</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">VARIANTS</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">SEASONS</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">ALLOCATIONS</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">LANDED COSTS</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">ATTRIBUTES</span><span class="marquee-dot">&middot;</span>
+    <span class="marquee-item">STATUSES</span><span class="marquee-dot">&middot;</span>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works" id="how-it-works">
+  <div class="hiw-header">
+    <h2 class="hiw-title">Four steps to<br>apparel excellence.</h2>
+    <p class="hiw-desc">From installation to full operation, Volt Apparel integrates seamlessly into your existing Business Central environment.</p>
+  </div>
+  <div class="hiw-timeline">
+    <div class="hiw-step">
+      <div class="hiw-step-num">01</div>
+      <h3 class="hiw-step-title">Install &amp; Configure</h3>
+      <p class="hiw-step-text">Deploy directly from AppSource. Configure your color libraries, size scales, and business rules in the setup wizard.</p>
+    </div>
+    <div class="hiw-step">
+      <div class="hiw-step-num">02</div>
+      <h3 class="hiw-step-title">Define Your Catalog</h3>
+      <p class="hiw-step-text">Create styles, assign colors and sizes, generate variant matrices. Your entire catalog structure built in hours.</p>
+    </div>
+    <div class="hiw-step">
+      <div class="hiw-step-num">03</div>
+      <h3 class="hiw-step-title">Plan Your Seasons</h3>
+      <p class="hiw-step-text">Set up seasons and delivery windows. Allocate inventory, plan purchases, and manage your buying calendar.</p>
+    </div>
+    <div class="hiw-step">
+      <div class="hiw-step-num">04</div>
+      <h3 class="hiw-step-title">Run Your Business</h3>
+      <p class="hiw-step-text">Process orders with variant-aware workflows. Track landed costs, manage allocations, and analyze by any dimension.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Metrics -->
+<section class="metrics">
+  <div class="metrics-grid">
+    <div class="metric-item">
+      <div class="metric-number"><span class="counter" data-target="90">0</span><span class="metric-suffix">%</span></div>
+      <div class="metric-label">Reduction in variant creation time</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-number"><span class="counter" data-target="42">0</span></div>
+      <div class="metric-label">Custom tables purpose-built for apparel</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-number"><span class="counter" data-target="30">0</span></div>
+      <div class="metric-label">Attributes per product for full detail</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-number"><span class="counter" data-target="0">0</span></div>
+      <div class="metric-label">External dependencies required</div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonial -->
+<section class="testimonial">
+  <div class="testimonial-inner">
+    <div class="testimonial-quote-mark">&ldquo;</div>
+    <p class="testimonial-text">Volt Apparel turned Business Central into the apparel ERP we always needed. Variant management that used to take days now happens in minutes.</p>
+    <div class="testimonial-author">
+      <strong>Apparel Operations Director</strong>
+      Fashion Wholesale Company
+    </div>
+  </div>
+</section>
+
+<!-- Integration -->
+<section class="integration" id="integration">
+  <div class="integration-split">
+    <div>
+      <span class="section-label">Architecture</span>
+      <h2 class="integration-title">Native BC.<br><em>Zero friction.</em></h2>
+      <p class="integration-text">Volt Apparel is built entirely within the Business Central platform using standard AL development. No external services, no middleware, no API dependencies.</p>
+      <ul class="integration-list">
+        <li>Standard AL extension architecture</li>
+        <li>No external API calls or services</li>
+        <li>Full compatibility with BC updates</li>
+        <li>Works with all existing BC customizations</li>
+        <li>Respects BC permission sets and security</li>
+        <li>Available on AppSource</li>
+      </ul>
+    </div>
+    <div class="integration-flow" id="integrationFlow">
+      <div class="flow-node">
+        <div class="flow-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h18"/></svg>
+        </div>
+        <div>
+          <div class="flow-label">Business Central Platform</div>
+          <div class="flow-sub">Microsoft Dynamics 365</div>
+        </div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-node">
+        <div class="flow-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div>
+          <div class="flow-label">Volt Apparel Extension</div>
+          <div class="flow-sub">Native AL codebase</div>
+        </div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-node">
+        <div class="flow-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        </div>
+        <div>
+          <div class="flow-label">Apparel Modules</div>
+          <div class="flow-sub">Variants, Seasons, Allocations, Costs</div>
+        </div>
+      </div>
+      <div class="flow-connector"></div>
+      <div class="flow-node">
+        <div class="flow-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div>
+          <div class="flow-label">Your Workflows</div>
+          <div class="flow-sub">Sales, Purchasing, Inventory, Reporting</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <h2 class="cta-title">Ready to modernize your apparel operations?</h2>
+  <p class="cta-subtitle">Join the apparel businesses running on Volt.</p>
+  <div class="cta-buttons">
+    <a href="#" class="btn-primary">Request a Demo</a>
+    <a href="#" class="btn-secondary">View Documentation</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo" style="font-size:1.25rem;">Volt<em>.</em></a>
+      <p>Fashion ERP extension for Microsoft Dynamics 365 Business Central. Built by Volt Technologies.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Pricing</a></li>
+        <li><a href="#">Documentation</a></li>
+        <li><a href="#">Changelog</a></li>
+        <li><a href="#">AppSource</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Modules</h4>
+      <ul>
+        <li><a href="#">Product Variants</a></li>
+        <li><a href="#">Seasonality</a></li>
+        <li><a href="#">Allocations</a></li>
+        <li><a href="#">Landed Costs</a></li>
+        <li><a href="#">Attributes</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Partners</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">&copy; 2026 Volt Technologies. All rights reserved.</span>
+    <div class="footer-legal">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  // ============ LENIS SMOOTH SCROLL ============
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: 'vertical',
+    smoothWheel: true,
+  });
+
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+
+  // Connect Lenis to GSAP ScrollTrigger
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+  gsap.ticker.lagSmoothing(0);
+
+  // ============ SCROLL PROGRESS ============
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    document.getElementById('scrollProgress').style.width = progress + '%';
+  });
+
+  // ============ LOADER ANIMATION ============
+  const loaderTl = gsap.timeline({
+    onComplete: () => {
+      gsap.to('#loader', {
+        clipPath: 'inset(0 0 100% 0)',
+        duration: 1,
+        ease: 'power4.inOut',
+        onComplete: () => {
+          document.getElementById('loader').style.display = 'none';
+          initPageAnimations();
+        }
+      });
+    }
+  });
+
+  loaderTl
+    .to('.loader-text span', {
+      y: 0,
+      duration: 1,
+      ease: 'power4.out',
+      delay: 0.3
+    })
+    .to('.loader-line', {
+      width: '120px',
+      duration: 0.8,
+      ease: 'power2.inOut'
+    }, '-=0.4')
+    .to('.loader-sub', {
+      opacity: 1,
+      duration: 0.5,
+      ease: 'power2.out'
+    }, '-=0.3')
+    .to({}, { duration: 0.6 });
+
+  // ============ PAGE ANIMATIONS ============
+  function initPageAnimations() {
+    // Nav
+    gsap.to('#nav', { opacity: 1, duration: 0.8, ease: 'power2.out' });
+
+    // Hero heading lines
+    gsap.to('.hero-heading .line span', {
+      y: 0,
+      duration: 1.2,
+      stagger: 0.15,
+      ease: 'power4.out'
+    });
+
+    // Hero badge
+    gsap.to('.hero-badge', {
+      opacity: 1,
+      duration: 0.8,
+      delay: 0.5,
+      ease: 'power2.out'
+    });
+
+    // Hero subtitle
+    gsap.to('.hero-subtitle', {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      delay: 0.7,
+      ease: 'power2.out'
+    });
+
+    // Hero CTAs
+    gsap.to('.hero-ctas', {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      delay: 0.9,
+      ease: 'power2.out'
+    });
+
+    // Hero stats
+    gsap.to('.hero-stats', {
+      opacity: 1,
+      duration: 0.8,
+      delay: 1.1,
+      ease: 'power2.out'
+    });
+
+    // ============ MARQUEE ANIMATIONS ============
+    function initMarquee(selector, speed) {
+      const track = document.querySelector(selector);
+      if (!track) return;
+      const items = track.innerHTML;
+      track.innerHTML = items + items;
+      const totalWidth = track.scrollWidth / 2;
+
+      gsap.to(track, {
+        x: -totalWidth,
+        duration: speed,
+        ease: 'none',
+        repeat: -1,
+        modifiers: {
+          x: gsap.utils.unitize(x => parseFloat(x) % totalWidth)
+        }
+      });
+    }
+
+    initMarquee('#marquee1', 40);
+    initMarquee('#marquee2', 35);
+
+    // ============ SOCIAL PROOF ============
+    gsap.from('.proof-item', {
+      scrollTrigger: {
+        trigger: '.social-proof',
+        start: 'top 80%',
+      },
+      opacity: 0,
+      y: 30,
+      stagger: 0.08,
+      duration: 0.6,
+      ease: 'power2.out'
+    });
+
+    // ============ FEATURES CLIP REVEAL ============
+    document.querySelectorAll('.feature-card').forEach((card) => {
+      const reveals = card.querySelectorAll('.clip-reveal');
+      ScrollTrigger.create({
+        trigger: card,
+        start: 'top 80%',
+        onEnter: () => {
+          reveals.forEach((el, i) => {
+            gsap.to(el, {
+              clipPath: 'inset(0 0% 0 0)',
+              delay: i * 0.15,
+              duration: 1,
+              ease: 'power3.out'
+            });
+          });
+          gsap.from(card.querySelector('.feature-index'), {
+            opacity: 0,
+            x: -20,
+            duration: 0.6,
+            ease: 'power2.out'
+          });
+        },
+        once: true
+      });
+    });
+
+    // Feature cards entrance
+    gsap.from('.feature-card', {
+      scrollTrigger: {
+        trigger: '.features-grid',
+        start: 'top 80%',
+      },
+      opacity: 0,
+      y: 60,
+      stagger: 0.12,
+      duration: 0.8,
+      ease: 'power3.out'
+    });
+
+    // ============ DEEP DIVE: Variant Matrix ============
+    gsap.from('.matrix-cell', {
+      scrollTrigger: {
+        trigger: '.matrix-grid',
+        start: 'top 75%',
+      },
+      opacity: 0,
+      scale: 0.8,
+      stagger: {
+        each: 0.03,
+        grid: 'auto',
+        from: 'start'
+      },
+      duration: 0.4,
+      ease: 'power2.out'
+    });
+
+    // ============ DEEP DIVE: Allocation Bars ============
+    ScrollTrigger.create({
+      trigger: '#allocBars',
+      start: 'top 75%',
+      onEnter: () => {
+        document.querySelectorAll('.alloc-bar-fill').forEach((bar, i) => {
+          setTimeout(() => {
+            bar.style.width = bar.dataset.width + '%';
+          }, i * 200);
+        });
+      },
+      once: true
+    });
+
+    // ============ DEEP DIVE: Season Timeline ============
+    gsap.to('#seasonTimeline .season-item', {
+      scrollTrigger: {
+        trigger: '#seasonTimeline',
+        start: 'top 75%',
+      },
+      opacity: 1,
+      x: 0,
+      stagger: 0.15,
+      duration: 0.6,
+      ease: 'power2.out'
+    });
+
+    // ============ DEEP DIVE: Cost Breakdown ============
+    ScrollTrigger.create({
+      trigger: '#costBreakdown',
+      start: 'top 75%',
+      onEnter: () => {
+        gsap.to('#costBreakdown .cost-layer', {
+          opacity: 1,
+          y: 0,
+          stagger: 0.1,
+          duration: 0.5,
+          ease: 'power2.out'
+        });
+        gsap.to('#costBreakdown .cost-total', {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          delay: 0.7,
+          ease: 'power2.out'
+        });
+      },
+      once: true
+    });
+
+    // ============ DEEP DIVE content reveals ============
+    document.querySelectorAll('.dd-content').forEach((content) => {
+      const title = content.querySelector('.dd-title');
+      const text = content.querySelector('.dd-text');
+      const label = content.querySelector('.dd-label');
+
+      gsap.from([label, title, text], {
+        scrollTrigger: {
+          trigger: content,
+          start: 'top 75%',
+        },
+        opacity: 0,
+        y: 40,
+        stagger: 0.15,
+        duration: 0.8,
+        ease: 'power3.out'
+      });
+    });
+
+    // ============ HOW IT WORKS ============
+    gsap.to('.hiw-step', {
+      scrollTrigger: {
+        trigger: '.hiw-timeline',
+        start: 'top 75%',
+      },
+      opacity: 1,
+      y: 0,
+      stagger: 0.2,
+      duration: 0.8,
+      ease: 'power3.out'
+    });
+
+    // ============ METRICS COUNTERS ============
+    document.querySelectorAll('.counter').forEach((counter) => {
+      const target = parseInt(counter.dataset.target);
+      ScrollTrigger.create({
+        trigger: counter,
+        start: 'top 85%',
+        onEnter: () => {
+          gsap.to(counter, {
+            innerText: target,
+            duration: target === 0 ? 0.01 : 2,
+            ease: 'power2.out',
+            snap: { innerText: 1 },
+            onUpdate: function() {
+              counter.textContent = Math.round(parseFloat(counter.textContent));
+            }
+          });
+        },
+        once: true
+      });
+    });
+
+    // ============ TESTIMONIAL ============
+    gsap.from('.testimonial-inner', {
+      scrollTrigger: {
+        trigger: '.testimonial',
+        start: 'top 70%',
+      },
+      opacity: 0,
+      y: 60,
+      duration: 1,
+      ease: 'power3.out'
+    });
+
+    // ============ INTEGRATION FLOW ============
+    gsap.to('#integrationFlow .flow-node', {
+      scrollTrigger: {
+        trigger: '#integrationFlow',
+        start: 'top 75%',
+      },
+      opacity: 1,
+      x: 0,
+      stagger: 0.15,
+      duration: 0.6,
+      ease: 'power2.out'
+    });
+
+    // ============ CTA ============
+    gsap.from('.cta-title', {
+      scrollTrigger: {
+        trigger: '.cta-section',
+        start: 'top 75%',
+      },
+      opacity: 0,
+      y: 50,
+      duration: 0.8,
+      ease: 'power3.out'
+    });
+
+    // ============ SMOOTH SCROLL NAV LINKS ============
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href === '#') return;
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          lenis.scrollTo(target, { offset: -80 });
+        }
+      });
+    });
+  }
+
+})();
+</script>
+</body>
+</html>

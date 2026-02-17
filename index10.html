@@ -1,0 +1,1977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volt Apparel — Fashion ERP for Business Central</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,700;0,9..40,900;1,9..40,400;1,9..40,700;1,9..40,900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border-radius: 0;
+}
+
+:root {
+    --black: #09090b;
+    --gold: #d4a017;
+    --white: #fafafa;
+    --muted: rgba(250, 250, 250, 0.4);
+    --mono: 'Space Mono', 'IBM Plex Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+    --col: calc(100% / 12);
+    --gutter: 24px;
+    --container: 1440px;
+}
+
+html {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--mono);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold) var(--black);
+}
+
+body {
+    background: var(--black);
+    overflow-x: hidden;
+}
+
+::selection {
+    background: var(--gold);
+    color: var(--black);
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+::-webkit-scrollbar-track {
+    background: var(--black);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--gold);
+}
+
+/* ---- LOADING SCREEN ---- */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--black);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-line {
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    position: absolute;
+    left: 0;
+    top: 50%;
+}
+
+/* ---- SCROLL PROGRESS ---- */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: var(--gold);
+    z-index: 9999;
+}
+
+/* ---- GRID SYSTEM ---- */
+.container {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--gutter);
+}
+
+/* ---- TYPOGRAPHY ---- */
+.t-headline {
+    font-family: var(--sans);
+    font-weight: 900;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+}
+
+.t-mono {
+    font-family: var(--mono);
+    font-weight: 400;
+    font-size: 0.8125rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.t-body {
+    font-family: var(--mono);
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--muted);
+}
+
+/* ---- DIVIDERS ---- */
+.hr {
+    width: 100%;
+    height: 1px;
+    background: var(--gold);
+    border: none;
+    display: block;
+}
+
+.hr--muted {
+    background: rgba(212, 160, 23, 0.2);
+}
+
+.vr {
+    width: 1px;
+    background: var(--gold);
+    align-self: stretch;
+}
+
+/* ---- BUTTONS ---- */
+.btn {
+    display: inline-block;
+    padding: 16px 40px;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid var(--gold);
+    transition: background 0.3s, color 0.3s;
+}
+
+.btn--fill {
+    background: var(--gold);
+    color: var(--black);
+}
+
+.btn--fill:hover {
+    background: transparent;
+    color: var(--gold);
+}
+
+.btn--outline {
+    background: transparent;
+    color: var(--gold);
+}
+
+.btn--outline:hover {
+    background: var(--gold);
+    color: var(--black);
+}
+
+/* ---- SECTION SPACING ---- */
+section {
+    padding: 200px 0;
+    position: relative;
+}
+
+/* ---- NAVIGATION ---- */
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9000;
+    padding: 24px 0;
+    background: var(--black);
+}
+
+.nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-logo {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+}
+
+.nav-logo span {
+    color: var(--gold);
+}
+
+.nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+}
+
+.nav-links a {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--gold);
+}
+
+.nav-mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 1.5rem;
+    cursor: pointer;
+    font-family: var(--mono);
+}
+
+/* ---- HERO ---- */
+.hero {
+    padding-top: 180px;
+    padding-bottom: 200px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.hero-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    margin-bottom: 48px;
+    opacity: 0;
+}
+
+.hero-title {
+    font-size: clamp(3.5rem, 12vw, 13rem);
+    margin-bottom: 48px;
+}
+
+.hero-title .line {
+    display: block;
+    overflow: hidden;
+}
+
+.hero-title .line-inner {
+    display: block;
+    opacity: 0;
+}
+
+.hero-title .accent {
+    color: var(--gold);
+}
+
+.hero-subtitle {
+    font-family: var(--mono);
+    font-size: 0.875rem;
+    color: var(--muted);
+    max-width: 520px;
+    margin-bottom: 56px;
+    line-height: 1.8;
+    opacity: 0;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 120px;
+    opacity: 0;
+}
+
+.hero-stats {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 0;
+    padding-top: 48px;
+    border-top: 1px solid var(--gold);
+    opacity: 0;
+}
+
+.hero-stat {
+    text-align: center;
+    padding: 0 24px;
+}
+
+.hero-stat-number {
+    font-family: var(--sans);
+    font-weight: 900;
+    font-size: 2.5rem;
+    color: var(--gold);
+    letter-spacing: -0.02em;
+}
+
+.hero-stat-label {
+    font-family: var(--mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 8px;
+}
+
+.hero-stats .vr {
+    height: 48px;
+    justify-self: center;
+}
+
+/* ---- SOCIAL PROOF ---- */
+.social-proof {
+    padding: 100px 0;
+}
+
+.social-proof-label {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.social-proof-items {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+}
+
+.social-proof-item {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 32px;
+}
+
+.social-proof-dot {
+    width: 4px;
+    height: 4px;
+    background: var(--gold);
+    flex-shrink: 0;
+}
+
+/* ---- FEATURES ---- */
+.features-header {
+    margin-bottom: 96px;
+}
+
+.features-title {
+    font-size: clamp(2rem, 5vw, 4.5rem);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+}
+
+.feature-card {
+    padding: 48px 40px;
+    border-left: 1px solid var(--gold);
+    position: relative;
+    opacity: 0;
+}
+
+.feature-card:nth-child(3n+1) {
+    border-left: none;
+}
+
+.feature-card:nth-child(n+4) {
+    border-top: 1px solid rgba(212, 160, 23, 0.2);
+}
+
+.feature-number {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 24px;
+}
+
+.feature-title {
+    font-family: var(--sans);
+    font-weight: 900;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+    color: var(--white);
+}
+
+.feature-desc {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    line-height: 1.8;
+    color: var(--muted);
+}
+
+/* ---- FEATURE DEEP DIVES ---- */
+.deep-dive {
+    padding: 160px 0;
+}
+
+.deep-dive + .deep-dive {
+    padding-top: 0;
+}
+
+.deep-dive-label {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+}
+
+.deep-dive-title {
+    font-family: var(--sans);
+    font-weight: 900;
+    font-size: clamp(1.75rem, 3.5vw, 3rem);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+}
+
+.deep-dive-desc {
+    font-family: var(--mono);
+    font-size: 0.8125rem;
+    line-height: 1.8;
+    color: var(--muted);
+    max-width: 480px;
+    margin-bottom: 64px;
+}
+
+/* Variant Matrix Table */
+.matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+}
+
+.matrix-table th {
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.625rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--gold);
+}
+
+.matrix-table td {
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(212, 160, 23, 0.1);
+    color: var(--muted);
+}
+
+.matrix-table tr:hover td {
+    color: var(--white);
+}
+
+.matrix-cell--active {
+    color: var(--gold) !important;
+    font-weight: 700;
+}
+
+.matrix-cell--header {
+    color: var(--white) !important;
+    font-weight: 700;
+}
+
+/* Allocation Bars */
+.allocation-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.alloc-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 60px;
+    align-items: center;
+    gap: 24px;
+}
+
+.alloc-label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.alloc-track {
+    height: 3px;
+    background: rgba(212, 160, 23, 0.1);
+    position: relative;
+}
+
+.alloc-fill {
+    height: 100%;
+    background: var(--gold);
+    width: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.alloc-value {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--gold);
+    text-align: right;
+}
+
+/* Season Timeline */
+.season-timeline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--gold);
+}
+
+.season-block {
+    padding: 32px 24px;
+    border-right: 1px solid rgba(212, 160, 23, 0.2);
+}
+
+.season-block:last-child {
+    border-right: none;
+}
+
+.season-quarter {
+    font-family: var(--mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+.season-name {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.season-detail {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+/* Landed Cost Breakdown */
+.cost-breakdown {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+}
+
+.cost-item {
+    padding: 24px 32px;
+    border-bottom: 1px solid rgba(212, 160, 23, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cost-item:nth-child(odd) {
+    border-right: 1px solid rgba(212, 160, 23, 0.1);
+}
+
+.cost-label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.cost-value {
+    font-family: var(--mono);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--gold);
+}
+
+/* ---- HOW IT WORKS ---- */
+.steps-list {
+    max-width: 800px;
+}
+
+.step-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 40px;
+    padding: 48px 0;
+    border-bottom: 1px solid rgba(212, 160, 23, 0.2);
+    opacity: 0;
+}
+
+.step-item:first-child {
+    border-top: 1px solid var(--gold);
+}
+
+.step-number {
+    font-family: var(--mono);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gold);
+}
+
+.step-title {
+    font-family: var(--sans);
+    font-weight: 900;
+    font-size: 1.375rem;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.step-desc {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    line-height: 1.8;
+    color: var(--muted);
+}
+
+/* ---- METRICS ---- */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--gold);
+    border-bottom: 1px solid var(--gold);
+}
+
+.metric-item {
+    padding: 64px 40px;
+    text-align: center;
+    border-right: 1px solid rgba(212, 160, 23, 0.2);
+}
+
+.metric-item:last-child {
+    border-right: none;
+}
+
+.metric-number {
+    font-family: var(--mono);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+}
+
+.metric-suffix {
+    font-family: var(--mono);
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: var(--gold);
+}
+
+.metric-label {
+    font-family: var(--mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 12px;
+}
+
+/* ---- TESTIMONIAL ---- */
+.testimonial-quote {
+    font-family: var(--sans);
+    font-style: italic;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--white);
+    max-width: 900px;
+    margin-bottom: 48px;
+    position: relative;
+}
+
+.testimonial-mark {
+    font-family: var(--sans);
+    font-size: 6rem;
+    color: var(--gold);
+    line-height: 0.5;
+    display: block;
+    margin-bottom: 32px;
+}
+
+.testimonial-author {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.testimonial-author strong {
+    color: var(--white);
+    font-weight: 700;
+}
+
+/* ---- INTEGRATION ---- */
+.integration-title {
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    margin-bottom: 24px;
+}
+
+.integration-subtitle {
+    font-family: var(--mono);
+    font-size: 0.875rem;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.8;
+    margin-bottom: 80px;
+}
+
+.integration-list {
+    list-style: none;
+    margin-bottom: 96px;
+}
+
+.integration-list li {
+    font-family: var(--mono);
+    font-size: 0.8125rem;
+    color: var(--muted);
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(212, 160, 23, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.integration-bullet {
+    width: 8px;
+    height: 8px;
+    background: var(--gold);
+    flex-shrink: 0;
+}
+
+.integration-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+}
+
+.flow-box {
+    padding: 24px 32px;
+    border: 1px solid var(--gold);
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-align: center;
+    min-width: 180px;
+}
+
+.flow-line {
+    width: 48px;
+    height: 1px;
+    background: var(--gold);
+    flex-shrink: 0;
+}
+
+/* ---- CTA ---- */
+.cta {
+    text-align: center;
+}
+
+.cta-title {
+    font-size: clamp(2rem, 5vw, 4rem);
+    max-width: 900px;
+    margin: 0 auto 56px;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+/* ---- FOOTER ---- */
+.footer {
+    padding: 80px 0 48px;
+}
+
+.footer-rule {
+    margin-bottom: 64px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: var(--gutter);
+    margin-bottom: 80px;
+}
+
+.footer-brand {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+.footer-brand span {
+    color: var(--gold);
+}
+
+.footer-tagline {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 280px;
+}
+
+.footer-col-title {
+    font-family: var(--mono);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+}
+
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col li {
+    margin-bottom: 12px;
+}
+
+.footer-col a {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.3s;
+}
+
+.footer-col a:hover {
+    color: var(--gold);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(212, 160, 23, 0.2);
+    padding-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-copy {
+    font-family: var(--mono);
+    font-size: 0.625rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+}
+
+.footer-copy span {
+    color: var(--gold);
+}
+
+/* ---- REVEAL UTILITY ---- */
+.reveal {
+    opacity: 0;
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 1024px) {
+    section {
+        padding: 140px 0;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .feature-card:nth-child(3n+1) {
+        border-left: 1px solid var(--gold);
+    }
+
+    .feature-card:nth-child(2n+1) {
+        border-left: none;
+    }
+
+    .feature-card:nth-child(n+3) {
+        border-top: 1px solid rgba(212, 160, 23, 0.2);
+    }
+
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .metric-item:nth-child(2) {
+        border-right: none;
+    }
+
+    .metric-item:nth-child(n+3) {
+        border-top: 1px solid rgba(212, 160, 23, 0.2);
+    }
+
+    .hero-stats {
+        grid-template-columns: 1fr auto 1fr;
+        gap: 24px;
+    }
+
+    .hero-stats .vr:nth-child(4),
+    .hero-stats .hero-stat:nth-child(n+6),
+    .hero-stats .vr:nth-child(6) {
+        display: none;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+    }
+
+    .cost-breakdown {
+        grid-template-columns: 1fr;
+    }
+
+    .cost-item:nth-child(odd) {
+        border-right: none;
+    }
+
+    .season-timeline {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .season-block:nth-child(2) {
+        border-right: none;
+    }
+
+    .season-block:nth-child(n+3) {
+        border-top: 1px solid rgba(212, 160, 23, 0.2);
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --gutter: 16px;
+    }
+
+    section {
+        padding: 100px 0;
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--black);
+        flex-direction: column;
+        padding: 24px var(--gutter);
+        gap: 20px;
+        border-bottom: 1px solid var(--gold);
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .nav-mobile-toggle {
+        display: block;
+    }
+
+    .hero-title {
+        font-size: clamp(2.5rem, 14vw, 5rem);
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+    }
+
+    .btn {
+        text-align: center;
+    }
+
+    .hero-stats {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .hero-stats .vr {
+        display: none;
+    }
+
+    .hero-stat {
+        padding: 20px 0;
+        border-bottom: 1px solid rgba(212, 160, 23, 0.1);
+    }
+
+    .hero-stat:last-child {
+        border-bottom: none;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-card {
+        border-left: 1px solid var(--gold) !important;
+        border-top: none !important;
+    }
+
+    .feature-card + .feature-card {
+        border-top: 1px solid rgba(212, 160, 23, 0.2) !important;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .metric-item {
+        border-right: none !important;
+        border-bottom: 1px solid rgba(212, 160, 23, 0.2);
+    }
+
+    .metric-item:last-child {
+        border-bottom: none;
+    }
+
+    .alloc-row {
+        grid-template-columns: 100px 1fr 50px;
+        gap: 16px;
+    }
+
+    .step-item {
+        grid-template-columns: 60px 1fr;
+        gap: 24px;
+    }
+
+    .integration-flow {
+        flex-direction: column;
+    }
+
+    .flow-line {
+        width: 1px;
+        height: 32px;
+    }
+
+    .flow-box {
+        min-width: 240px;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .social-proof-items {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .social-proof-dot {
+        display: none;
+    }
+
+    .season-timeline {
+        grid-template-columns: 1fr;
+    }
+
+    .season-block {
+        border-right: none !important;
+    }
+
+    .season-block + .season-block {
+        border-top: 1px solid rgba(212, 160, 23, 0.2) !important;
+    }
+
+    .matrix-table {
+        font-size: 0.625rem;
+    }
+
+    .matrix-table th,
+    .matrix-table td {
+        padding: 10px 12px;
+    }
+
+    .deep-dive .grid {
+        display: block;
+    }
+
+    .deep-dive-desc {
+        margin-bottom: 48px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        padding-top: 140px;
+    }
+
+    .alloc-row {
+        grid-template-columns: 1fr 40px;
+        gap: 8px;
+    }
+
+    .alloc-label {
+        grid-column: 1 / -1;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div class="loading-screen" id="loader">
+    <div class="loading-line" id="loading-line"></div>
+</div>
+
+<!-- Scroll Progress -->
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+    <div class="container">
+        <a href="#" class="nav-logo">Volt<span>.</span></a>
+        <button class="nav-mobile-toggle" id="nav-toggle" aria-label="Toggle navigation">&#9776;</button>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#features" data-scroll>Features</a></li>
+            <li><a href="#deep-dives" data-scroll>Deep Dives</a></li>
+            <li><a href="#how-it-works" data-scroll>Process</a></li>
+            <li><a href="#metrics" data-scroll>Metrics</a></li>
+            <li><a href="#integration" data-scroll>Integration</a></li>
+            <li><a href="#cta" class="btn btn--outline" style="padding:10px 24px;" data-scroll>Get Started</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+    <div class="container">
+        <div class="hero-badge">[Built for Business Central]</div>
+        <h1 class="hero-title t-headline">
+            <span class="line"><span class="line-inner">Fashion</span></span>
+            <span class="line"><span class="line-inner">ERP<span class="accent">,</span></span></span>
+            <span class="line"><span class="line-inner">Reimagined<span class="accent">.</span></span></span>
+        </h1>
+        <p class="hero-subtitle">Purpose-built apparel management for Microsoft Dynamics 365 Business Central. Variant matrices, seasonal planning, allocations, and landed costs in one native extension.</p>
+        <div class="hero-buttons">
+            <a href="#cta" class="btn btn--fill" data-scroll>Request a Demo</a>
+            <a href="#features" class="btn btn--outline" data-scroll>Explore Features</a>
+        </div>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-number">6</div>
+                <div class="hero-stat-label">Core Modules</div>
+            </div>
+            <div class="vr"></div>
+            <div class="hero-stat">
+                <div class="hero-stat-number">100%</div>
+                <div class="hero-stat-label">Native to BC</div>
+            </div>
+            <div class="vr"></div>
+            <div class="hero-stat">
+                <div class="hero-stat-number">0</div>
+                <div class="hero-stat-label">External Dependencies</div>
+            </div>
+            <div class="vr"></div>
+            <div class="hero-stat">
+                <div class="hero-stat-number">SaaS</div>
+                <div class="hero-stat-label">Cloud Ready</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Social Proof -->
+<section class="social-proof" id="social-proof">
+    <div class="container">
+        <div class="hr" style="margin-bottom: 48px;"></div>
+        <p class="social-proof-label reveal">Trusted across the apparel industry</p>
+        <div class="social-proof-items reveal">
+            <span class="social-proof-item">Fashion Brands</span>
+            <span class="social-proof-dot"></span>
+            <span class="social-proof-item">Wholesale Distributors</span>
+            <span class="social-proof-dot"></span>
+            <span class="social-proof-item">Retail Chains</span>
+            <span class="social-proof-dot"></span>
+            <span class="social-proof-item">E-Commerce Operators</span>
+            <span class="social-proof-dot"></span>
+            <span class="social-proof-item">Private Label Manufacturers</span>
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section id="features">
+    <div class="container">
+        <div class="features-header">
+            <h2 class="features-title t-headline reveal">Everything Apparel<br>Businesses Need.</h2>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-number">01</div>
+                <h3 class="feature-title">Product Variants</h3>
+                <p class="feature-desc">Define items by style, color, and size with a powerful variant matrix. Generate all combinations automatically and manage them as a unified product.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-number">02</div>
+                <h3 class="feature-title">Seasonality</h3>
+                <p class="feature-desc">Organize your catalog into seasons and delivery windows. Plan collections, manage buy periods, and track sell-through by seasonal lifecycle.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-number">03</div>
+                <h3 class="feature-title">Soft Allocations</h3>
+                <p class="feature-desc">Allocate incoming inventory to customers before it arrives. Prioritize key accounts, manage channel distribution, and optimize stock placement.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-number">04</div>
+                <h3 class="feature-title">Landed Costs</h3>
+                <p class="feature-desc">Calculate true product cost including freight, duties, insurance, and handling. Distribute costs by weight, volume, quantity, or value across shipments.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-number">05</div>
+                <h3 class="feature-title">Product Attributes</h3>
+                <p class="feature-desc">Extend your catalog with custom attributes like fabric composition, care instructions, country of origin, and compliance certifications.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-number">06</div>
+                <h3 class="feature-title">Item Statuses</h3>
+                <p class="feature-desc">Control item lifecycle from development through discontinuation. Restrict transactions by status to enforce business rules across your organization.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Deep Dives -->
+<section id="deep-dives">
+    <!-- Variant Matrix -->
+    <div class="deep-dive">
+        <div class="container">
+            <div class="grid">
+                <div style="grid-column: 1 / 5;">
+                    <div class="deep-dive-label">Feature / 01</div>
+                    <h3 class="deep-dive-title reveal">Variant Matrix</h3>
+                    <p class="deep-dive-desc">Define products by style, then expand across every color-size combination. One click generates the full variant matrix.</p>
+                </div>
+                <div style="grid-column: 5 / 13;">
+                    <div class="matrix-table-wrapper reveal" style="overflow-x:auto;">
+                        <table class="matrix-table">
+                            <thead>
+                                <tr>
+                                    <th>Style / Size</th>
+                                    <th>XS</th>
+                                    <th>S</th>
+                                    <th>M</th>
+                                    <th>L</th>
+                                    <th>XL</th>
+                                    <th>XXL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="matrix-cell--header">Black</td>
+                                    <td class="matrix-cell--active">24</td>
+                                    <td class="matrix-cell--active">48</td>
+                                    <td class="matrix-cell--active">72</td>
+                                    <td class="matrix-cell--active">64</td>
+                                    <td class="matrix-cell--active">36</td>
+                                    <td>12</td>
+                                </tr>
+                                <tr>
+                                    <td class="matrix-cell--header">Navy</td>
+                                    <td>18</td>
+                                    <td class="matrix-cell--active">36</td>
+                                    <td class="matrix-cell--active">54</td>
+                                    <td class="matrix-cell--active">48</td>
+                                    <td>24</td>
+                                    <td>8</td>
+                                </tr>
+                                <tr>
+                                    <td class="matrix-cell--header">White</td>
+                                    <td>12</td>
+                                    <td>24</td>
+                                    <td class="matrix-cell--active">42</td>
+                                    <td class="matrix-cell--active">36</td>
+                                    <td>18</td>
+                                    <td>6</td>
+                                </tr>
+                                <tr>
+                                    <td class="matrix-cell--header">Olive</td>
+                                    <td>8</td>
+                                    <td>16</td>
+                                    <td class="matrix-cell--active">28</td>
+                                    <td>24</td>
+                                    <td>12</td>
+                                    <td>4</td>
+                                </tr>
+                                <tr>
+                                    <td class="matrix-cell--header">Stone</td>
+                                    <td>6</td>
+                                    <td>12</td>
+                                    <td>20</td>
+                                    <td>18</td>
+                                    <td>8</td>
+                                    <td>--</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Smart Allocation -->
+    <div class="deep-dive">
+        <div class="container">
+            <div class="grid">
+                <div style="grid-column: 1 / 5;">
+                    <div class="deep-dive-label">Feature / 03</div>
+                    <h3 class="deep-dive-title reveal">Smart Allocation</h3>
+                    <p class="deep-dive-desc">Distribute incoming inventory across channels before it arrives. Priority-based allocation ensures your best accounts get filled first.</p>
+                </div>
+                <div style="grid-column: 5 / 13;">
+                    <div class="allocation-bars reveal">
+                        <div class="alloc-row">
+                            <span class="alloc-label">VIP Accounts</span>
+                            <div class="alloc-track">
+                                <div class="alloc-fill" data-width="95"></div>
+                            </div>
+                            <span class="alloc-value">95%</span>
+                        </div>
+                        <div class="alloc-row">
+                            <span class="alloc-label">Wholesale</span>
+                            <div class="alloc-track">
+                                <div class="alloc-fill" data-width="78"></div>
+                            </div>
+                            <span class="alloc-value">78%</span>
+                        </div>
+                        <div class="alloc-row">
+                            <span class="alloc-label">Retail</span>
+                            <div class="alloc-track">
+                                <div class="alloc-fill" data-width="62"></div>
+                            </div>
+                            <span class="alloc-value">62%</span>
+                        </div>
+                        <div class="alloc-row">
+                            <span class="alloc-label">E-Commerce</span>
+                            <div class="alloc-track">
+                                <div class="alloc-fill" data-width="45"></div>
+                            </div>
+                            <span class="alloc-value">45%</span>
+                        </div>
+                        <div class="alloc-row">
+                            <span class="alloc-label">Outlet</span>
+                            <div class="alloc-track">
+                                <div class="alloc-fill" data-width="30"></div>
+                            </div>
+                            <span class="alloc-value">30%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Season & Delivery -->
+    <div class="deep-dive">
+        <div class="container">
+            <div class="deep-dive-label">Feature / 02</div>
+            <h3 class="deep-dive-title reveal">Season &amp; Delivery Planning</h3>
+            <p class="deep-dive-desc">Structure your business around seasonal cycles. Define buy windows, delivery schedules, and track performance across each collection period.</p>
+            <div class="season-timeline reveal">
+                <div class="season-block">
+                    <div class="season-quarter">Q1 / Jan-Mar</div>
+                    <div class="season-name">Spring</div>
+                    <div class="season-detail">Pre-season buy<br>Early deliveries begin</div>
+                </div>
+                <div class="season-block">
+                    <div class="season-quarter">Q2 / Apr-Jun</div>
+                    <div class="season-name">Summer</div>
+                    <div class="season-detail">Main delivery window<br>In-season replenishment</div>
+                </div>
+                <div class="season-block">
+                    <div class="season-quarter">Q3 / Jul-Sep</div>
+                    <div class="season-name">Fall</div>
+                    <div class="season-detail">Sell-through analysis<br>Markdown planning</div>
+                </div>
+                <div class="season-block">
+                    <div class="season-quarter">Q4 / Oct-Dec</div>
+                    <div class="season-name">Winter</div>
+                    <div class="season-detail">End-of-season close<br>Next year planning</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Landed Costs -->
+    <div class="deep-dive">
+        <div class="container">
+            <div class="grid">
+                <div style="grid-column: 1 / 5;">
+                    <div class="deep-dive-label">Feature / 04</div>
+                    <h3 class="deep-dive-title reveal">Landed Cost Tracking</h3>
+                    <p class="deep-dive-desc">Know your true cost-to-shelf. Every charge from factory to warehouse is captured and allocated to the unit level.</p>
+                </div>
+                <div style="grid-column: 5 / 13;">
+                    <div class="cost-breakdown reveal">
+                        <div class="cost-item">
+                            <span class="cost-label">FOB Price</span>
+                            <span class="cost-value">$12.40</span>
+                        </div>
+                        <div class="cost-item">
+                            <span class="cost-label">Ocean Freight</span>
+                            <span class="cost-value">$1.85</span>
+                        </div>
+                        <div class="cost-item">
+                            <span class="cost-label">Import Duty</span>
+                            <span class="cost-value">$2.10</span>
+                        </div>
+                        <div class="cost-item">
+                            <span class="cost-label">Insurance</span>
+                            <span class="cost-value">$0.32</span>
+                        </div>
+                        <div class="cost-item">
+                            <span class="cost-label">Customs Brokerage</span>
+                            <span class="cost-value">$0.45</span>
+                        </div>
+                        <div class="cost-item">
+                            <span class="cost-label">Inland Transport</span>
+                            <span class="cost-value">$0.68</span>
+                        </div>
+                        <div class="cost-item" style="border-bottom: 1px solid var(--gold); grid-column: 1 / -1; border-right: none;">
+                            <span class="cost-label" style="color: var(--white); font-weight: 700;">Total Landed Cost</span>
+                            <span class="cost-value" style="font-size: 1.125rem;">$17.80</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section id="how-it-works">
+    <div class="container">
+        <div class="grid">
+            <div style="grid-column: 1 / 5;">
+                <div class="deep-dive-label">Process</div>
+                <h2 class="deep-dive-title reveal" style="font-size: clamp(2rem, 4vw, 3.5rem);">How It<br>Works.</h2>
+                <p class="deep-dive-desc">Four steps from installation to running your apparel business on Business Central.</p>
+            </div>
+            <div style="grid-column: 5 / 13;">
+                <div class="steps-list">
+                    <div class="step-item">
+                        <div class="step-number">01</div>
+                        <div>
+                            <h3 class="step-title">Install &amp; Configure</h3>
+                            <p class="step-desc">Install Volt Apparel from Microsoft AppSource. Configure seasons, size scales, color palettes, and cost allocation rules to match your business.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">02</div>
+                        <div>
+                            <h3 class="step-title">Define Your Catalog</h3>
+                            <p class="step-desc">Create styles with variant matrices. Assign attributes, set cost structures, and organize products into seasonal collections.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">03</div>
+                        <div>
+                            <h3 class="step-title">Plan Your Seasons</h3>
+                            <p class="step-desc">Build purchase orders, set delivery windows, and allocate incoming inventory to your channel partners and retail locations.</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">04</div>
+                        <div>
+                            <h3 class="step-title">Run Your Business</h3>
+                            <p class="step-desc">Process orders, track shipments, analyze sell-through, and manage markdowns. All within the Business Central environment you already know.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Metrics -->
+<section id="metrics">
+    <div class="container">
+        <div class="deep-dive-label" style="margin-bottom: 48px;">By the Numbers</div>
+        <div class="metrics-grid">
+            <div class="metric-item">
+                <div class="metric-number"><span class="counter" data-target="90">0</span><span class="metric-suffix">%</span></div>
+                <div class="metric-label">Faster Variant Setup</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-number"><span class="counter" data-target="42">0</span><span class="metric-suffix">%</span></div>
+                <div class="metric-label">Reduction in Overstock</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-number"><span class="counter" data-target="30">0</span><span class="metric-suffix">min</span></div>
+                <div class="metric-label">Average Implementation</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-number"><span class="counter" data-target="0" data-display="0">0</span></div>
+                <div class="metric-label">External Dependencies</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonial -->
+<section id="testimonial">
+    <div class="container">
+        <div class="hr" style="margin-bottom: 80px;"></div>
+        <div class="reveal">
+            <div class="testimonial-mark">"</div>
+            <blockquote class="testimonial-quote">Volt Apparel transformed how we manage our product catalog. The variant matrix alone saved us weeks of manual data entry every season. It feels like Business Central was built for fashion from the start.</blockquote>
+            <div class="testimonial-author" style="margin-top: 48px;">
+                <strong>Sarah Mitchell</strong> &mdash; Director of Operations, Meridian Fashion Group
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Integration -->
+<section id="integration">
+    <div class="container">
+        <h2 class="integration-title t-headline reveal">Native BC.<br>Zero Friction.</h2>
+        <p class="integration-subtitle reveal">Volt Apparel is built entirely within the Business Central platform. No middleware, no external databases, no synchronization headaches.</p>
+        <ul class="integration-list reveal">
+            <li><span class="integration-bullet"></span>Runs natively inside Business Central</li>
+            <li><span class="integration-bullet"></span>Uses standard BC tables and APIs</li>
+            <li><span class="integration-bullet"></span>Compatible with all BC extensions</li>
+            <li><span class="integration-bullet"></span>Full support for BC SaaS environments</li>
+            <li><span class="integration-bullet"></span>Standard AL permission sets and security</li>
+            <li><span class="integration-bullet"></span>Automatic updates through AppSource</li>
+            <li><span class="integration-bullet"></span>No external services or subscriptions required</li>
+        </ul>
+        <div class="integration-flow reveal">
+            <div class="flow-box">Business Central</div>
+            <div class="flow-line"></div>
+            <div class="flow-box" style="border-color: var(--gold); color: var(--gold);">Volt Apparel</div>
+            <div class="flow-line"></div>
+            <div class="flow-box">Your Workflows</div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="cta">
+    <div class="container">
+        <div class="hr" style="margin-bottom: 96px;"></div>
+        <h2 class="cta-title t-headline reveal">Ready to Modernize Your Apparel Operations?</h2>
+        <div class="cta-buttons reveal">
+            <a href="#" class="btn btn--fill">Request a Demo</a>
+            <a href="#" class="btn btn--outline">Contact Sales</a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer" id="footer">
+    <div class="container">
+        <div class="hr footer-rule"></div>
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">Volt<span>.</span></div>
+                <p class="footer-tagline">Purpose-built apparel management for Microsoft Dynamics 365 Business Central.</p>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">Product</div>
+                <ul>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Changelog</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">Company</div>
+                <ul>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Partners</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <div class="footer-col-title">Resources</div>
+                <ul>
+                    <li><a href="#">AppSource</a></li>
+                    <li><a href="#">Support</a></li>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Terms</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span class="footer-copy"><span>&copy;</span> 2026 Volt Technologies. All rights reserved.</span>
+            <span class="footer-copy">Built for <span>Business Central</span></span>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+
+<script>
+(function() {
+    "use strict";
+
+    /* ============================================
+       LOADING SCREEN
+    ============================================ */
+    const loader = document.getElementById("loader");
+    const loadingLine = document.getElementById("loading-line");
+
+    gsap.set(loadingLine, { width: "0%", left: "0%" });
+
+    const loadTl = gsap.timeline({
+        onComplete: function() {
+            gsap.to(loader, {
+                opacity: 0,
+                duration: 0.01,
+                onComplete: function() {
+                    loader.style.display = "none";
+                    document.body.style.overflow = "";
+                    initSite();
+                }
+            });
+        }
+    });
+
+    loadTl.to(loadingLine, {
+        width: "100%",
+        duration: 1.4,
+        ease: "power2.inOut"
+    });
+
+    document.body.style.overflow = "hidden";
+
+    /* ============================================
+       MAIN INITIALIZATION
+    ============================================ */
+    function initSite() {
+
+        /* ---- Lenis Smooth Scroll ---- */
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: function(t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+            orientation: "vertical",
+            smoothWheel: true
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        lenis.on("scroll", ScrollTrigger.update);
+
+        gsap.ticker.add(function(time) {
+            lenis.raf(time * 1000);
+        });
+
+        gsap.ticker.lagSmoothing(0);
+
+        /* ---- Scroll Progress Bar ---- */
+        var progressBar = document.getElementById("scroll-progress");
+
+        gsap.to(progressBar, {
+            width: "100%",
+            ease: "none",
+            scrollTrigger: {
+                trigger: document.body,
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 0.3
+            }
+        });
+
+        /* ---- Scroll-to Links ---- */
+        document.querySelectorAll("[data-scroll]").forEach(function(link) {
+            link.addEventListener("click", function(e) {
+                e.preventDefault();
+                var target = this.getAttribute("href");
+                if (target && target !== "#") {
+                    var el = document.querySelector(target);
+                    if (el) {
+                        lenis.scrollTo(el, { offset: -80 });
+                    }
+                }
+                /* Close mobile nav */
+                document.getElementById("nav-links").classList.remove("open");
+            });
+        });
+
+        /* ---- Mobile Nav Toggle ---- */
+        document.getElementById("nav-toggle").addEventListener("click", function() {
+            document.getElementById("nav-links").classList.toggle("open");
+        });
+
+        /* ============================================
+           HERO ANIMATIONS
+        ============================================ */
+        var heroTl = gsap.timeline({ delay: 0.2 });
+
+        heroTl
+            .to(".hero-badge", {
+                opacity: 1,
+                duration: 0.6,
+                ease: "power2.out"
+            })
+            .to(".hero-title .line-inner", {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                stagger: 0.12,
+                ease: "power3.out"
+            }, "-=0.3")
+            .to(".hero-subtitle", {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                ease: "power2.out"
+            }, "-=0.4")
+            .to(".hero-buttons", {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                ease: "power2.out"
+            }, "-=0.3")
+            .to(".hero-stats", {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                ease: "power2.out"
+            }, "-=0.3");
+
+        /* Set initial positions */
+        gsap.set(".hero-title .line-inner", { y: 60, opacity: 0 });
+        gsap.set(".hero-subtitle", { y: 30, opacity: 0 });
+        gsap.set(".hero-buttons", { y: 30, opacity: 0 });
+        gsap.set(".hero-stats", { y: 30, opacity: 0 });
+
+        /* Re-run timeline */
+        heroTl.restart();
+
+        /* ============================================
+           SCROLL REVEAL ANIMATIONS
+        ============================================ */
+        document.querySelectorAll(".reveal").forEach(function(el) {
+            gsap.fromTo(el,
+                { opacity: 0, y: 40 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 85%",
+                        toggleActions: "play none none none"
+                    }
+                }
+            );
+        });
+
+        /* ---- Feature Cards ---- */
+        document.querySelectorAll(".feature-card").forEach(function(card, i) {
+            gsap.fromTo(card,
+                { opacity: 0, y: 40 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.7,
+                    delay: i * 0.08,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 88%",
+                        toggleActions: "play none none none"
+                    }
+                }
+            );
+        });
+
+        /* ---- Step Items ---- */
+        document.querySelectorAll(".step-item").forEach(function(step, i) {
+            gsap.fromTo(step,
+                { opacity: 0, x: -30 },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.7,
+                    delay: i * 0.1,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: step,
+                        start: "top 88%",
+                        toggleActions: "play none none none"
+                    }
+                }
+            );
+        });
+
+        /* ============================================
+           ALLOCATION BAR ANIMATIONS
+        ============================================ */
+        document.querySelectorAll(".alloc-fill").forEach(function(bar) {
+            var targetWidth = bar.getAttribute("data-width");
+            gsap.to(bar, {
+                width: targetWidth + "%",
+                duration: 1.2,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: bar,
+                    start: "top 90%",
+                    toggleActions: "play none none none"
+                }
+            });
+        });
+
+        /* ============================================
+           COUNTER ANIMATIONS
+        ============================================ */
+        document.querySelectorAll(".counter").forEach(function(counter) {
+            var target = parseInt(counter.getAttribute("data-target"), 10);
+            var displayVal = counter.getAttribute("data-display");
+
+            if (displayVal !== null) {
+                /* Static counter (the "0") */
+                gsap.fromTo(counter.closest(".metric-item"),
+                    { opacity: 0, y: 30 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.6,
+                        ease: "power2.out",
+                        scrollTrigger: {
+                            trigger: counter.closest(".metric-item"),
+                            start: "top 85%",
+                            toggleActions: "play none none none"
+                        }
+                    }
+                );
+                return;
+            }
+
+            var obj = { val: 0 };
+
+            ScrollTrigger.create({
+                trigger: counter.closest(".metric-item"),
+                start: "top 85%",
+                onEnter: function() {
+                    gsap.to(obj, {
+                        val: target,
+                        duration: 2,
+                        ease: "power2.out",
+                        onUpdate: function() {
+                            counter.textContent = Math.round(obj.val);
+                        }
+                    });
+
+                    gsap.fromTo(counter.closest(".metric-item"),
+                        { opacity: 0, y: 30 },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.6,
+                            ease: "power2.out"
+                        }
+                    );
+                },
+                once: true
+            });
+        });
+
+        /* ============================================
+           NAV HIDE/SHOW ON SCROLL
+        ============================================ */
+        var nav = document.getElementById("nav");
+        var lastScroll = 0;
+
+        ScrollTrigger.create({
+            start: "top -100",
+            onUpdate: function(self) {
+                var direction = self.direction;
+                if (direction === 1) {
+                    gsap.to(nav, { y: -100, duration: 0.3, ease: "power2.out" });
+                } else {
+                    gsap.to(nav, { y: 0, duration: 0.3, ease: "power2.out" });
+                }
+            }
+        });
+
+    } /* end initSite */
+
+})();
+</script>
+
+</body>
+</html>

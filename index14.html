@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOLT APPAREL | Collection 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --black-deep: #050505;
+    --black: #09090b;
+    --gold: #d4a017;
+    --gold-light: #fbbf24;
+    --white: #f5f5f0;
+    --white-dim: rgba(245, 245, 240, 0.6);
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Inter', -apple-system, Helvetica, Arial, sans-serif;
+}
+
+html {
+    background: var(--black-deep);
+}
+
+html.lenis, html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+body {
+    font-family: var(--sans);
+    font-weight: 300;
+    background: var(--black-deep);
+    color: var(--white);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========== LOADING SCREEN ========== */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--black-deep);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: all;
+}
+
+.loading-brand {
+    display: flex;
+    gap: 0.15em;
+    overflow: hidden;
+}
+
+.loading-brand .letter {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    font-weight: 400;
+    letter-spacing: 0.35em;
+    color: var(--white);
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.loading-subtitle {
+    font-family: var(--sans);
+    font-size: clamp(0.6rem, 1.2vw, 0.85rem);
+    letter-spacing: 0.6em;
+    text-transform: uppercase;
+    color: var(--white-dim);
+    margin-top: 2rem;
+    opacity: 0;
+}
+
+.loading-line {
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    margin-top: 2.5rem;
+}
+
+/* ========== SCROLL PROGRESS ========== */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 1px;
+    background: var(--gold);
+    z-index: 9999;
+    transform-origin: left;
+    transform: scaleX(0);
+    width: 100%;
+}
+
+/* ========== NAVIGATION ========== */
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9000;
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+}
+
+.nav.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+.nav::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 3rem;
+    right: 3rem;
+    height: 1px;
+    background: rgba(212, 160, 23, 0.15);
+}
+
+.nav-brand {
+    font-family: var(--serif);
+    font-size: 0.85rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--white);
+}
+
+.nav-right {
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--white-dim);
+}
+
+/* ========== HERO / LOOK 1 ========== */
+.look {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 100svh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.look-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.look-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(5, 5, 5, 0.4) 0%,
+        rgba(5, 5, 5, 0.55) 40%,
+        rgba(5, 5, 5, 0.7) 100%
+    );
+}
+
+.look-overlay--heavy {
+    background: linear-gradient(
+        to bottom,
+        rgba(5, 5, 5, 0.5) 0%,
+        rgba(5, 5, 5, 0.65) 40%,
+        rgba(5, 5, 5, 0.8) 100%
+    );
+}
+
+.look-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Hero text */
+.hero-line {
+    overflow: hidden;
+}
+
+.hero-line span {
+    display: block;
+    font-family: var(--serif);
+    font-size: clamp(3rem, 9vw, 9rem);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--white);
+    opacity: 0;
+    transform: translateY(100%);
+}
+
+.hero-line .hero-accent {
+    color: var(--gold);
+}
+
+.hero-sub {
+    font-family: var(--sans);
+    font-size: clamp(0.55rem, 1vw, 0.75rem);
+    letter-spacing: 0.55em;
+    text-transform: uppercase;
+    color: var(--white-dim);
+    margin-top: 3rem;
+    opacity: 0;
+}
+
+/* ========== INTERLUDE ========== */
+.interlude {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--black-deep);
+}
+
+.interlude-line {
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    margin-bottom: 3rem;
+}
+
+.interlude-text {
+    font-family: var(--sans);
+    font-size: clamp(0.55rem, 1vw, 0.7rem);
+    letter-spacing: 0.7em;
+    text-transform: uppercase;
+    color: var(--white-dim);
+    opacity: 0;
+}
+
+/* ========== FEATURE LOOKS ========== */
+.feature-look {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 100svh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.feature-look-number {
+    position: absolute;
+    top: 3rem;
+    left: 3rem;
+    font-family: var(--sans);
+    font-size: 0.55rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: rgba(212, 160, 23, 0.4);
+    z-index: 10;
+    opacity: 0;
+}
+
+.feature-look-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+.feature-look-title {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.feature-look-title span {
+    display: block;
+    opacity: 0;
+    transform: translateY(80px);
+}
+
+.feature-look-tagline {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    color: var(--gold);
+    opacity: 0;
+    margin-bottom: 2rem;
+}
+
+.feature-look-desc {
+    font-family: var(--sans);
+    font-size: clamp(0.8rem, 1.1vw, 0.95rem);
+    line-height: 1.8;
+    color: var(--white-dim);
+    max-width: 500px;
+    margin: 0 auto;
+    opacity: 0;
+}
+
+.feature-look-line {
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    margin: 2rem auto 0;
+}
+
+/* ========== STATS INTERLUDE ========== */
+.stats-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--black-deep);
+    padding: 6rem 2rem;
+}
+
+.stats-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(3rem, 8vw, 8rem);
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+    opacity: 0;
+}
+
+.stat-number {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 400;
+    color: var(--white);
+    line-height: 1;
+}
+
+.stat-suffix {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    color: var(--gold);
+}
+
+.stat-label {
+    font-family: var(--sans);
+    font-size: clamp(0.55rem, 0.8vw, 0.7rem);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--white-dim);
+    margin-top: 1rem;
+}
+
+.stat-divider {
+    width: 1px;
+    height: 60px;
+    background: rgba(212, 160, 23, 0.2);
+}
+
+/* ========== THE PROCESS ========== */
+.process-section {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.process-header {
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    background: var(--black-deep);
+}
+
+.process-header-label {
+    font-family: var(--sans);
+    font-size: clamp(0.55rem, 0.8vw, 0.65rem);
+    letter-spacing: 0.7em;
+    text-transform: uppercase;
+    color: rgba(212, 160, 23, 0.5);
+    margin-bottom: 2rem;
+    opacity: 0;
+}
+
+.process-header-title {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4.5vw, 4rem);
+    font-weight: 400;
+    color: var(--white);
+    opacity: 0;
+}
+
+.process-step {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 100svh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.process-step-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 5rem);
+    padding: 2rem;
+    max-width: 1100px;
+}
+
+.process-step-num {
+    font-family: var(--serif);
+    font-size: clamp(5rem, 12vw, 10rem);
+    font-weight: 400;
+    color: rgba(212, 160, 23, 0.12);
+    line-height: 1;
+    flex-shrink: 0;
+    opacity: 0;
+}
+
+.process-step-text {
+    max-width: 450px;
+}
+
+.process-step-title {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 1rem;
+    opacity: 0;
+}
+
+.process-step-desc {
+    font-family: var(--sans);
+    font-size: clamp(0.8rem, 1vw, 0.9rem);
+    line-height: 1.9;
+    color: var(--white-dim);
+    opacity: 0;
+}
+
+/* ========== THE VOICE (TESTIMONIAL) ========== */
+.testimonial-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 100svh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.testimonial-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 900px;
+    padding: 2rem;
+}
+
+.testimonial-mark {
+    font-family: var(--serif);
+    font-size: clamp(4rem, 8vw, 7rem);
+    color: rgba(212, 160, 23, 0.2);
+    line-height: 1;
+    margin-bottom: 1rem;
+    opacity: 0;
+}
+
+.testimonial-quote {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1.5rem, 3vw, 2.8rem);
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--white);
+    opacity: 0;
+}
+
+.testimonial-author {
+    margin-top: 3rem;
+    opacity: 0;
+}
+
+.testimonial-author-name {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--white);
+}
+
+.testimonial-author-title {
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--white-dim);
+    margin-top: 0.3rem;
+}
+
+/* ========== THE SYSTEM (INTEGRATION) ========== */
+.system-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--black-deep);
+    padding: 8rem 2rem;
+}
+
+.system-label {
+    font-family: var(--sans);
+    font-size: clamp(0.55rem, 0.8vw, 0.65rem);
+    letter-spacing: 0.7em;
+    text-transform: uppercase;
+    color: rgba(212, 160, 23, 0.5);
+    margin-bottom: 2rem;
+    opacity: 0;
+}
+
+.system-title {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4.5vw, 4rem);
+    font-weight: 400;
+    color: var(--white);
+    text-align: center;
+    margin-bottom: 5rem;
+    opacity: 0;
+}
+
+.system-flow {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.system-node {
+    text-align: center;
+    opacity: 0;
+}
+
+.system-node-icon {
+    width: clamp(70px, 10vw, 110px);
+    height: clamp(70px, 10vw, 110px);
+    border: 1px solid rgba(212, 160, 23, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.2rem;
+    position: relative;
+}
+
+.system-node-icon svg {
+    width: 28px;
+    height: 28px;
+    stroke: var(--gold);
+    fill: none;
+    stroke-width: 1.2;
+}
+
+.system-node-name {
+    font-family: var(--sans);
+    font-size: clamp(0.6rem, 0.8vw, 0.72rem);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--white);
+}
+
+.system-node-sub {
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    color: var(--white-dim);
+    margin-top: 0.3rem;
+    letter-spacing: 0.1em;
+}
+
+.system-connector {
+    width: clamp(30px, 5vw, 70px);
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(212, 160, 23, 0.3), transparent);
+    opacity: 0;
+}
+
+/* ========== FINALE (CTA) ========== */
+.finale-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 100svh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.finale-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+.finale-title {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4.5vw, 4rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--white);
+    margin-bottom: 2rem;
+    opacity: 0;
+}
+
+.finale-sub {
+    font-family: var(--sans);
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
+    line-height: 1.8;
+    color: var(--white-dim);
+    margin-bottom: 3.5rem;
+    opacity: 0;
+}
+
+.finale-cta {
+    display: inline-block;
+    padding: 1.1rem 3.5rem;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold);
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.6s ease, color 0.6s ease;
+    opacity: 0;
+}
+
+.finale-cta:hover {
+    background: var(--gold);
+    color: var(--black-deep);
+}
+
+/* ========== CREDITS (FOOTER) ========== */
+.credits {
+    background: var(--black-deep);
+    padding: 6rem 3rem;
+    border-top: 1px solid rgba(212, 160, 23, 0.08);
+}
+
+.credits-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 3rem;
+}
+
+.credits-brand {
+    font-family: var(--serif);
+    font-size: 1rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 1rem;
+}
+
+.credits-tagline {
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--white-dim);
+}
+
+.credits-col h4 {
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: 0.55rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: rgba(212, 160, 23, 0.4);
+    margin-bottom: 1.2rem;
+}
+
+.credits-col a,
+.credits-col p {
+    display: block;
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    color: var(--white-dim);
+    text-decoration: none;
+    line-height: 2.2;
+    letter-spacing: 0.05em;
+    transition: color 0.4s ease;
+}
+
+.credits-col a:hover {
+    color: var(--gold);
+}
+
+.credits-bottom {
+    max-width: 1200px;
+    margin: 4rem auto 0;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(245, 245, 240, 0.04);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.credits-bottom p {
+    font-family: var(--sans);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: rgba(245, 245, 240, 0.25);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .nav {
+        padding: 1rem 1.5rem;
+    }
+
+    .nav::after {
+        left: 1.5rem;
+        right: 1.5rem;
+    }
+
+    .feature-look-number {
+        top: 1.5rem;
+        left: 1.5rem;
+    }
+
+    .process-step-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .stats-container {
+        flex-direction: column;
+        gap: 3rem;
+    }
+
+    .stat-divider {
+        width: 40px;
+        height: 1px;
+    }
+
+    .system-connector {
+        display: none;
+    }
+
+    .credits-inner {
+        flex-direction: column;
+    }
+
+    .credits-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- LOADING SCREEN -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-brand" id="loadingBrand"></div>
+    <div class="loading-subtitle" id="loadingSubtitle">Collection 2026</div>
+    <div class="loading-line" id="loadingLine"></div>
+</div>
+
+<!-- NAVIGATION -->
+<nav class="nav" id="mainNav">
+    <div class="nav-brand">Volt Apparel</div>
+    <div class="nav-right">Collection 2026</div>
+</nav>
+
+<!-- LOOK 1: HERO -->
+<section class="look" id="hero">
+    <img class="look-image" src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=1920&q=80" alt="Runway" loading="eager">
+    <div class="look-overlay"></div>
+    <div class="look-content">
+        <div class="hero-line"><span id="heroLine1">Fashion</span></div>
+        <div class="hero-line"><span id="heroLine2" class="hero-accent">ERP,</span></div>
+        <div class="hero-line"><span id="heroLine3">Reimagined.</span></div>
+        <p class="hero-sub" id="heroSub">Built for Business Central</p>
+    </div>
+</section>
+
+<!-- INTERLUDE 1 -->
+<section class="interlude" id="interlude1">
+    <div class="interlude-line" id="interludeLine1"></div>
+    <p class="interlude-text" id="interludeText1">The Collection</p>
+</section>
+
+<!-- LOOK 2: Product Variants -->
+<section class="feature-look" id="look2">
+    <img class="look-image" src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=80" alt="Model dramatic" loading="lazy">
+    <div class="look-overlay look-overlay--heavy"></div>
+    <div class="feature-look-number">Look II</div>
+    <div class="feature-look-content">
+        <h2 class="feature-look-title"><span>Product Variants</span></h2>
+        <p class="feature-look-tagline">Every shade, every silhouette</p>
+        <p class="feature-look-desc">Multi-dimensional variant matrices that capture every combination of size, color, material, and style. Configure unlimited dimensions to represent your full product range with precision and elegance.</p>
+        <div class="feature-look-line"></div>
+    </div>
+</section>
+
+<!-- LOOK 3: Seasonality -->
+<section class="feature-look" id="look3">
+    <img class="look-image" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80" alt="Haute couture" loading="lazy">
+    <div class="look-overlay look-overlay--heavy"></div>
+    <div class="feature-look-number">Look III</div>
+    <div class="feature-look-content">
+        <h2 class="feature-look-title"><span>Seasonality</span></h2>
+        <p class="feature-look-tagline">From runway to reality</p>
+        <p class="feature-look-desc">Manage pre-season planning, in-season execution, and end-of-season transitions. Align buying calendars with delivery windows and ensure each collection arrives precisely when the market demands.</p>
+        <div class="feature-look-line"></div>
+    </div>
+</section>
+
+<!-- LOOK 4: Soft Allocations -->
+<section class="feature-look" id="look4">
+    <img class="look-image" src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=80" alt="Fashion dark" loading="lazy">
+    <div class="look-overlay look-overlay--heavy"></div>
+    <div class="feature-look-number">Look IV</div>
+    <div class="feature-look-content">
+        <h2 class="feature-look-title"><span>Soft Allocations</span></h2>
+        <p class="feature-look-tagline">Precision placement</p>
+        <p class="feature-look-desc">Reserve inventory across channels before commitments finalize. Distribute product with surgical precision across stores, wholesale, and e-commerce. Balance demand signals against available supply in real time.</p>
+        <div class="feature-look-line"></div>
+    </div>
+</section>
+
+<!-- LOOK 5: Landed Costs -->
+<section class="feature-look" id="look5">
+    <img class="look-image" src="https://images.unsplash.com/photo-1558171813-4c088753af8f?auto=format&fit=crop&w=1200&q=80" alt="Atelier" loading="lazy">
+    <div class="look-overlay look-overlay--heavy"></div>
+    <div class="feature-look-number">Look V</div>
+    <div class="feature-look-content">
+        <h2 class="feature-look-title"><span>Landed Costs</span></h2>
+        <p class="feature-look-tagline">The craft behind the cost</p>
+        <p class="feature-look-desc">Track freight, duties, insurance, and handling charges with full transparency. Allocate costs across purchase lines with configurable methods. Know the true cost of every garment from factory floor to fitting room.</p>
+        <div class="feature-look-line"></div>
+    </div>
+</section>
+
+<!-- LOOK 6: Product Attributes -->
+<section class="feature-look" id="look6">
+    <img class="look-image" src="https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?auto=format&fit=crop&w=800&q=80" alt="Detail" loading="lazy">
+    <div class="look-overlay look-overlay--heavy"></div>
+    <div class="feature-look-number">Look VI</div>
+    <div class="feature-look-content">
+        <h2 class="feature-look-title"><span>Product Attributes</span></h2>
+        <p class="feature-look-tagline">Thirty dimensions of detail</p>
+        <p class="feature-look-desc">Capture every nuance that defines a product: fabric weight, wash type, fit profile, sustainability certifications, care instructions, and more. Rich attribute data powers search, filtering, and reporting across your entire catalogue.</p>
+        <div class="feature-look-line"></div>
+    </div>
+</section>
+
+<!-- LOOK 7: Item Statuses -->
+<section class="feature-look" id="look7">
+    <img class="look-image" src="https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1200&q=80" alt="Collection" loading="lazy">
+    <div class="look-overlay look-overlay--heavy"></div>
+    <div class="feature-look-number">Look VII</div>
+    <div class="feature-look-content">
+        <h2 class="feature-look-title"><span>Item Statuses</span></h2>
+        <p class="feature-look-tagline">From concept to icon</p>
+        <p class="feature-look-desc">Govern the complete item lifecycle: concept, sample, approved, active, markdown, and discontinued. Each status controls what operations are permitted, ensuring your assortment moves through its stages with discipline.</p>
+        <div class="feature-look-line"></div>
+    </div>
+</section>
+
+<!-- INTERLUDE 2: STATS -->
+<section class="stats-section" id="statsSection">
+    <div class="stats-container">
+        <div class="stat-item" id="stat1">
+            <div class="stat-number"><span class="stat-counter" data-target="90">0</span><span class="stat-suffix">%</span></div>
+            <div class="stat-label">Faster order processing</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item" id="stat2">
+            <div class="stat-number"><span class="stat-counter" data-target="42">0</span></div>
+            <div class="stat-label">Countries served</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item" id="stat3">
+            <div class="stat-number"><span class="stat-counter" data-target="30">0</span><span class="stat-suffix">+</span></div>
+            <div class="stat-label">Product attributes</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item" id="stat4">
+            <div class="stat-number"><span class="stat-counter" data-target="0">0</span></div>
+            <div class="stat-label">Manual workarounds</div>
+        </div>
+    </div>
+</section>
+
+<!-- THE PROCESS -->
+<section class="process-section" id="processSection">
+    <div class="process-header">
+        <p class="process-header-label" id="processLabel">The Process</p>
+        <h2 class="process-header-title" id="processTitle">Four movements</h2>
+    </div>
+
+    <div class="process-step" id="step1">
+        <img class="look-image" src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1200&q=80" alt="Backstage" loading="lazy">
+        <div class="look-overlay look-overlay--heavy"></div>
+        <div class="process-step-content">
+            <div class="process-step-num">01</div>
+            <div class="process-step-text">
+                <h3 class="process-step-title">Discovery</h3>
+                <p class="process-step-desc">We map your product architecture, channel strategy, and operational workflows. Every brand has a unique DNA, and our implementation begins by understanding yours completely.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="process-step" id="step2">
+        <img class="look-image" src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=80" alt="Silhouette" loading="lazy">
+        <div class="look-overlay look-overlay--heavy"></div>
+        <div class="process-step-content">
+            <div class="process-step-num">02</div>
+            <div class="process-step-text">
+                <h3 class="process-step-title">Configuration</h3>
+                <p class="process-step-desc">We shape Volt Apparel to your specifications: variant dimensions, season calendars, allocation rules, and cost structures. Tailored like bespoke, delivered as standard.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="process-step" id="step3">
+        <img class="look-image" src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=1200&q=80" alt="Store" loading="lazy">
+        <div class="look-overlay look-overlay--heavy"></div>
+        <div class="process-step-content">
+            <div class="process-step-num">03</div>
+            <div class="process-step-text">
+                <h3 class="process-step-title">Integration</h3>
+                <p class="process-step-desc">Seamless connection with your existing Business Central environment: financials, warehousing, and sales. Extended to e-commerce, PLM, and third-party logistics through standard APIs.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="process-step" id="step4">
+        <img class="look-image" src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=1920&q=80" alt="Runway" loading="lazy">
+        <div class="look-overlay look-overlay--heavy"></div>
+        <div class="process-step-content">
+            <div class="process-step-num">04</div>
+            <div class="process-step-text">
+                <h3 class="process-step-title">Launch</h3>
+                <p class="process-step-desc">Go live with confidence. Parallel runs, data validation, and guided transition ensure your operations continue without disruption. From first order to full velocity.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- THE VOICE (TESTIMONIAL) -->
+<section class="testimonial-section" id="testimonialSection">
+    <img class="look-image" src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=80" alt="Fashion" loading="lazy">
+    <div class="look-overlay look-overlay--heavy"></div>
+    <div class="testimonial-content">
+        <div class="testimonial-mark" id="testimonialMark">&ldquo;</div>
+        <p class="testimonial-quote" id="testimonialQuote">Volt Apparel transformed how we manage our collections. What once required three separate systems and countless spreadsheets now flows through a single, elegant solution built into Business Central.</p>
+        <div class="testimonial-author" id="testimonialAuthor">
+            <p class="testimonial-author-name">Alexandra Reinhardt</p>
+            <p class="testimonial-author-title">Head of Operations, European Fashion House</p>
+        </div>
+    </div>
+</section>
+
+<!-- THE SYSTEM (INTEGRATION) -->
+<section class="system-section" id="systemSection">
+    <p class="system-label" id="systemLabel">The System</p>
+    <h2 class="system-title" id="systemTitle">Native to Business Central</h2>
+    <div class="system-flow">
+        <div class="system-node" id="sysNode1">
+            <div class="system-node-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <p class="system-node-name">Volt Apparel</p>
+            <p class="system-node-sub">Fashion ERP Extension</p>
+        </div>
+        <div class="system-connector" id="sysConn1"></div>
+        <div class="system-node" id="sysNode2">
+            <div class="system-node-icon">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            </div>
+            <p class="system-node-name">Business Central</p>
+            <p class="system-node-sub">Dynamics 365</p>
+        </div>
+        <div class="system-connector" id="sysConn2"></div>
+        <div class="system-node" id="sysNode3">
+            <div class="system-node-icon">
+                <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <p class="system-node-name">Analytics</p>
+            <p class="system-node-sub">Power BI & Reporting</p>
+        </div>
+        <div class="system-connector" id="sysConn3"></div>
+        <div class="system-node" id="sysNode4">
+            <div class="system-node-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <p class="system-node-name">Channels</p>
+            <p class="system-node-sub">E-commerce & Wholesale</p>
+        </div>
+    </div>
+</section>
+
+<!-- FINALE (CTA) -->
+<section class="finale-section" id="finaleSection">
+    <img class="look-image" src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1200&q=80" alt="Backstage" loading="lazy">
+    <div class="look-overlay"></div>
+    <div class="finale-content">
+        <h2 class="finale-title" id="finaleTitle">Ready to modernize your apparel operations?</h2>
+        <p class="finale-sub" id="finaleSub">Join the fashion brands that have chosen Volt Apparel as the foundation of their Business Central environment.</p>
+        <a href="#" class="finale-cta" id="finaleCta">Request a Private Showing</a>
+    </div>
+</section>
+
+<!-- CREDITS (FOOTER) -->
+<footer class="credits">
+    <div class="credits-inner">
+        <div>
+            <p class="credits-brand">Volt Apparel</p>
+            <p class="credits-tagline">Fashion ERP for Business Central</p>
+        </div>
+        <div class="credits-col">
+            <h4>Collection</h4>
+            <a href="#">Product Variants</a>
+            <a href="#">Seasonality</a>
+            <a href="#">Allocations</a>
+            <a href="#">Landed Costs</a>
+        </div>
+        <div class="credits-col">
+            <h4>Atelier</h4>
+            <a href="#">Documentation</a>
+            <a href="#">Implementation</a>
+            <a href="#">Support</a>
+            <a href="#">AppSource</a>
+        </div>
+        <div class="credits-col">
+            <h4>Maison</h4>
+            <a href="#">Volt Technologies</a>
+            <a href="#">Partnerships</a>
+            <a href="#">Contact</a>
+        </div>
+    </div>
+    <div class="credits-bottom">
+        <p>&copy; 2026 Volt Technologies. All rights reserved.</p>
+        <p>Crafted with precision for the fashion industry</p>
+    </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<script>
+(function() {
+    "use strict";
+
+    /* ========== LENIS SMOOTH SCROLL ========== */
+    const lenis = new Lenis({
+        duration: 1.8,
+        easing: function(t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 0.8,
+        touchMultiplier: 1.5
+    });
+
+    lenis.stop();
+
+    function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    gsap.ticker.add(function(time) {
+        lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+    /* ========== SCROLL PROGRESS BAR ========== */
+    gsap.to("#scrollProgress", {
+        scaleX: 1,
+        ease: "none",
+        scrollTrigger: {
+            trigger: document.body,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 0.3
+        }
+    });
+
+    /* ========== NAVIGATION SHOW/HIDE ========== */
+    var navEl = document.getElementById("mainNav");
+    ScrollTrigger.create({
+        trigger: "#hero",
+        start: "bottom 80%",
+        onEnterBack: function() { navEl.classList.remove("visible"); },
+        onLeave: function() { navEl.classList.add("visible"); }
+    });
+
+    /* ========== LOADING ANIMATION ========== */
+    var brandText = "VOLT APPAREL";
+    var brandContainer = document.getElementById("loadingBrand");
+    for (var i = 0; i < brandText.length; i++) {
+        var span = document.createElement("span");
+        span.className = "letter";
+        span.textContent = brandText[i] === " " ? "\u00A0" : brandText[i];
+        brandContainer.appendChild(span);
+    }
+
+    var loadingTl = gsap.timeline({
+        onComplete: function() {
+            lenis.start();
+            initScrollAnimations();
+        }
+    });
+
+    loadingTl
+        .to(".loading-brand .letter", {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.08,
+            ease: "power4.out",
+            delay: 0.5
+        })
+        .to("#loadingSubtitle", {
+            opacity: 1,
+            duration: 1.2,
+            ease: "power2.out"
+        }, "-=0.3")
+        .to("#loadingLine", {
+            width: "120px",
+            duration: 1.5,
+            ease: "power4.inOut"
+        }, "-=0.8")
+        .to("#loadingLine", {
+            width: "100vw",
+            duration: 1.2,
+            ease: "power4.inOut"
+        }, "+=1.0")
+        .to("#loadingScreen", {
+            yPercent: -100,
+            duration: 1.5,
+            ease: "power4.inOut"
+        }, "-=0.3")
+        .set("#loadingScreen", { display: "none" });
+
+    /* ========== SCROLL ANIMATIONS ========== */
+    function initScrollAnimations() {
+
+        /* --- HERO TEXT REVEAL --- */
+        var heroTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#hero",
+                start: "top 80%",
+                toggleActions: "play none none none"
+            }
+        });
+
+        heroTl
+            .to("#heroLine1", {
+                opacity: 1,
+                y: 0,
+                duration: 2.0,
+                ease: "power4.out"
+            })
+            .to("#heroLine2", {
+                opacity: 1,
+                y: 0,
+                duration: 2.0,
+                ease: "power4.out"
+            }, "+=0.5")
+            .to("#heroLine3", {
+                opacity: 1,
+                y: 0,
+                duration: 2.0,
+                ease: "power4.out"
+            }, "+=0.5")
+            .to("#heroSub", {
+                opacity: 1,
+                duration: 1.5,
+                ease: "power2.out"
+            }, "+=0.3");
+
+        /* Parallax on hero image */
+        gsap.to("#hero .look-image", {
+            yPercent: 20,
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#hero",
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+
+        /* --- INTERLUDE 1 --- */
+        var intTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#interlude1",
+                start: "top 70%",
+                toggleActions: "play none none none"
+            }
+        });
+
+        intTl
+            .to("#interludeLine1", {
+                width: "80px",
+                duration: 1.8,
+                ease: "power4.inOut"
+            })
+            .to("#interludeText1", {
+                opacity: 1,
+                duration: 1.5,
+                ease: "power2.out"
+            }, "-=0.8");
+
+        /* --- FEATURE LOOKS --- */
+        var featureSections = document.querySelectorAll(".feature-look");
+        featureSections.forEach(function(section) {
+            var img = section.querySelector(".look-image");
+            var number = section.querySelector(".feature-look-number");
+            var titleSpan = section.querySelector(".feature-look-title span");
+            var tagline = section.querySelector(".feature-look-tagline");
+            var desc = section.querySelector(".feature-look-desc");
+            var line = section.querySelector(".feature-look-line");
+
+            /* Image parallax */
+            gsap.to(img, {
+                yPercent: 15,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+
+            /* Image scale-in */
+            gsap.from(img, {
+                scale: 1.15,
+                duration: 3,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                    toggleActions: "play none none none"
+                }
+            });
+
+            /* Content reveal */
+            var ftl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 55%",
+                    toggleActions: "play none none none"
+                }
+            });
+
+            ftl
+                .to(number, {
+                    opacity: 1,
+                    duration: 1.2,
+                    ease: "power2.out"
+                })
+                .to(titleSpan, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 2.0,
+                    ease: "power4.out"
+                }, "-=0.6")
+                .to(tagline, {
+                    opacity: 1,
+                    duration: 1.5,
+                    ease: "power2.out"
+                }, "-=1.0")
+                .to(desc, {
+                    opacity: 1,
+                    duration: 1.5,
+                    ease: "power2.out"
+                }, "-=0.8")
+                .to(line, {
+                    width: "60px",
+                    duration: 1.5,
+                    ease: "power4.inOut"
+                }, "-=1.0");
+        });
+
+        /* --- STATS --- */
+        var statItems = document.querySelectorAll(".stat-item");
+        var statDividers = document.querySelectorAll(".stat-divider");
+
+        statItems.forEach(function(item, idx) {
+            gsap.to(item, {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                ease: "power4.out",
+                scrollTrigger: {
+                    trigger: "#statsSection",
+                    start: "top 60%",
+                    toggleActions: "play none none none"
+                },
+                delay: idx * 0.4,
+                onStart: function() {
+                    var counter = item.querySelector(".stat-counter");
+                    var target = parseInt(counter.getAttribute("data-target"));
+                    animateCounter(counter, target, 2000);
+                }
+            });
+        });
+
+        statDividers.forEach(function(div, idx) {
+            gsap.to(div, {
+                opacity: 1,
+                duration: 1.0,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: "#statsSection",
+                    start: "top 60%",
+                    toggleActions: "play none none none"
+                },
+                delay: idx * 0.4 + 0.2
+            });
+        });
+
+        function animateCounter(el, target, duration) {
+            var start = 0;
+            var startTime = null;
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                var progress = Math.min((timestamp - startTime) / duration, 1);
+                var eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.floor(eased * target);
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    el.textContent = target;
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        /* --- PROCESS SECTION --- */
+        gsap.to("#processLabel", {
+            opacity: 1,
+            duration: 1.5,
+            ease: "power2.out",
+            scrollTrigger: {
+                trigger: ".process-header",
+                start: "top 70%",
+                toggleActions: "play none none none"
+            }
+        });
+
+        gsap.to("#processTitle", {
+            opacity: 1,
+            duration: 1.8,
+            ease: "power2.out",
+            scrollTrigger: {
+                trigger: ".process-header",
+                start: "top 65%",
+                toggleActions: "play none none none"
+            },
+            delay: 0.3
+        });
+
+        var processSteps = document.querySelectorAll(".process-step");
+        processSteps.forEach(function(step) {
+            var img = step.querySelector(".look-image");
+            var num = step.querySelector(".process-step-num");
+            var title = step.querySelector(".process-step-title");
+            var desc = step.querySelector(".process-step-desc");
+
+            gsap.to(img, {
+                yPercent: 15,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: step,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+
+            gsap.from(img, {
+                scale: 1.1,
+                duration: 3,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: step,
+                    start: "top 80%",
+                    toggleActions: "play none none none"
+                }
+            });
+
+            var stl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: step,
+                    start: "top 55%",
+                    toggleActions: "play none none none"
+                }
+            });
+
+            stl
+                .to(num, {
+                    opacity: 1,
+                    duration: 1.5,
+                    ease: "power2.out"
+                })
+                .to(title, {
+                    opacity: 1,
+                    duration: 1.8,
+                    ease: "power4.out"
+                }, "-=0.8")
+                .to(desc, {
+                    opacity: 1,
+                    duration: 1.5,
+                    ease: "power2.out"
+                }, "-=0.8");
+        });
+
+        /* --- TESTIMONIAL --- */
+        var tesTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#testimonialSection",
+                start: "top 55%",
+                toggleActions: "play none none none"
+            }
+        });
+
+        gsap.to("#testimonialSection .look-image", {
+            yPercent: 15,
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#testimonialSection",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+
+        tesTl
+            .to("#testimonialMark", {
+                opacity: 1,
+                duration: 1.5,
+                ease: "power2.out"
+            })
+            .to("#testimonialQuote", {
+                opacity: 1,
+                duration: 2.5,
+                ease: "power4.out"
+            }, "-=0.5")
+            .to("#testimonialAuthor", {
+                opacity: 1,
+                duration: 1.5,
+                ease: "power2.out"
+            }, "-=1.0");
+
+        /* --- SYSTEM SECTION --- */
+        gsap.to("#systemLabel", {
+            opacity: 1,
+            duration: 1.5,
+            ease: "power2.out",
+            scrollTrigger: {
+                trigger: "#systemSection",
+                start: "top 65%",
+                toggleActions: "play none none none"
+            }
+        });
+
+        gsap.to("#systemTitle", {
+            opacity: 1,
+            duration: 1.8,
+            ease: "power2.out",
+            scrollTrigger: {
+                trigger: "#systemSection",
+                start: "top 60%",
+                toggleActions: "play none none none"
+            },
+            delay: 0.3
+        });
+
+        var sysNodes = ["#sysNode1", "#sysNode2", "#sysNode3", "#sysNode4"];
+        var sysConns = ["#sysConn1", "#sysConn2", "#sysConn3"];
+
+        sysNodes.forEach(function(sel, idx) {
+            gsap.to(sel, {
+                opacity: 1,
+                y: 0,
+                duration: 1.5,
+                ease: "power4.out",
+                scrollTrigger: {
+                    trigger: "#systemSection",
+                    start: "top 50%",
+                    toggleActions: "play none none none"
+                },
+                delay: idx * 0.3
+            });
+        });
+
+        sysConns.forEach(function(sel, idx) {
+            gsap.to(sel, {
+                opacity: 1,
+                duration: 1.2,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: "#systemSection",
+                    start: "top 50%",
+                    toggleActions: "play none none none"
+                },
+                delay: idx * 0.3 + 0.15
+            });
+        });
+
+        /* --- FINALE --- */
+        gsap.to("#finaleSection .look-image", {
+            yPercent: 15,
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#finaleSection",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
+            }
+        });
+
+        var finTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#finaleSection",
+                start: "top 55%",
+                toggleActions: "play none none none"
+            }
+        });
+
+        finTl
+            .to("#finaleTitle", {
+                opacity: 1,
+                duration: 2.0,
+                ease: "power4.out"
+            })
+            .to("#finaleSub", {
+                opacity: 1,
+                duration: 1.5,
+                ease: "power2.out"
+            }, "-=1.0")
+            .to("#finaleCta", {
+                opacity: 1,
+                duration: 1.5,
+                ease: "power2.out"
+            }, "-=0.5");
+    }
+
+    /* Trigger hero immediately since it's in viewport on load */
+    loadingTl.eventCallback("onComplete", function() {
+        lenis.start();
+        initScrollAnimations();
+        /* Immediately play hero since it's visible */
+        ScrollTrigger.refresh();
+    });
+
+})();
+</script>
+</body>
+</html>
